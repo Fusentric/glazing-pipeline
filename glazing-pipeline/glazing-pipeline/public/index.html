@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Glazing Extractor</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #181c27;
+      --border: #272d3d;
+      --accent: #4ade80;
+      --accent-dim: rgba(74, 222, 128, 0.12);
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --error: #f87171;
+      --warning: #fbbf24;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 48px 20px 80px;
+    }
+
+    .wordmark {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 48px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 560px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    .drop-zone {
+      border: 1.5px dashed var(--border);
+      border-radius: 12px;
+      padding: 40px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+
+    .drop-zone:hover,
+    .drop-zone.drag-over {
+      border-color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    .drop-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .drop-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .drop-label {
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .drop-hint {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .file-selected {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+      padding: 12px 16px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(74,222,128,0.25);
+      border-radius: 8px;
+    }
+
+    .file-selected.show { display: flex; }
+
+    .file-icon { font-size: 20px; }
+
+    .file-name {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      color: var(--accent);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .clear-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      padding: 2px;
+    }
+    .clear-btn:hover { color: var(--error); }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      margin-top: 20px;
+      padding: 14px 24px;
+      background: var(--accent);
+      color: #0f1117;
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+
+    .btn:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); }
+    .btn:active:not(:disabled) { transform: translateY(0); }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .status {
+      display: none;
+      margin-top: 24px;
+      padding: 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .status.show { display: block; }
+    .status.loading { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2); color: var(--warning); }
+    .status.success { background: var(--accent-dim); border: 1px solid rgba(74,222,128,0.25); color: var(--accent); }
+    .status.error { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.2); color: var(--error); }
+
+    .spinner {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid rgba(251,191,36,0.3);
+      border-top-color: var(--warning);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 14px;
+      padding: 10px 18px;
+      background: var(--accent);
+      color: #0f1117;
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .download-btn:hover { opacity: 0.85; }
+
+    .element-count {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 28px 0;
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .step {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      width: 24px; height: 24px;
+      background: var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .step-text {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .step-text strong { color: var(--text); font-weight: 500; }
+  </style>
+</head>
+<body>
+  <div class="wordmark">Energy Rating Tools</div>
+
+  <div class="card">
+    <h1>Glazing Extractor</h1>
+    <p class="subtitle">Upload architectural PDF plans to automatically extract glazing data into the NCC 2022 glazing calculator.</p>
+
+    <div class="drop-zone" id="dropZone">
+      <input type="file" id="fileInput" accept=".pdf" />
+      <div class="drop-icon">📄</div>
+      <div class="drop-label">Drop PDF plans here</div>
+      <div class="drop-hint">or click to browse</div>
+    </div>
+
+    <div class="file-selected" id="fileSelected">
+      <span class="file-icon">📋</span>
+      <span class="file-name" id="fileName"></span>
+      <button class="clear-btn" id="clearBtn" title="Remove file">✕</button>
+    </div>
+
+    <button class="btn" id="extractBtn" disabled>
+      ⚡ Extract Glazing Data
+    </button>
+
+    <div class="status" id="status"></div>
+
+    <hr class="divider" />
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text"><strong>Upload</strong> the builder's PDF plans above</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text"><strong>Claude AI</strong> reads the elevations and floor plans, extracting every window and door with its orientation, dimensions, room type, and frame colour</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text"><strong>Download</strong> the pre-filled glazing calculator spreadsheet — then add U-values, SHGC and openability from product specs</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const fileSelected = document.getElementById('fileSelected');
+    const fileNameEl = document.getElementById('fileName');
+    const clearBtn = document.getElementById('clearBtn');
+    const extractBtn = document.getElementById('extractBtn');
+    const statusEl = document.getElementById('status');
+
+    let selectedFile = null;
+
+    function setFile(file) {
+      if (!file || file.type !== 'application/pdf') {
+        showStatus('error', 'Please select a PDF file.');
+        return;
+      }
+      selectedFile = file;
+      fileNameEl.textContent = file.name;
+      fileSelected.classList.add('show');
+      extractBtn.disabled = false;
+      hideStatus();
+    }
+
+    function clearFile() {
+      selectedFile = null;
+      fileInput.value = '';
+      fileSelected.classList.remove('show');
+      extractBtn.disabled = true;
+      hideStatus();
+    }
+
+    function showStatus(type, html) {
+      statusEl.className = `status show ${type}`;
+      statusEl.innerHTML = html;
+    }
+
+    function hideStatus() {
+      statusEl.className = 'status';
+      statusEl.innerHTML = '';
+    }
+
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files[0]) setFile(e.target.files[0]);
+    });
+
+    clearBtn.addEventListener('click', clearFile);
+
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('drag-over');
+    });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('drag-over');
+      if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]);
+    });
+
+    extractBtn.addEventListener('click', async () => {
+      if (!selectedFile) return;
+
+      extractBtn.disabled = true;
+      showStatus('loading', '<span class="spinner"></span> Reading plans and extracting glazing data… this takes 30–60 seconds.');
+
+      try {
+        // Read file as base64
+        const base64 = await readAsBase64(selectedFile);
+
+        const response = await fetch('/.netlify/functions/extract-glazing', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            pdfBase64: base64,
+            filename: selectedFile.name,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          showStatus('error', `❌ Extraction failed: ${data.error || 'Unknown error'}`);
+          extractBtn.disabled = false;
+          return;
+        }
+
+        // Trigger download
+        const blob = base64ToBlob(data.xlsx_base64, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = data.filename;
+        a.click();
+        URL.revokeObjectURL(url);
+
+        showStatus('success', `
+          ✅ Done! Found <strong>${data.element_count} glazing elements</strong>.<br>
+          Your spreadsheet has downloaded automatically.<br>
+          <span style="color:var(--muted);font-size:12px;">Remember to fill in U-values, SHGC, and operability from product specs.</span><br>
+          <a class="download-btn" href="${url}" download="${data.filename}">⬇ Download Again</a>
+        `);
+
+        extractBtn.disabled = false;
+
+      } catch (err) {
+        showStatus('error', `❌ Error: ${err.message}`);
+        extractBtn.disabled = false;
+      }
+    });
+
+    function readAsBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function base64ToBlob(base64, mimeType) {
+      const bytes = atob(base64);
+      const arr = new Uint8Array(bytes.length);
+      for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+      return new Blob([arr], { type: mimeType });
+    }
+  </script>
+</body>
+</html>

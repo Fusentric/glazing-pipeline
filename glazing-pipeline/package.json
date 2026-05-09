@@ -1,0 +1,15 @@
+{
+  "name": "glazing-pipeline",
+  "version": "1.0.0",
+  "description": "NCC 2022 glazing data extraction pipeline",
+  "scripts": {
+    "dev": "netlify dev"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  }
+}

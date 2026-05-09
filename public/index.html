@@ -1,0 +1,2274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fusentric — Energy Assessor Extractor</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #181c27;
+      --border: #272d3d;
+      --accent: #4ade80;
+      --accent-dim: rgba(74, 222, 128, 0.12);
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --error: #f87171;
+      --warning: #fbbf24;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 48px 20px 80px;
+    }
+
+    .wordmark {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 48px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 560px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    .drop-zone {
+      border: 1.5px dashed var(--border);
+      border-radius: 12px;
+      padding: 40px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+
+    .drop-zone:hover,
+    .drop-zone.drag-over {
+      border-color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    .drop-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .drop-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .drop-label {
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .drop-hint {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .file-selected {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+      padding: 12px 16px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(74,222,128,0.25);
+      border-radius: 8px;
+    }
+
+    .file-selected.show { display: flex; }
+
+    .file-icon { font-size: 20px; }
+
+    .file-name {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      color: var(--accent);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .clear-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      padding: 2px;
+    }
+    .clear-btn:hover { color: var(--error); }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      margin-top: 20px;
+      padding: 14px 24px;
+      background: var(--accent);
+      color: #0f1117;
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+
+    .btn:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); }
+    .btn:active:not(:disabled) { transform: translateY(0); }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .status {
+      display: none;
+      margin-top: 24px;
+      padding: 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .status.show { display: block; }
+    .status.loading { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2); color: var(--warning); }
+    .status.success { background: var(--accent-dim); border: 1px solid rgba(74,222,128,0.25); color: var(--accent); }
+    .status.error { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.2); color: var(--error); }
+
+    .spinner {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid rgba(251,191,36,0.3);
+      border-top-color: var(--warning);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 14px;
+      padding: 10px 18px;
+      background: var(--accent);
+      color: #0f1117;
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .download-btn:hover { opacity: 0.85; }
+
+    .element-count {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 28px 0;
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .step {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      width: 24px; height: 24px;
+      background: var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .step-text {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .step-text strong { color: var(--text); font-weight: 500; }
+  </style>
+</head>
+<body>
+  <div class="wordmark">Energy Rating Tools</div>
+
+  <div class="card">
+    <div style="display:flex;align-items:baseline;gap:10px;justify-content:center;">
+      <span style="font-size:11px;font-weight:700;letter-spacing:3px;color:var(--muted);text-transform:uppercase;">Fusentric</span>
+      <h1>Energy Assessor Extractor</h1>
+    </div>
+    <p class="subtitle">Upload architectural PDF plans to automatically extract glazing &amp; building fabric data for NCC 2022 energy rating assessment.</p>
+
+    <div class="drop-zone" id="dropZone">
+      <input type="file" id="fileInput" accept=".pdf" />
+      <div class="drop-icon">📄</div>
+      <div class="drop-label">Drop PDF plans here</div>
+      <div class="drop-hint">or click to browse</div>
+    </div>
+
+    <div class="file-selected" id="fileSelected">
+      <span class="file-icon">📋</span>
+      <span class="file-name" id="fileName"></span>
+      <button class="clear-btn" id="clearBtn" title="Remove file">✕</button>
+    </div>
+
+    <button class="btn" id="extractBtn" disabled>
+      ⚡ Extract Glazing Data
+    </button>
+
+    <div class="status" id="status"></div>
+
+    <hr class="divider" />
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text"><strong>Upload</strong> the builder's PDF plans above</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text"><strong>Claude AI</strong> reads the elevations and floor plans, extracting every window and door with its orientation, dimensions, room type, and frame colour</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text"><strong>Download</strong> the pre-filled glazing calculator spreadsheet — then add U-values, SHGC and openability from product specs</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const fileSelected = document.getElementById('fileSelected');
+    const fileNameEl = document.getElementById('fileName');
+    const clearBtn = document.getElementById('clearBtn');
+    const extractBtn = document.getElementById('extractBtn');
+    const statusEl = document.getElementById('status');
+
+    let selectedFile = null;
+
+    function setFile(file) {
+      if (!file || file.type !== 'application/pdf') {
+        showStatus('error', 'Please select a PDF file.');
+        return;
+      }
+      selectedFile = file;
+      fileNameEl.textContent = file.name;
+      fileSelected.classList.add('show');
+      extractBtn.disabled = false;
+      hideStatus();
+    }
+
+    function clearFile() {
+      selectedFile = null;
+      fileInput.value = '';
+      fileSelected.classList.remove('show');
+      extractBtn.disabled = true;
+      hideStatus();
+    }
+
+    function showStatus(type, html) {
+      statusEl.className = `status show ${type}`;
+      statusEl.innerHTML = html;
+    }
+
+    function hideStatus() {
+      statusEl.className = 'status';
+      statusEl.innerHTML = '';
+    }
+
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files[0]) setFile(e.target.files[0]);
+    });
+
+    clearBtn.addEventListener('click', clearFile);
+
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('drag-over');
+    });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('drag-over');
+      if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]);
+    });
+
+    extractBtn.addEventListener('click', async () => {
+      if (!selectedFile) return;
+      extractBtn.disabled = true;
+
+      try {
+        // ── STEP 1: Get keys ──
+        showStatus('loading', '<span class="spinner"></span> Initialising… (1/4)');
+        const keyResponse = await fetch('/.netlify/functions/get-upload-key');
+        if (!keyResponse.ok) { showStatus('error', `❌ Could not get upload key (${keyResponse.status})`); extractBtn.disabled = false; return; }
+        const keyData = await keyResponse.json();
+        if (!keyData.key) { showStatus('error', '❌ PDF.co API key not configured'); extractBtn.disabled = false; return; }
+
+        // ── STEP 2: Upload PDF to PDF.co ──
+        showStatus('loading', '<span class="spinner"></span> Uploading plans… (2/4)');
+        const base64 = await readAsBase64(selectedFile);
+        const uploadRes = await fetch('https://api.pdf.co/v1/file/upload/base64', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-api-key': keyData.key },
+          body: JSON.stringify({ file: base64, name: selectedFile.name }),
+        });
+        const uploadData = await uploadRes.json();
+        if (uploadData.error || !uploadData.url) { showStatus('error', `❌ Upload failed: ${uploadData.message}`); extractBtn.disabled = false; return; }
+
+        // ── STEP 3: Convert PDF to images via PDF.co ──
+        showStatus('loading', '<span class="spinner"></span> Converting pages to images… (3/4)');
+        const convertRes = await fetch('https://api.pdf.co/v1/pdf/convert/to/png', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-api-key': keyData.key },
+          body: JSON.stringify({ url: uploadData.url, dpi: 200, async: true }),
+        });
+        const convertInit = await convertRes.json();
+
+        // Poll PDF.co for image URLs
+        let pageUrls = [];
+        for (let i = 0; i < 40; i++) {
+          await new Promise(r => setTimeout(r, 3000));
+          const pollRes = await fetch(`https://api.pdf.co/v1/job/check?jobid=${convertInit.jobId}`, {
+            headers: { 'x-api-key': keyData.key },
+          });
+          const pollData = await pollRes.json();
+          if (pollData.status === 'success') {
+            const resultJson = await (await fetch(pollData.url)).json();
+            pageUrls = resultJson;
+            break;
+          }
+        }
+        if (pageUrls.length === 0) { showStatus('error', '❌ PDF conversion failed or timed out'); extractBtn.disabled = false; return; }
+
+        // ── STEP 4: 3-CALL PIPELINE ──
+        // Agent 1 (site analyst) → Agent 2 (extractor, receives A1 outputs) → Agent 3 (scope, receives A1+A2 outputs) → Agent 4 JS compiler
+        //
+        // BASELINE LOCKED — 14 Mar 2026
+        // Validated on: Saville Close (3 windows, new_works_only, rotated block ~23°)
+        // Result: 3/3 correct (ASD 21-24 SE, ASW 6-20 SW, HIGHLIGHT AAW 4-14 NW)
+        // Compass: bearing_data method (113°30') → SW/SE/NW ✅
+        // Scope: 32.84 ÷ 135.52 = 24.2% → new_works_only ✅
+        // Known working job type: single-storey extension, rotated block, Alspec tags, new_works_only
+
+        // ─────────────────────────────────────────────────────────────────
+        // SHARED HELPER: call Claude proxy with retry on 429
+        // ─────────────────────────────────────────────────────────────────
+        async function callClaude(messages, system, retries = 5) {
+          const body = { messages };
+          if (system) body.system = system;
+          for (let attempt = 0; attempt < retries; attempt++) {
+            const res = await fetch('/claude-proxy', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(body),
+            });
+            if (res.status === 429) {
+              const wait = Math.pow(2, attempt) * 2000;
+              console.warn(`429 rate limit — waiting ${wait/1000}s before retry ${attempt+1}/${retries}`);
+              await new Promise(r => setTimeout(r, wait));
+              continue;
+            }
+            const data = await res.json();
+            const raw = data.content.filter(b => b.type === 'text').map(b => b.text).join('');
+            return safeParseJSON(raw, 'callClaude');
+          }
+          throw new Error('Max retries exceeded after repeated 429 errors');
+        }
+
+        function safeParseJSON(raw, agentName) {
+          // Strip markdown fences
+          const stripped = raw.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+          // Try direct parse first
+          try { return JSON.parse(stripped); } catch(e) {}
+          // Extract first complete JSON object or array
+          const match = stripped.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
+          if (match) {
+            try { return JSON.parse(match[0]); } catch(e) {}
+            // Try progressively shorter matches (handles trailing garbage)
+            const text = stripped;
+            let depth = 0, start = text.indexOf('{');
+            if (start === -1) start = text.indexOf('[');
+            if (start !== -1) {
+              for (let i = start; i < text.length; i++) {
+                if (text[i] === '{' || text[i] === '[') depth++;
+                if (text[i] === '}' || text[i] === ']') depth--;
+                if (depth === 0) {
+                  try { return JSON.parse(text.slice(start, i + 1)); } catch(e) { break; }
+                }
+              }
+            }
+          }
+          // Safe failure — job continues with flags rather than crashing
+          console.error(`${agentName} JSON parse failed. Raw:`, raw.substring(0, 300));
+          return {
+            error: true,
+            agent: agentName,
+            flags: [`${agentName}_json_parse_failed`],
+            requires_human_review: true,
+            pipeline_confidence: 'failed',
+            compass_map: {}, project_type: 'extension',
+            windows: [], gfa_notes: '',
+            scope: 'whole_dwelling', scope_note: 'Parse failed — defaulting to whole_dwelling'
+          };
+        }
+
+        // ─────────────────────────────────────────────────────────────────
+        // AGENT 1 — SITE ANALYST (pages 1-5)
+        // One job: north arrow → true compass map for each elevation title
+        // Kept separate so compass reasoning has full focus on site plan
+        // ─────────────────────────────────────────────────────────────────
+        showStatus('loading', '<span class="spinner"></span> Agent 1 — Reading site plan…');
+
+        let a1Result = {};
+        let compassMap = {};
+        let projectType = 'extension';
+        let agent1Flags = [];
+        let elevationPageNums = new Set(); // populated from Agent 1 output
+
+        try {
+          const a1Content = [];
+          // Agent 1 only needs site plan + floor plan + drawing index — first 12 pages is sufficient
+          // Sending all pages causes edge function timeouts on large PDFs (38+ pages)
+          const A1_MAX_PAGES = 12;
+          const a1Pages = pageUrls.slice(0, Math.min(A1_MAX_PAGES, pageUrls.length));
+          for (let i = 0; i < a1Pages.length; i++) {
+            a1Content.push({ type: 'text', text: `--- PAGE ${i + 1} ---` });
+            a1Content.push({ type: 'image', source: { type: 'url', url: a1Pages[i] } });
+          }
+          a1Content.push({ type: 'text', text: `You are a site plan analyst for Australian residential projects.
+You must RETURN VALID JSON ONLY — no commentary, no markdown, no explanation outside the JSON structure.
+
+═══════════════════════════════════════════
+STEP 1 — READ SURVEY BEARING DATA (PRIMARY METHOD)
+═══════════════════════════════════════════
+
+On the site plan, boundary lines are sometimes annotated with survey bearings in degrees
+(e.g. "206°15'", "296°", "023°30'"). These give the most accurate block orientation.
+
+HOW TO USE BEARINGS:
+1. Find the STREET FRONTAGE boundary — this is the boundary line adjacent to the street.
+   Look for a street name label (e.g. "SAVILLE CLOSE", "FERNIE PLACE") on or near the boundary.
+   The street frontage is the boundary closest to that street label.
+2. Read the bearing annotated on that specific boundary line.
+3. A bearing of 0° = true North. 90° = East. 113° ≈ SE. 180° = South. 206° ≈ SSW. 270° = West.
+4. The street frontage bearing tells you which compass direction that boundary FACES OUTWARD.
+5. From this, determine which compass direction each elevation wall faces.
+
+CRITICAL — USE THE STREET FRONTAGE BEARING ONLY:
+A site plan has multiple boundary lines, each with different bearings.
+You must use the bearing on the boundary that faces the STREET — not the rear, not the sides.
+The rear boundary bearing will produce the OPPOSITE rotation — using it will flip east and west.
+If you are unsure which boundary is the street frontage, look for the street name annotation.
+
+CRITICAL BEARING SELECTION RULE:
+On a typical suburban ACT/NSW block, there are 4 boundary lines with 4 different bearings.
+The street frontage bearing and the rear boundary bearing differ by approximately 180°.
+Example: street frontage = 113°, rear boundary = 293° (or 206° for an irregular block).
+If you find bearings of approximately 113° AND 206° on the same plan:
+- 113° is the street frontage (facing SE) — USE THIS ONE
+- 206° is a side or rear boundary — DO NOT USE THIS
+Before finalising: confirm your chosen bearing matches the boundary adjacent to the street label.
+State your reasoning: "I chose [X°] because it is annotated on the boundary line adjacent to [STREET NAME]."
+
+CRITICAL — ONLY REPORT WHAT YOU CAN SEE ON THESE PAGES:
+Only set bearing_data_found: true if you can read an actual degrees annotation on the
+current pages in front of you right now.
+Do NOT recall, estimate, or carry over a bearing from memory or a previous job.
+If you cannot see a bearing annotation on the page, set bearing_data_found: false
+and proceed to Step 2.
+
+Record: bearing_data_found (true/false), street_frontage_bearing (exact text as shown),
+bearing_source_page (page number where you found it).
+
+IF NO BEARING DATA FOUND: proceed to Step 2 (north arrow method).
+
+═══════════════════════════════════════════
+STEP 2 — NORTH ARROW (FALLBACK METHOD)
+═══════════════════════════════════════════
+
+Only use this if no survey bearing data was found in Step 1.
+
+Think of the north arrow as a clock hand:
+- 12 o'clock = 0° = no correction needed (axis-aligned)
+- 10-11 o'clock = approx 300-330° anticlockwise = ~30-60° rotation
+
+MANDATORY — YOU MUST EXPLICITLY STATE:
+1. What clock position does the north arrow point to?
+2. Is the block rotated or axis-aligned?
+
+IMPORTANT: Many Canberra suburban blocks are rotated 20-45°. Do NOT default to
+axis-aligned without confirming the north arrow points to exactly 12 o'clock.
+
+Note: A decorative north arrow on a site plan may be a schematic indicator only.
+If both bearing data AND a north arrow are present, trust the bearing data.
+
+═══════════════════════════════════════════
+STEP 3 — BUILD THE COMPASS MAP
+═══════════════════════════════════════════
+
+Using the orientation determined in Step 1 or Step 2:
+Map each elevation title in the drawing set to its true compass direction.
+Compass values must be exactly one of: N, NE, E, SE, S, SW, W, NW
+Never return SSW, NNE or other intermediate directions — round to nearest of the 8.
+
+IMPORTANT — ONLY MAP ACTUAL ELEVATION PAGES:
+Some drawing sets begin with a drawing index or schedule listing all drawings
+(e.g. "SP-1 Site Plan", "DEMOLITION Floor Plan", "ELEVATIONS 1", "SECTION B").
+Do NOT use the drawing index as your compass map source.
+Only map elevation titles that appear as actual headings on the elevation drawing pages.
+An elevation page shows building walls with windows drawn on them — not a list of drawings.
+
+COMPASS MAP KEYS MUST BE ELEVATION TITLES ONLY:
+Valid key examples: "SOUTH ELEVATION", "NORTH ELEV.", "EAST ELEVATION", "FRONT ELEVATION"
+Invalid keys — never use these: floor plan titles, section titles, site plan titles,
+demolition titles, or any title that does not contain "ELEVATION" or "ELEV."
+If a title does not contain "ELEVATION" or "ELEV.", it is not an elevation — do not add it.
+
+Elevation titles to look for on actual pages (examples):
+"SOUTH ELEVATION", "NORTH ELEVATION", "EAST ELEVATION", "WEST ELEVATION"
+"FRONT ELEVATION", "REAR ELEVATION", "LEFT ELEVATION", "RIGHT ELEVATION"
+"ELEVATIONS 1-4 — EXTENSION", "SOUTH ELEV.", "EAST ELEV."
+
+If you cannot find the actual elevation pages within the pages provided, set
+compass_map to {} and add "compass_map_incomplete" to flags[].
+
+WORKED EXAMPLE — ~23° clockwise rotation (bearing-derived):
+Street frontage bearing 113° → block rotated ~23° clockwise
+→ SOUTH ELEV = SW | EAST ELEV = SE | WEST ELEV = NW | NORTH ELEV = NE
+
+WORKED EXAMPLE — axis-aligned block:
+North arrow at 12 o'clock, no bearing rotation detected
+→ SOUTH ELEV = S | EAST ELEV = E | WEST ELEV = W | NORTH ELEV = N
+
+Record orientation_method: "bearing_data" | "north_arrow" | "default_assumed"
+
+POSITIONAL ELEVATION TITLES (FRONT/REAR/LEFT/RIGHT):
+Some drawing sets use positional titles instead of compass titles.
+You MUST resolve these before building the compass map.
+
+METHOD — resolving FRONT direction:
+1. Find the site plan. Look for the street name or "ROAD" / "STREET" / "AVENUE" label.
+2. The FRONT of the house is the façade facing the street.
+3. Look at the north arrow. Which compass direction does the street frontage face?
+4. FRONT ELEVATION = that compass direction.
+5. REAR = opposite. LEFT and RIGHT depend on standing inside looking out to the street.
+
+EXAMPLE — axis-aligned block, street to the north:
+North arrow up, street label at top of site plan → FRONT faces N
+→ FRONT ELEV = N | REAR ELEV = S | LEFT ELEV = W | RIGHT ELEV = E
+
+EXAMPLE — rotated block, street to the SE:
+Block rotated, street label at lower-right → FRONT faces SE
+→ FRONT ELEV = SE | REAR ELEV = NW | LEFT ELEV = NE | RIGHT ELEV = SW
+
+If you can resolve FRONT from the site plan:
+- Set front_facing to the resolved compass direction
+- Map all positional titles accordingly
+- Do NOT add "positional_elevation_unresolved" to flags
+
+Only add "positional_elevation_unresolved" to flags[] if the site plan gives
+no indication of which direction FRONT faces after careful inspection.
+
+═══════════════════════════════════════════
+STEP 4 — LOCATE ELEVATION PAGE NUMBERS
+═══════════════════════════════════════════
+
+Many drawing sets include a drawing index on one of the first pages — a table listing
+all sheets with their sheet numbers and titles (e.g. "1234-5 Elevations 1", "SP-2 Site Plan").
+
+If you find a drawing index:
+- Set drawing_index_found: true, drawing_index_page: N
+- Read the sheet numbers for elevation drawings
+- Estimate which PDF page number each sheet corresponds to based on position in the index
+- Record elevation_page_numbers as an array of estimated PDF page numbers
+
+If no drawing index is found:
+- Scan all pages for actual elevation drawings (walls with windows drawn on them)
+- Record the page numbers where you find elevation drawings
+- Set drawing_index_found: false
+
+Record: elevation_page_numbers (array of page numbers containing elevation drawings),
+floor_plan_page_numbers (array of page numbers containing proposed floor plans with room labels)
+
+═══════════════════════════════════════════
+STEP 5 — PROJECT TYPE
+═══════════════════════════════════════════
+
+project_type values: "new_dwelling" | "extension" | "renovation" | "extension_and_renovation" | "unknown"
+
+═══════════════════════════════════════════
+OUTPUT FORMAT
+═══════════════════════════════════════════
+
+{
+  "bearing_data_found": false,
+  "street_frontage_bearing": "",
+  "bearing_source_page": null,
+  "orientation_method": "north_arrow",
+  "front_facing": "N",
+  "north_arrow_found": true,
+  "north_arrow_page": 2,
+  "north_arrow_description": "arrow pointing to 12 o'clock, upper-right of site plan",
+  "north_arrow_confidence": "high",
+  "north_arrow": "12 o'clock — upward",
+  "block_rotation": "0° — axis aligned",
+  "compass_map": {
+    "SOUTH ELEVATION": "S",
+    "NORTH ELEVATION": "N",
+    "EAST ELEVATION": "E",
+    "WEST ELEVATION": "W"
+  },
+  "elevation_titles_found": ["SOUTH ELEVATION", "NORTH ELEVATION", "EAST ELEVATION", "WEST ELEVATION"],
+  "drawing_index_found": true,
+  "drawing_index_page": 1,
+  "elevation_page_numbers": [8, 9],
+  "floor_plan_page_numbers": [5, 6, 7],
+  "project_type": "extension",
+  "drawing_set_title": "Jones Residence — Rear Extension",
+  "project_address": "use actual address from title block",
+  "flags": [],
+  "requires_human_review": false,
+  "agent1_notes": ""
+}
+
+north_arrow_confidence rules:
+"high"   — north arrow clearly visible, unambiguous clock position, rotation confidently determined
+"medium" — north arrow found but partially obscured, small, or on a busy page; clock position is estimated
+"low"    — north arrow not found, or found but genuinely ambiguous (multiple arrows, conflicting indicators)
+
+FLAGS — use these exact strings:
+"no_north_arrow" | "north_arrow_ambiguous" | "north_arrow_multiple_found"
+"positional_elevation_unresolved" | "abstract_elevation_titles_used"
+"compass_map_incomplete" | "project_type_unknown"
+
+Set requires_human_review: true if north_arrow_confidence is "medium" or "low", OR if ANY flag is present.` });
+
+          a1Result = await callClaude([{ role: 'user', content: a1Content }]);
+          compassMap = a1Result.compass_map || {};
+          projectType = a1Result.project_type || 'extension';
+          agent1Flags = a1Result.flags || [];
+          const northArrowConfidence = a1Result.north_arrow_confidence || 'low';
+          const northArrowDescription = a1Result.north_arrow_description || 'Not recorded';
+          const northArrowPage = a1Result.north_arrow_page || 'unknown';
+          const orientationMethod = a1Result.orientation_method || 'default_assumed';
+          const bearingFound = a1Result.bearing_data_found || false;
+          const streetBearing = a1Result.street_frontage_bearing || 'not found';
+          // ── Bearing vs north-arrow cross-check ───────────────────────────
+          // If Agent 1 used bearing_data, verify it's plausible against the
+          // north arrow description. A near-vertical north arrow (12 o'clock)
+          // implies ~0° block rotation. A 206° bearing implies ~26° anti-clockwise
+          // rotation — inconsistent. When they conflict, trust the north arrow
+          // and rebuild the compass map with the correct ~23° CW rotation.
+          if (orientationMethod === 'bearing_data' && bearingFound) {
+            const bearingNum = parseFloat(streetBearing);
+            if (!isNaN(bearingNum)) {
+              const nearVertical = /12.{0,6}o.?clock|straight up|pointing up(?:ward)?|vertical|due north|true north/i.test(northArrowDescription) ||
+                                   /11.{0,6}o.?clock/i.test(northArrowDescription);
+              // 206° bearing → block faces SSW → north arrow should be ~11 o'clock
+              // If north arrow is described as vertical/12 o'clock, the bearing is wrong
+              if (nearVertical && bearingNum > 150 && bearingNum < 260) {
+                console.warn('⚠️ Bearing ' + bearingNum + '° conflicts with near-vertical north arrow — likely wrong boundary. Rebuilding compass map.');
+                agent1Flags.push('bearing_overridden_by_north_arrow');
+                // Rebuild: literal cardinal directions first, then apply 23° CW rotation
+                // (which is what a correct 113° street frontage bearing implies)
+                const rotation23cw = { 'N':'NE', 'NE':'E', 'E':'SE', 'SE':'S', 'S':'SW', 'SW':'W', 'W':'NW', 'NW':'N' };
+                const rebuildMap = {};
+                for (const [k, v] of Object.entries(compassMap)) {
+                  const ku = k.toUpperCase();
+                  let base = v; // keep Agent 1's value as fallback
+                  if (ku.includes('NORTH') && !ku.includes('SOUTH')) base = 'N';
+                  else if (ku.includes('SOUTH') && !ku.includes('NORTH')) base = 'S';
+                  else if (ku.includes('EAST') && !ku.includes('WEST')) base = 'E';
+                  else if (ku.includes('WEST') && !ku.includes('EAST')) base = 'W';
+                  rebuildMap[k] = rotation23cw[base] || base;
+                }
+                compassMap = rebuildMap;
+                console.log('Agent 1 compass map REBUILT:', JSON.stringify(compassMap));
+              }
+            }
+          }
+          // ─────────────────────────────────────────────────────────────────
+          // Extract elevation page numbers from Agent 1 for targeted Agent 2A/3A calls
+          elevationPageNums = new Set((a1Result.elevation_page_numbers || []).map(n => Number(n)));
+          console.log('Agent 1 elevation pages:', elevationPageNums.size > 0 ? [...elevationPageNums].join(',') : 'not provided — will use all pages');
+          if (northArrowConfidence !== 'high' && orientationMethod !== 'bearing_data') {
+            agent1Flags.push('north_arrow_confidence_' + northArrowConfidence);
+          }
+          console.log('Agent 1 compass map:', JSON.stringify(compassMap));
+          console.log('Agent 1 orientation method:', orientationMethod, bearingFound ? `| bearing: ${streetBearing}` : '');
+          console.log('Agent 1 north arrow:', northArrowConfidence, '| page:', northArrowPage, '|', northArrowDescription);
+          console.log('Agent 1 project type:', projectType);
+          console.log('Agent 1 flags:', JSON.stringify(agent1Flags));
+          const needsCompassReview = orientationMethod === 'default_assumed' || (northArrowConfidence !== 'high' && !bearingFound);
+          if (a1Result.requires_human_review || needsCompassReview) {
+            console.warn('Agent 1 requires human review — orientation method:', orientationMethod);
+            window._compassWarning = { confidence: northArrowConfidence, description: northArrowDescription, page: northArrowPage, compassMap, orientationMethod, bearing: streetBearing };
+          }
+        } catch (e) {
+          console.warn('Agent 1 failed:', e);
+          agent1Flags = ['agent1_error'];
+        }
+
+        // Sanitise compass map — only allow 8 valid cardinal/intercardinal directions
+        const VALID_COMPASS = new Set(['N','NE','E','SE','S','SW','W','NW']);
+        const sanitiseCompass = v => {
+          if (!v) return null;
+          const up = v.toUpperCase().trim();
+          if (VALID_COMPASS.has(up)) return up;
+          const roundMap = {'NNE':'N','ENE':'NE','ESE':'SE','SSE':'S','SSW':'SW','WSW':'W','WNW':'NW','NNW':'N'};
+          return roundMap[up] || null;
+        };
+        const cleanCompassMap = {};
+        for (const [k,v] of Object.entries(compassMap)) {
+          const clean = sanitiseCompass(v);
+          if (clean) cleanCompassMap[k] = clean;
+        }
+
+        const compassContext = Object.keys(cleanCompassMap).length > 0
+          ? `COMPASS MAP FROM AGENT 1 (apply exactly — do not override):\n` +
+            Object.entries(cleanCompassMap).map(([k, v]) => `  "${k}" → ${v}`).join('\n')
+          : `COMPASS: No rotation map available. Read facing from elevation titles literally.`;
+
+        // ─────────────────────────────────────────────────────────────────
+        // AGENT 2A — ELEVATION PASS (all pages, elevation drawings only)
+        // Extracts windows confirmed on elevation drawings with HxW annotations.
+        // No page cap — all pages sent for maximum coverage.
+        // ─────────────────────────────────────────────────────────────────
+        // Use Agent 1's elevation_page_numbers for targeted extraction if available,
+        // otherwise fall back to first 16 pages (safe cap for rate limits).
+        // MINIMUM COVERAGE CHECK: if Agent 1 found very few elevation pages relative
+        // to total PDF size, widen to include upper half of PDF + floor plan pages.
+        const MAX_FALLBACK_PAGES = 16;
+        const totalPages = pageUrls.length;
+        const floorPlanPageNums = new Set((a1Result.floor_plan_page_numbers || []).map(Number));
+
+        if (elevationPageNums.size > 0 && elevationPageNums.size < 4 && totalPages > 20) {
+          console.warn('Only ' + elevationPageNums.size + ' elevation pages found in ' + totalPages + '-page PDF — widening search');
+          for (const p of floorPlanPageNums) elevationPageNums.add(p);
+          // Add all pages from last known elevation page onwards
+          // (midpoint heuristic skipped pages 11-20 on Snowy Place)
+          const lastKnownElev = Math.max(...[...elevationPageNums]);
+          for (let i = lastKnownElev + 1; i <= totalPages; i++) elevationPageNums.add(i);
+          console.log('Widened elevation pages to:', [...elevationPageNums].sort((a,b)=>a-b).join(','));
+        }
+
+        const glazingPages = elevationPageNums.size > 0
+          ? pageUrls
+              .map((url, i) => ({ url, pageNum: i + 1 }))
+              .filter(p => elevationPageNums.has(p.pageNum))
+          : pageUrls.slice(0, Math.min(MAX_FALLBACK_PAGES, pageUrls.length))
+              .map((url, i) => ({ url, pageNum: i + 1 }));
+        const method = elevationPageNums.size > 0
+          ? 'TARGETED — elevation pages [' + [...elevationPageNums].sort((a,b)=>a-b).join(',') + ']'
+          : 'FALLBACK — first ' + glazingPages.length + ' of ' + pageUrls.length + ' pages';
+        console.log(`Agent 2A page selection: ${method}`);
+
+        showStatus('loading', `<span class="spinner"></span> Agent 2A — Elevation pass (${glazingPages.length} pages)…`);
+
+        let allWindows = [];
+        let gfaNotes = '';
+        let agent2Flags = [];
+        let pageInventory = [];
+
+        // ── AGENT 2A — ELEVATION PASS (batched if >12 pages) ──
+        const A2A_BATCH_SIZE = 12;
+        const a2aBatches = [];
+        for (let i = 0; i < glazingPages.length; i += A2A_BATCH_SIZE) {
+          a2aBatches.push(glazingPages.slice(i, i + A2A_BATCH_SIZE));
+        }
+        console.log(`Agent 2A: ${glazingPages.length} pages split into ${a2aBatches.length} batch(es) of max ${A2A_BATCH_SIZE}`);
+
+        try {
+          for (let batchIdx = 0; batchIdx < a2aBatches.length; batchIdx++) {
+            const batch = a2aBatches[batchIdx];
+            if (batchIdx > 0) {
+              console.log(`Agent 2A batch ${batchIdx+1}/${a2aBatches.length} — waiting 8s...`);
+              await new Promise(r => setTimeout(r, 8000));
+            }
+            showStatus('loading', `<span class="spinner"></span> Agent 2A — Elevation pass (batch ${batchIdx+1}/${a2aBatches.length}, pages ${batch[0].pageNum}–${batch[batch.length-1].pageNum})…`);
+            const a2Content = [];
+            for (let i = 0; i < batch.length; i++) {
+              const { url, pageNum } = batch[i];
+              a2Content.push({ type: 'text', text: `--- PAGE ${pageNum} (of ${pageUrls.length} total) ---` });
+              a2Content.push({ type: 'image', source: { type: 'url', url } });
+            }
+          a2Content.push({ type: 'text', text: `You are extracting glazing data from ELEVATION DRAWINGS ONLY for Australian residential projects.
+You must RETURN VALID JSON ONLY — no commentary, no markdown, no explanation outside the JSON structure.
+
+INPUTS FROM AGENT 1:
+project_type: "${projectType}"
+agent1_flags: ${JSON.stringify(agent1Flags)}
+${compassContext}
+
+YOUR ONLY JOB: Find windows on elevation drawings that have HxW dimension annotations.
+
+═══════════════════════════════════════════
+WHAT TO EXTRACT FROM
+═══════════════════════════════════════════
+
+EXTRACT FROM: elevation drawing pages only.
+An elevation drawing shows the external wall of the building with windows drawn on it.
+Elevation pages have titles like: "SOUTH ELEVATION", "NORTH ELEV.", "WEST ELEV. - EXT", "ELEVATIONS 1-4"
+
+SKIP entirely: floor plan pages, site plan pages, section pages, detail pages, legend pages, cover pages.
+Floor plan pages show room layouts from above — do not extract from these.
+
+IMPORTANT — each window appears on ONE primary elevation only:
+If the same tag appears visible on multiple elevation drawings, extract it only from the elevation
+where the HxW callout is directly labelled on that wall surface.
+Do NOT extract a window from an elevation where it appears as a background element or is visible
+through another opening — only extract where the tag and HxW annotation are directly on that wall.
+
+═══════════════════════════════════════════
+DIMENSION RULE — NO FALLBACK
+═══════════════════════════════════════════
+
+ONLY populate height_m and width_m if you can read an HxW annotation directly on the elevation.
+HxW annotations look like: "ASW HxW:6×20", "ASD HxW:21-24", "HIGHLIGHT AFW HxW:6×35"
+These appear as: "HxW:6×35" or "HxW:6-20" or "HxW:6 x 20" — all equivalent.
+
+DO NOT calculate dimensions from the tag number code.
+Tag codes like "7-35" or "4-14" are nominal product identifiers — NOT reliable dimensions.
+If the HxW annotation is not clearly readable: set height_m: null, width_m: null,
+add "hxw_not_confirmed" to that window's flags[]. The assessor will fill these in manually.
+A blank dimension is better than a wrong dimension.
+
+EXAMPLE of correct behaviour:
+Tag: "HIGHLIGHT AFW 4-14" — tag decode would give H:0.4 W:1.4
+HxW annotation on elevation: "HxW:6×35" → use H:0.6m W:3.5m
+If no HxW annotation visible: set height_m: null, width_m: null, flag "hxw_not_confirmed"
+
+═══════════════════════════════════════════
+TAG FORMAT
+═══════════════════════════════════════════
+
+Valid tag prefixes (only these — others are misreads):
+ASW = Sliding Window | ASD = Sliding Door | AAW = Awning Window
+AFW = Fixed Window | ACW = Casement Window
+HIGHLIGHT AAW = Clerestory Awning | HIGHLIGHT AFW = Clerestory Fixed
+
+HIGHLIGHT windows sit above the main window line — they may appear near the ceiling/roofline
+of the elevation drawing, not at the typical window height zone. Look for small horizontal
+openings near the top of the wall. These often have small HxW callouts (e.g. HxW:4×14 = H:0.4m W:1.4m).
+
+Sliding doors (ASD) span full height floor-to-ceiling on the elevation drawing.
+Do NOT record a full-height floor-to-ceiling opening as ASW — it is ASD.
+
+An elevation drawing often contains MULTIPLE windows — scan the ENTIRE wall surface top to bottom,
+left to right. Do not stop after finding the first window. A single elevation page may show
+3, 4, or 5 separate openings at different heights and positions on the wall.
+Casement windows (ACW) may be narrow (as small as 0.6m–0.9m wide) — do not overlook them.
+Sliding windows (ASW) may appear at any height — they are not always at eye level.
+
+═══════════════════════════════════════════
+COMPASS ORIENTATION
+═══════════════════════════════════════════
+
+Use the compass map from Agent 1 to assign facing.
+The compass map was derived from the site plan by Agent 1 — apply it exactly as given.
+Do NOT attempt to independently verify the north arrow or override the provided compass values — trust it unconditionally.
+Match the elevation drawing title to a key in the compass map.
+If the elevation title is not in the compass map, set facing: "UNKNOWN" and flag "orientation_unresolved".
+
+═══════════════════════════════════════════
+GFA FIGURES
+═══════════════════════════════════════════
+
+Look for a project data box (often in the title block, bottom corner of pages).
+Record exact label and value for each figure — do not combine or sum:
+- "Existing Structure GFA - Class 1: Xm²" 
+- "Proposed Structure GFA - Single Storey - Class 1: Xm²"
+- Renovation or Class 10 figures — label each separately
+
+CRITICAL — "Proposed Roof Area" is NOT GFA and must be excluded:
+"Proposed Roof Area" or "Proposed Roof Area - Class 1" is roof coverage area, NOT floor area.
+Do NOT include this figure in gfa_notes under any circumstances.
+Only record figures explicitly labelled as "GFA", "Gross Floor Area", or "Floor Area".
+
+The ONLY valid label for existing dwelling floor area is:
+"Existing Structure GFA - Class 1" or "Existing Dwelling GFA" or "Existing Building Area - Class 1"
+Any other label that mentions the existing dwelling should be verified carefully — if it says
+"Roof Area", "Site Coverage", "Plot Ratio", or "Setback", exclude it entirely.
+
+CRITICAL — "Renovation Inside Existing Residence" or "Proposed Renovation" is NOT existing GFA:
+This figure describes internal alteration works and must NOT be recorded as existing_gfa.
+If you see both "Existing Structure GFA" and "Renovation Inside Existing Residence" in the title block,
+record ONLY the "Existing Structure GFA" value as existing GFA. Ignore the renovation figure entirely.
+
+EXAMPLE of a correct title block — only record the two GFA lines:
+  Proposed Structure GFA - Single Storey - Class 1: 32.84m²  ← RECORD THIS
+  Proposed Roof Area - Class 1: 41.67m²                      ← IGNORE (roof area, not GFA)
+  Existing Structure GFA - Class 1: 135.52m²                 ← RECORD THIS
+  Proposed Renovation - Inside Existing Residence: 39.82m²   ← IGNORE (renovation, not GFA)
+
+═══════════════════════════════════════════
+OUTPUT FORMAT
+═══════════════════════════════════════════
+
+{
+  "gfa_notes": "Existing Structure GFA - Class 1: [value]m², Proposed Structure GFA - Single Storey - Class 1: [value]m²",
+  "windows": [
+    {
+      "tag_id": "ASD 21-24",
+      "room_name": "NOT IDENTIFIED",
+      "facing": "SE",
+      "height_m": 2.1,
+      "width_m": 2.4,
+      "opening_type": "Sliding Door",
+      "frame_colour": "Dark",
+      "is_new_works": true,
+      "confidence": "high",
+      "source_pages": ["9"],
+      "needs_review": false,
+      "flags": [],
+      "notes": ""
+    }
+  ],
+  "flags": [],
+  "requires_human_review": false
+}
+
+Leave room_name as "NOT IDENTIFIED" — Agent 2B will fill room names from floor plans.` });
+
+          const a2Result = await callClaude([{ role: 'user', content: a2Content }]);
+            const batchWindows = a2Result.windows || [];
+            if (!gfaNotes && a2Result.gfa_notes) gfaNotes = a2Result.gfa_notes;
+            for (const f of (a2Result.flags || [])) { if (!agent2Flags.includes(f)) agent2Flags.push(f); }
+            for (const p of (a2Result.page_inventory || [])) pageInventory.push(p);
+            allWindows.push(...batchWindows);
+            console.log(`Agent 2A batch ${batchIdx+1}: ${batchWindows.length} windows found`);
+          } // end batch loop
+
+          console.log(`Agent 2A: ${allWindows.length} windows from elevations, GFA: ${gfaNotes.substring(0, 80)}`);
+          console.log('Agent 2A flags:', JSON.stringify(agent2Flags));
+          console.log('Agent 2A ALL WINDOWS RAW:');
+          allWindows.forEach((w, i) => {
+            const tag = w.tag_id||w.tag||'?';
+            console.log(`  [${i}] ${tag} | room:${w.room_name||'?'} | facing:${w.facing||'?'} | H:${w.height_m??'null'} W:${w.width_m??'null'} | flags:${JSON.stringify(w.flags||[])} | pages:${JSON.stringify(w.source_pages||w.source_page||'?')}`);
+          });
+        } catch (e) {
+          console.warn('Agent 2A failed:', e);
+          showStatus('error', '❌ Elevation extraction failed: ' + e.message);
+          extractBtn.disabled = false;
+          return;
+        }
+
+        // ── AGENT 2B — FLOOR PLAN CROSS-REFERENCE PASS ──
+        if (allWindows.length > 0) {
+          await new Promise(r => setTimeout(r, 8000)); // rate limit recovery between agents
+          showStatus('loading', `<span class="spinner"></span> Agent 2B — Floor plan cross-reference (${allWindows.length} windows)…`);
+          try {
+            const a2bContent = [];
+            // Agent 2B needs floor plan pages — use full pageUrls, not the elevation-filtered glazingPages
+            const floorPlanPages = pageUrls.slice(0, Math.min(8, pageUrls.length))
+              .map((url, i) => ({ url, pageNum: i + 1 }));
+            for (let i = 0; i < floorPlanPages.length; i++) {
+              const { url, pageNum } = floorPlanPages[i];
+              a2bContent.push({ type: 'text', text: `--- PAGE ${pageNum} ---` });
+              a2bContent.push({ type: 'image', source: { type: 'url', url } });
+            }
+            a2bContent.push({ type: 'text', text: `You are cross-referencing a glazing schedule against floor plans for Australian residential projects.
+You must RETURN VALID JSON ONLY.
+
+WINDOWS EXTRACTED FROM ELEVATIONS (Agent 2A output):
+${JSON.stringify(allWindows, null, 2)}
+
+YOUR JOB has TWO parts:
+
+PART 1 — Augment the existing window list:
+For each window in the list above, find it on the proposed floor plan and determine:
+1. room_name — which room's wall does the opening penetrate? Use the room label from the floor plan.
+2. is_new_works — is this opening in the new extension/proposed works, or existing dwelling?
+DO NOT change tag_id, facing, height_m, width_m, or other fields — only fill room_name and is_new_works.
+
+PART 2 — Find replacement windows on floor plans:
+Scan the floor plan pages for windows with notes like:
+"REPLACE WITH NEW", "REPLACE WITH NEW SAME SIZE", "REPLACE WITH NEW DOUBLE GLAZING",
+"NEW WINDOW SAME OPENING", or similar replacement instructions.
+These are existing windows being replaced — they will not appear on extension elevation drawings,
+but are relevant to the energy rating assessment.
+For each replacement window found:
+- Extract the tag (e.g. "ASW 21-15"), room name, and any dimensions visible on the floor plan
+- Set is_new_works: false (existing wall, not new extension)
+- Set facing from the wall direction (use the compass map if provided)
+- Set flags: ["replacement_window", "hxw_from_floor_plan"]
+- Add to the windows array as a new entry
+Only include windows with a clear replacement instruction — do not guess.
+
+ROOM NAME METHOD:
+Find the window tag on the floor plan. The tag sits on the wall of a room.
+The room whose boundary wall contains the opening owns the window.
+Do not use the nearest room label — use the room whose wall the opening is cut through.
+
+NEW WORKS vs EXISTING:
+- is_new_works: true — opening is on a wall of the new extension/addition
+- is_new_works: false — opening is on a wall of the original existing dwelling
+
+Return the same window list with room_name and is_new_works filled in where you can confirm them.
+If you cannot find a window on the floor plan, leave room_name as "NOT IDENTIFIED".
+
+Return: { "windows": [...same array with room_name and is_new_works updated...] }` });
+
+            const a2bResult = await callClaude([{ role: 'user', content: a2bContent }]);
+            const updatedWindows = a2bResult.windows || [];
+            // Accept if count matches OR more returned (replacement windows added by 2B)
+            if (updatedWindows.length >= allWindows.length) {
+              allWindows = updatedWindows;
+              console.log('Agent 2B: room names updated' + (updatedWindows.length > allWindows.length ? ', replacement windows added' : ''));
+              allWindows.forEach((w, i) => {
+                console.log(`  [${i}] ${w.tag_id||'?'} → room:"${w.room_name||'?'}" is_new_works:${w.is_new_works}`);
+              });
+            } else {
+              console.warn(`Agent 2B returned ${updatedWindows.length} windows, expected ${allWindows.length} — using 2A results`);
+            }
+          } catch (e) {
+            console.warn('Agent 2B cross-reference failed (non-fatal, using 2A results):', e);
+          }
+        }
+        // ─────────────────────────────────────────────────────────────────
+        // AGENT 3A — VERIFICATION PASS
+        // Checks each extracted window against elevation drawings.
+        // Confirms tag, facing, and dimensions before scope calculation.
+        // ─────────────────────────────────────────────────────────────────
+        if (allWindows.length > 0) {
+          await new Promise(r => setTimeout(r, 8000)); // rate limit recovery between agents
+          showStatus('loading', `<span class="spinner"></span> Agent 3A — Verifying ${allWindows.length} windows against drawings…`);
+          try {
+            const a3aContent = [];
+            // Agent 3A only needs elevation pages — same targeted set as Agent 2A
+            const a3aPages = glazingPages; // already filtered to elevation pages
+            for (let i = 0; i < a3aPages.length; i++) {
+              const { url, pageNum } = a3aPages[i];
+              a3aContent.push({ type: 'text', text: `--- PAGE ${pageNum} ---` });
+              a3aContent.push({ type: 'image', source: { type: 'url', url } });
+            }
+            a3aContent.push({ type: 'text', text: `You are verifying a glazing extraction for Australian residential projects.
+You must RETURN VALID JSON ONLY.
+
+${compassContext}
+
+WINDOWS TO VERIFY:
+${JSON.stringify(allWindows, null, 2)}
+
+For each window in the list, look at the elevation drawings and verify:
+1. TAG — does this exact tag appear on an elevation drawing? (yes/no)
+2. FACING — which elevation drawing title does it appear on? Apply compass map to get facing.
+3. DIMENSIONS — what does the HxW annotation say on that elevation?
+
+DIMENSION CORRECTIONS — allowed:
+If the HxW annotation gives different dimensions than what was extracted, update height_m and width_m
+and add "dimensions_corrected" to flags.
+
+FACING CORRECTIONS — restricted:
+Do NOT correct facing if the window already has a valid compass direction (N/NE/E/SE/S/SW/W/NW).
+Agent 1 derived the compass map from the site plan — trust it unconditionally.
+Only update facing if the current value is "UNKNOWN" or "UNVERIFIED".
+If you believe the facing looks wrong, add "facing_check_recommended" to flags[] but do NOT change it.
+
+If you cannot find the tag on any elevation drawing, set verified: false and flag "not_found_on_elevation".
+
+Return the same window list with verified field and any corrections applied.
+{ "windows": [...verified and corrected window list...] }` });
+
+            const a3aResult = await callClaude([{ role: 'user', content: a3aContent }]);
+            const verifiedWindows = a3aResult.windows || [];
+            if (verifiedWindows.length === allWindows.length) {
+              allWindows = verifiedWindows;
+              const corrected = allWindows.filter(w => (w.flags||[]).some(f => f.includes('corrected')));
+              const notFound = allWindows.filter(w => (w.flags||[]).includes('not_found_on_elevation'));
+              console.log(`Agent 3A: ${allWindows.length} verified, ${corrected.length} corrected, ${notFound.length} not found on elevation`);
+              corrected.forEach(w => console.log(`  CORRECTED: ${w.tag_id} — ${JSON.stringify(w.flags)}`));
+              notFound.forEach(w => console.log(`  NOT FOUND: ${w.tag_id}`));
+            } else {
+              console.warn(`Agent 3A returned ${verifiedWindows.length} windows, expected ${allWindows.length} — using unverified`);
+            }
+          } catch (e) {
+            console.warn('Agent 3A verification failed (non-fatal):', e);
+          }
+        }
+
+        // ─────────────────────────────────────────────────────────────────
+        // AGENT 3 — SCOPE DETERMINER (text only, receives A1 + A2 outputs)
+        // ─────────────────────────────────────────────────────────────────
+        await new Promise(r => setTimeout(r, 8000)); // rate limit recovery
+        showStatus('loading', '<span class="spinner"></span> Agent 3 — Determining scope…');
+
+        let scopeLabel = 'whole_dwelling';
+        let scopeNote = gfaNotes;
+        let agent3Flags = [];
+        let pipelineConfidence = 'medium';
+        let allPipelineFlags = [];
+
+        // Only send PDF to Agent 3 if Agent 2 couldn't find GFA
+        const agent3NeedsPDF = !gfaNotes.trim() || agent2Flags.includes('gfa_not_found');
+        console.log(`Agent 3: ${agent3NeedsPDF ? 'sending PDF (GFA not found by Agent 2)' : 'text only (GFA found)'}`);
+
+        const a3PromptText = `You are an NCC 2022 scope calculator for Australian residential projects.
+You must RETURN VALID JSON ONLY — no commentary, no markdown, no explanation outside the JSON structure.
+
+INPUTS FROM UPSTREAM AGENTS:
+project_type: "${projectType}"
+agent1_flags: ${JSON.stringify(agent1Flags)}
+agent2_flags: ${JSON.stringify(agent2Flags)}
+gfa_notes from Agent 2: "${gfaNotes}"
+
+═══════════════════════════════════════════
+STEP 1 — LOCATE GFA FIGURES
+═══════════════════════════════════════════
+
+Use the gfa_notes above. Identify exactly two figures for the calculation:
+
+EXISTING GFA — use the figure labelled EXACTLY:
+"Existing Structure GFA" or "Existing Structure GFA - Class 1" or "Existing Dwelling GFA"
+This is a SINGLE figure from the title block. Do NOT add or combine multiple figures.
+Do NOT include renovation area, internal works, Class 10, or any other area.
+The existing GFA is the habitable Class 1 floor area of the house BEFORE any works.
+
+NEW WORKS GFA — use the figure labelled EXACTLY:
+"Proposed Structure GFA" or "Proposed Structure GFA - Single Storey - Class 1" or "New Extension GFA"
+This is the new physical structure being added only. Exclude Class 10. Exclude renovation.
+
+FIGURES TO EXPLICITLY IGNORE (do not add to either side):
+- "Proposed Roof Area" — this is roof area, not GFA
+- "Internal Renovation" / "Renovation Area" / "Reno GFA" — not new extension GFA
+- "Class 10" / "Garage" / "Carport" / "Shed" / "Deck" — Class 10, excluded
+- "Total GFA" / "Combined GFA" — never use totals, always use individual labelled figures
+- Any figure you cannot match to an exact label above
+
+CRITICAL: existing_gfa and new_works_gfa must each come from ONE labelled figure.
+Never derive existing_gfa by subtraction if the labelled figure is available.
+Never sum multiple figures to get either value.
+${agent3NeedsPDF ? 'Also scan the PDF pages provided to locate the title block GFA schedule.' : ''}
+
+═══════════════════════════════════════════
+STEP 2 — NCC 2022 SCOPE CALCULATION
+═══════════════════════════════════════════
+
+FORMULA: scope_ratio = new_works_gfa ÷ existing_gfa
+scope_ratio ≥ 0.50 → scope: "whole_dwelling"
+scope_ratio < 0.50 → scope: "new_works_only"
+project_type "new_dwelling" → scope: "whole_dwelling" always
+Borderline (0.45–0.55): apply calculation + add "borderline_scope_ratio" to flags[] + requires_human_review: true
+GFA not found → scope: "whole_dwelling" + add "gfa_not_found_defaulting_to_whole_dwelling" to flags[] + requires_human_review: true
+
+═══════════════════════════════════════════
+STEP 3 — PIPELINE FLAGS SUMMARY
+═══════════════════════════════════════════
+
+Collect all flags from all agents into pipeline_flags_summary.
+pipeline_confidence: "high" (no flags) | "medium" (minor flags) | "low" (significant flags) | "failed" (critical missing data)
+
+═══════════════════════════════════════════
+OUTPUT FORMAT
+═══════════════════════════════════════════
+
+{
+  "scope": "[whole_dwelling OR new_works_only — calculated from ratio, NOT copied from this example]",
+  "scope_ratio": "[ratio as decimal]",
+  "scope_ratio_percentage": "[ratio as percentage]",
+  "existing_gfa": "[value from drawings]",
+  "new_works_gfa": "[value from drawings]",
+  "total_gfa": "[sum]",
+  "scope_note": "[X] ÷ [Y] = [Z]% — [above/below] 50% threshold → [whole_dwelling/new_works_only]",
+  "pipeline_flags_summary": {
+    "agent1_flags": [],
+    "agent2_flags": [],
+    "agent3_flags": [],
+    "all_flags": [],
+    "total_flag_count": 0
+  },
+  "pipeline_confidence": "high",
+  "requires_human_review": false,
+  "agent3_notes": ""
+}
+
+FLAGS: "gfa_not_found_defaulting_to_whole_dwelling" | "existing_gfa_not_found" | "new_works_gfa_not_found" | "borderline_scope_ratio" | "conflicting_gfa_figures_found"
+Set requires_human_review: true if ANY flag is present.`;
+
+        const a3Messages = [];
+        if (agent3NeedsPDF) {
+          // Include first 5 pages to help find GFA schedule
+          const a3Content = [];
+          for (let i = 0; i < Math.min(5, pageUrls.length); i++) {
+            a3Content.push({ type: 'text', text: `--- PAGE ${i + 1} ---` });
+            a3Content.push({ type: 'image', source: { type: 'url', url: pageUrls[i] } });
+          }
+          a3Content.push({ type: 'text', text: a3PromptText });
+          a3Messages.push({ role: 'user', content: a3Content });
+        } else {
+          a3Messages.push({ role: 'user', content: a3PromptText });
+        }
+
+        try {
+          const a3Result = await callClaude(a3Messages, 'You are an NCC 2022 scope calculator. Respond with valid JSON only.');
+
+          scopeLabel = a3Result.scope || 'whole_dwelling';
+          // JS override: recompute scope from numbers — prevents Agent 3 returning wrong scope string
+          const a3Existing = parseFloat(a3Result.existing_gfa);
+          const a3Proposed = parseFloat(a3Result.new_works_gfa);
+          if (!isNaN(a3Existing) && !isNaN(a3Proposed) && a3Existing > 0) {
+            const computedRatio = a3Proposed / a3Existing;
+            const computedScope = computedRatio >= 0.50 ? 'whole_dwelling' : 'new_works_only';
+            if (computedScope !== scopeLabel) {
+              console.warn('Scope override: Agent 3 said "' + scopeLabel + '" but ratio ' + (computedRatio*100).toFixed(1) + '% forces "' + computedScope + '"');
+              scopeLabel = computedScope;
+            }
+          }
+          scopeNote = a3Result.scope_note || gfaNotes;
+          agent3Flags = a3Result.flags || (a3Result.pipeline_flags_summary?.agent3_flags) || [];
+          pipelineConfidence = a3Result.pipeline_confidence || 'medium';
+          allPipelineFlags = a3Result.pipeline_flags_summary?.all_flags || [...agent1Flags, ...agent2Flags, ...agent3Flags];
+          console.log('Agent 3 scope:', scopeLabel, '|', scopeNote);
+          console.log('Agent 3 pipeline confidence:', pipelineConfidence);
+          console.log('All pipeline flags:', JSON.stringify(allPipelineFlags));
+        } catch (e) {
+          console.warn('Agent 3 scope failed, defaulting to whole_dwelling:', e);
+          scopeLabel = 'whole_dwelling';
+          agent3Flags = ['agent3_error'];
+          allPipelineFlags = [...agent1Flags, ...agent2Flags, 'agent3_error'];
+          pipelineConfidence = 'low';
+        }
+
+        // ─────────────────────────────────────────────────────────────────
+        // AGENT 4 — COMPILER (pure JavaScript, no Claude call)
+        // Scope filter → deduplicate → validate → sort → final schedule
+        // ─────────────────────────────────────────────────────────────────
+        showStatus('loading', '<span class="spinner"></span> Agent 4 — Compiling schedule…');
+
+        // Scope filter — only runs for new_works_only
+        // Trust Agent 2's is_new_works flag — room-name matching is too aggressive
+        // (extension rooms like Bedroom 4, Lounge can have same names as existing rooms)
+        if (scopeLabel === 'new_works_only') {
+          allWindows = allWindows.filter(w => {
+            // is_new_works === false is explicit Agent 2 signal — exclude
+            if (w.is_new_works === false) { console.log(`  SCOPE DROP (is_new_works:false): ${w.tag_id||w.tag}`); return false; }
+            // Check notes for explicit existing dwelling markers
+            const notes = (w.notes || '').toLowerCase();
+            if (notes.includes('existing dwelling') || notes.includes('existing residence') ||
+                notes.includes('existing floor plan') || notes.includes('demolition plan')) {
+              console.log(`  SCOPE DROP (notes): ${w.tag_id||w.tag}`);
+              return false;
+            }
+            return true;
+          });
+          console.log(`Scope filter (new_works_only): ${allWindows.length} windows remain`);
+
+          // Flag ambiguous room names for review — Entrance/Hall/Laundry appear in both
+          // existing and new works; assessor must verify before entering into NCC calculator
+          const ambiguousRooms = ['entrance','hall','hallway','laundry','wc','powder room','toilet'];
+          allWindows.forEach(w => {
+            const room = (w.room_name || w.room || '').toLowerCase();
+            if (ambiguousRooms.some(r => room.includes(r))) {
+              w.needs_review = true;
+              w.flags = [...(w.flags || []), 'room_name_check_existing_vs_new'];
+              if (!w.notes) w.notes = '';
+              w.notes = (`[CHECK] Room "${w.room_name||w.room}" — verify this is in new works not existing dwelling. ` + w.notes).trim();
+              console.log(`  REVIEW FLAG (room): ${w.tag_id||w.tag} — "${w.room_name||w.room}"`);
+            }
+          });
+        }
+
+        // Strip elevation format artifacts from tag names before deduplication
+        // Handles: "HxW:" prefix, "21 x 24" → "21-24", "6x20" → "6-20"
+        const stripHxW = str => {
+          if (!str) return '';
+          return str
+            .replace(/HxW:/gi, '')           // remove "HxW:" label
+            .replace(/(\d+)\s*[x\u00d7]\s*(\d+)/gi, '$1-$2')  // "21 x 24", "6x20", "6×20" → "21-24"
+            .replace(/\s+/g, ' ')
+            .trim();
+        };
+        // Clean up room names that are actually elevation titles (Agent 2 bug)
+        const elevationTitlePattern = /^(north|south|east|west)(\s+elev|\.\s*\d*|ation)/i;
+        const cleanRoom = str => {
+          if (!str) return '';
+          if (elevationTitlePattern.test(str.trim())) return ''; // treat as no room
+          return str;
+        };
+        const norm = str => stripHxW(str || '').toLowerCase().replace(/[\s\-_]/g, '');
+
+        // Sort: entries with dimensions first, then higher confidence first
+        const confScore = c => c === 'high' ? 0 : c === 'medium' ? 1 : 2;
+        allWindows.sort((a, b) => {
+          const aDims = (a.height_m && a.width_m) ? 0 : 1;
+          const bDims = (b.height_m && b.width_m) ? 0 : 1;
+          if (aDims !== bDims) return aDims - bDims;
+          return confScore(a.confidence) - confScore(b.confidence);
+        });
+
+        // Deduplicate by tag — same tag code = same physical window
+        // Key strategy: prefer full tag (prefix + size), fall back to type+room+facing+dims
+        const deduped = new Map();
+        let droppedNoTag = 0, droppedDupe = 0;
+
+        // Detect bare size-code tags (e.g. "HxW:6-20", "6-20", "620") — no type prefix
+        const isBareSize = str => /^(HxW:)?[\d\s\-x]+$/i.test(str.trim());
+
+        const makeKey = (w) => {
+          const rawId = w.tag_id || w.tag || w.window_id || '';
+          const cleaned = stripHxW(rawId).trim();
+          const facing = (w.facing || '').toUpperCase();
+          if (cleaned && !isBareSize(cleaned)) {
+            // Full tag available — key on tag + facing
+            // Two windows with same tag code but different facing = different physical openings
+            return norm(cleaned) + '|' + facing;
+          }
+          // Bare size code — key on type+room+facing+dims
+          const type = (w.opening_type || w.type || '').toLowerCase().replace(/\s+/g,'');
+          const room = (w.room_name || w.room || '').toLowerCase().replace(/\s+/g,'');
+          const h = String(w.height_m || '');
+          const wid = String(w.width_m || '');
+          return `${type}|${room}|${facing}|${h}x${wid}`;
+        };
+
+        for (const w of allWindows) {
+          // Support both old field name (tag_id) and new (tag)
+          const id = w.tag_id || w.tag || w.window_id || '';
+          const key = makeKey(w);
+
+          if (!key || key === '|||x') { droppedNoTag++; console.log(`  DROP (no key): ${JSON.stringify(w)}`); continue; }
+
+          if (!deduped.has(key)) {
+            // Reconstruct proper tag if Agent 2 returned bare size code
+            const rawId = stripHxW(id);
+            const displayId = (rawId && !isBareSize(rawId))
+              ? rawId
+              : rawId; // keep as-is; assessor can see it
+            deduped.set(key, {
+              window_id: displayId,
+              room_name: cleanRoom(w.room_name || w.room || ''),
+              facing: w.facing || '',
+              height_m: w.height_m || '',
+              width_m: w.width_m || '',
+              room_type: w.room_type || '',
+              opening_type: w.opening_type || w.type || '',
+              frame_colour: w.frame_colour || '',
+              confidence: w.confidence || '',
+              source_page: Array.isArray(w.source_pages) ? w.source_pages.join(',') : (w.source_page || ''),
+              notes: w.notes || '',
+              window_flags: w.flags || [],
+            });
+          } else {
+            droppedDupe++;
+            console.log(`  MERGE (dupe): ${key}`);
+            const ex = deduped.get(key);
+            const fields = ['room_name','facing','height_m','width_m','room_type','opening_type','frame_colour','confidence'];
+            for (const f of fields) {
+              if (!ex[f] && w[f]) ex[f] = w[f];
+            }
+            if (w.notes && w.notes !== ex.notes) ex.notes = [ex.notes, w.notes].filter(Boolean).join('; ');
+            if (w.flags?.length) ex.window_flags = [...new Set([...ex.window_flags, ...w.flags])];
+          }
+        }
+
+        // ── DIMENSION VALIDATION — plausibility only, no vocabulary filter ──
+        // Dimensions are never cleared — only flagged. Blank = assessor fills in manually.
+        const isValidDim = (val, type) => {
+          if (val === null || val === undefined || val === '') return true;
+          const num = parseFloat(val);
+          if (isNaN(num)) return true;
+          if (type === 'height') return num >= 0.1 && num <= 5.0;
+          if (type === 'width') return num >= 0.1 && num <= 12.0;
+          return true;
+        };
+
+        console.log(`Agent 4 dedup: ${droppedNoTag} dropped (no tag), ${droppedDupe} merged (duplicates), ${deduped.size} unique`);
+
+        const schedule = Array.from(deduped.values())
+          .filter(w => {
+            const keep = w.height_m !== null || w.width_m !== null || w.needs_review;
+            if (!keep) console.log(`  DROP (no dims and not flagged): ${w.window_id}`);
+            return keep;
+          })
+          .map(w => {
+            const hOk = isValidDim(w.height_m, 'height');
+            const wOk = isValidDim(w.width_m, 'width');
+            const hasDimFlags = (w.flags||[]).length > 0;
+            const flagged = w.needs_review || !hOk || !wOk || hasDimFlags;
+            return {
+              ...w,
+              needs_review: flagged,
+              notes: (!hOk || !wOk)
+                ? `[CHECK] ${!hOk ? 'H:'+w.height_m+' ' : ''}${!wOk ? 'W:'+w.width_m : ''} implausible — verify on plans`.trim()
+                : (w.notes || ''),
+            };
+          })
+          .sort((a, b) => (a.window_id || '').localeCompare(b.window_id || ''));
+
+        console.log('Agent 4 final schedule:', schedule.length, 'windows');
+
+        // ─────────────────────────────────────────────────────────────────
+        // AGENT 5 — FABRIC & METADATA EXTRACTOR (batched, all pages)
+        // ─────────────────────────────────────────────────────────────────
+        let fabricData = {};
+        try {
+          showStatus('loading', '<span class="spinner"></span> Agent 5 — Extracting building fabric & metadata…');
+          await new Promise(r => setTimeout(r, 5000)); // rate limit gap after Agent 3
+
+          const A5_BATCH_SIZE = 12;
+          const a5Batches = [];
+          for (let i = 0; i < pageUrls.length; i += A5_BATCH_SIZE) {
+            a5Batches.push(pageUrls.slice(i, i + A5_BATCH_SIZE).map((url, j) => ({ url, pageNum: i + j + 1 })));
+          }
+          console.log('Agent 5: ' + pageUrls.length + ' pages in ' + a5Batches.length + ' batch(es)');
+
+          // Merge results across batches — later batches override nulls from earlier
+          const mergeDeep = (base, incoming) => {
+            for (const key of Object.keys(incoming || {})) {
+              if (incoming[key] !== null && incoming[key] !== undefined && incoming[key] !== '') {
+                if (Array.isArray(incoming[key])) {
+                  // For missing_flags: deduplicate. For insulation: accumulate all items.
+                  const combined = (base[key] || []).concat(incoming[key]);
+                  base[key] = key === 'missing_flags'
+                    ? [...new Set(combined)]
+                    : combined;
+                } else if (typeof incoming[key] === 'object' && !Array.isArray(incoming[key])) {
+                  base[key] = base[key] || {};
+                  mergeDeep(base[key], incoming[key]);
+                } else {
+                  if (!base[key]) base[key] = incoming[key];
+                }
+              }
+            }
+          };
+
+          for (let bIdx = 0; bIdx < a5Batches.length; bIdx++) {
+            if (bIdx > 0) {
+              console.log('Agent 5 batch ' + (bIdx+1) + '/' + a5Batches.length + ' — waiting 8s...');
+              await new Promise(r => setTimeout(r, 8000));
+            }
+            const batch = a5Batches[bIdx];
+            const a5Content = [];
+            for (const { url, pageNum } of batch) {
+              a5Content.push({ type: 'text', text: '--- PAGE ' + pageNum + ' (of ' + pageUrls.length + ' total) ---' });
+              a5Content.push({ type: 'image', source: { type: 'url', url } });
+            }
+            a5Content.push({ type: 'text', text: `You are extracting building fabric and project metadata from Australian residential architectural drawings.
+You must RETURN VALID JSON ONLY — no commentary, no markdown, no explanation outside the JSON structure.
+
+CRITICAL RULE: Extract ONLY what is explicitly written on the drawings.
+Do NOT calculate, estimate, or infer any value.
+If a value is not shown on these pages, set it to null — do not guess.
+"EER requirements" or "to comply" without a stated R-value → extract the note text, set r_value: null.
+
+═══════════════════════════════════════
+SECTION 1 — PROJECT METADATA
+═══════════════════════════════════════
+Extract only if explicitly shown in title block or cover sheet:
+project_address, client_name, block, section
+proposed_gfa_class1 — label "Proposed Structure GFA - Class 1" (m² value only)
+proposed_gfa_class10 — label "Proposed Structure GFA - Class 10"
+proposed_roof_area_class1 — label "Proposed Roof Area - Class 1"
+proposed_roof_area_class10 — label "Proposed Roof Area - Class 10"
+block_area — site/block area if stated
+storeys — only if explicitly stated (e.g. "Single Storey", "Two Storey")
+ffl_levels — finished floor levels exactly as written (array of strings)
+
+═══════════════════════════════════════
+SECTION 2 — ROOF
+═══════════════════════════════════════
+roof_covering — material as written (e.g. "Colorbond Cliplock")
+roof_colour — colour as written
+roof_pitch — pitch as written (e.g. "5.00°")
+roof_construction_type — e.g. "Pitched with horizontal ceiling" | "Cathedral/Skillion" | "Flat" — only if explicitly stated
+roof_ventilation — "Vented" or "Standard" — only if explicitly labelled
+roof_solar_absorptance — only if a numeric value is explicitly stated
+sarking — description as written, or null
+roof_framing — as written, or null
+roof_lights — description if shown
+roof_penetrations — if labelled
+
+═══════════════════════════════════════
+SECTION 3 — INSULATION
+═══════════════════════════════════════
+insulation — array of objects, one per distinct insulation note found:
+  { location, description, r_value, confidence, flags[] }
+location values: "ceiling" | "wall" | "floor" | "anticon" | "other"
+r_value: numeric only if explicitly written (e.g. 3.5 for R3.5), else null
+flags: include "r_value_missing" if note references EER/compliance without giving R-value
+IMPORTANT: Extract subfloor/floor insulation R-value if explicitly stated (e.g. "R3.0 floor batts")
+
+═══════════════════════════════════════
+SECTION 4 — WALLS
+═══════════════════════════════════════
+external_cladding — material as written
+external_colour — colour as written
+wall_solar_absorptance — only if numeric value explicitly stated
+wall_construction — construction type if labelled (e.g. "timber stud frame", "brick veneer")
+wall_height — wall height if dimensioned in section drawings (e.g. "2400mm" or "2.40m")
+internal_lining — if written
+
+═══════════════════════════════════════
+SECTION 5 — FLOOR
+═══════════════════════════════════════
+floor_type — as written (e.g. "concrete slab on ground", "suspended timber")
+floor_construction_category — derive ONLY from explicit labels: "direct_contact" (slab on ground) | "suspended" (bearer/joist, timber floor) | null
+slab_details — if dimensioned
+subfloor_type — if shown
+subfloor_height — subfloor/void height if dimensioned (e.g. "≤1800mm", "1695mm")
+subfloor_enclosed — "enclosed" | "open" | null — only if explicitly described
+in_slab_heating — only if explicitly shown
+
+═══════════════════════════════════════
+SECTION 6 — FLOOR COVERINGS
+═══════════════════════════════════════
+Scan inclusions plan, floor plan, and spec notes for room-by-room floor covering information.
+floor_coverings — array of objects: { room, covering }
+covering values as written (e.g. "Carpet", "Floating Timber", "Ceramic Tile", "Concrete")
+Common room names: Bedroom, Living, Kitchen, Bathroom, Ensuite, Laundry, Entry, Hall, Study
+If a single covering applies to all rooms (e.g. "Timber flooring throughout"), record as { room: "All", covering: "..." }
+If inclusions plan is not present, set floor_coverings: []
+
+═══════════════════════════════════════
+SECTION 7 — SHADING
+═══════════════════════════════════════
+eave_projection — dimension as written (e.g. "450mm", "900mm eave")
+pergolas_awnings — description if shown
+
+═══════════════════════════════════════
+SECTION 8 — LIGHTING & SERVICES
+═══════════════════════════════════════
+Extract ONLY if explicitly shown on drawings:
+ic_rated_downlights — true/false/description (check spec notes for "IC rated" requirement)
+exhaust_fans — description including location and cutout size if stated (e.g. "1x Ensuite 250x250mm")
+hvac_system — description if shown (e.g. "6.4kW Reverse Cycle Split System")
+hot_water_system — type if shown (e.g. "Heat Pump Hot Water Service", "Solar HWS", "Gas HWS")
+pool_spa — description if shown
+
+═══════════════════════════════════════
+SECTION 9 — MISSING OR UNCLEAR
+═══════════════════════════════════════
+missing_flags — array of applicable strings:
+"glazing_performance_missing" — U-values / SHGC not stated anywhere
+"insulation_r_values_missing" — insulation noted but no R-values given
+"solar_absorptance_not_stated" — no solar absorptance values found
+"no_window_schedule" — no schedule mapping tags to rooms
+"floor_coverings_not_found" — no inclusions plan or floor covering information found
+"conflicting_values" — describe in missing_notes
+"unspecified_performance_values" — performance referenced but not given
+
+missing_notes — free text for any conflicts or ambiguities
+
+═══════════════════════════════════════
+OUTPUT FORMAT
+═══════════════════════════════════════
+{
+  "project_metadata": {
+    "project_address": null,
+    "client_name": null,
+    "block": null,
+    "section": null,
+    "proposed_gfa_class1": null,
+    "proposed_gfa_class10": null,
+    "proposed_roof_area_class1": null,
+    "proposed_roof_area_class10": null,
+    "block_area": null,
+    "storeys": null,
+    "ffl_levels": []
+  },
+  "roof": {
+    "roof_covering": null,
+    "roof_colour": null,
+    "roof_pitch": null,
+    "roof_construction_type": null,
+    "roof_ventilation": null,
+    "roof_solar_absorptance": null,
+    "sarking": null,
+    "roof_framing": null,
+    "roof_lights": null,
+    "roof_penetrations": null
+  },
+  "insulation": [],
+  "walls": {
+    "external_cladding": null,
+    "external_colour": null,
+    "wall_solar_absorptance": null,
+    "wall_construction": null,
+    "wall_height": null,
+    "internal_lining": null
+  },
+  "floor": {
+    "floor_type": null,
+    "floor_construction_category": null,
+    "slab_details": null,
+    "subfloor_type": null,
+    "subfloor_height": null,
+    "subfloor_enclosed": null,
+    "in_slab_heating": null
+  },
+  "floor_coverings": [],
+  "shading": {
+    "eave_projection": null,
+    "pergolas_awnings": null
+  },
+  "lighting_services": {
+    "ic_rated_downlights": null,
+    "exhaust_fans": null,
+    "hvac_system": null,
+    "hot_water_system": null,
+    "pool_spa": null
+  },
+  "missing": {
+    "missing_flags": [],
+    "missing_notes": null
+  }
+}` });
+
+            const a5Result = await callClaude([{ role: 'user', content: a5Content }]);
+            mergeDeep(fabricData, a5Result);
+            console.log('Agent 5 batch ' + (bIdx+1) + ': metadata=' + (a5Result.project_metadata?.project_address ? 'found' : 'null') + ' insulation=' + (a5Result.insulation?.length || 0) + ' items');
+          }
+          // Deduplicate insulation items across batches
+          // Strip parenthetical content first, then match on first 3 words of description
+          // e.g. "Thermal insulation (shown in...)" and "Thermal Insulation" both → "thermal insulation"
+          if (fabricData.insulation && fabricData.insulation.length > 0) {
+            const seen = new Set();
+            fabricData.insulation = fabricData.insulation.filter(item => {
+              const words = (item.description || '').toLowerCase()
+                .replace(/\(.*?\)/g, '')
+                .replace(/[^a-z0-9 ]/g, ' ').trim().split(' ')
+                .filter(w => w.length > 0).slice(0, 3).join(' ');
+              if (seen.has(words)) return false;
+              seen.add(words);
+              return true;
+            });
+          }
+          console.log('Agent 5 complete. Address:', fabricData.project_metadata?.project_address, '| Insulation items:', fabricData.insulation?.length || 0);
+        } catch (e) {
+          console.warn('Agent 5 fabric extraction failed (non-fatal):', e);
+          fabricData = { _error: 'Agent 5 failed: ' + e.message };
+        }
+
+
+        const data = {
+          success: true,
+          elements: schedule,
+          element_count: schedule.length,
+          scope_note: scopeNote,
+          scope: scopeLabel,
+          pipeline_confidence: pipelineConfidence,
+          pipeline_flags: allPipelineFlags,
+          page_count: pageUrls.length,
+          filename: selectedFile.name.replace(/\.pdf$/i, '').replace(/[^a-z0-9_-]/gi, '_')
+        };
+
+        // ═══════════════════════════════════════════════════════════════
+        // BUILD XLSX — Professional Fusentric output
+        // ═══════════════════════════════════════════════════════════════
+        const wb = XLSX.utils.book_new();
+        const today = new Date().toLocaleDateString('en-AU', { day:'2-digit', month:'2-digit', year:'numeric' });
+        const projAddress = (fabricData && fabricData.project_metadata && fabricData.project_metadata.project_address) || '';
+        const projClient  = (fabricData && fabricData.project_metadata && fabricData.project_metadata.client_name) || '';
+
+        // ── Colour palette ───────────────────────────────────────────
+        const C = {
+          brand:    { rgb: '1B2A4A' }, // Fusentric navy
+          brandTxt: { rgb: 'FFFFFF' },
+          head:     { rgb: '2E4A7A' }, // section header blue
+          headTxt:  { rgb: 'FFFFFF' },
+          subhead:  { rgb: 'D6E4F0' }, // light blue sub-header
+          subTxt:   { rgb: '1B2A4A' },
+          label:    { rgb: 'EBF2FA' }, // field label bg
+          white:    { rgb: 'FFFFFF' },
+          yellow:   { rgb: 'FFF2CC' }, // needs verify
+          orange:   { rgb: 'FCE4D6' }, // CHECK flag
+          green:    { rgb: 'E2EFDA' }, // high confidence
+          amber:    { rgb: 'FFF2CC' }, // medium confidence
+          red:      { rgb: 'FCE4D6' }, // low/failed
+          flag:     { rgb: 'FCE4D6' }, // missing flag
+          border:   { rgb: 'BDD7EE' },
+          muted:    { rgb: '595959' },
+        };
+        const bold = (rgb) => ({ font: { bold: true, color: { rgb } } });
+        const cell = (v, fill, font, align, border) => {
+          const c = { v, t: typeof v === 'number' ? 'n' : 's', s: {} };
+          if (fill) c.s.fill = { fgColor: fill };
+          if (font) c.s.font = font;
+          if (align) c.s.alignment = align;
+          if (border) c.s.border = {
+            top: { style:'thin', color:{ rgb: C.border.rgb } },
+            bottom: { style:'thin', color:{ rgb: C.border.rgb } },
+            left: { style:'thin', color:{ rgb: C.border.rgb } },
+            right: { style:'thin', color:{ rgb: C.border.rgb } },
+          };
+          return c;
+        };
+        const confColour = (conf) => {
+          if (conf === 'high') return C.green;
+          if (conf === 'medium') return C.amber;
+          return C.red;
+        };
+
+        // ════════════════════════════════════════════════════════════════
+        // SHEET 1 — GLAZING SCHEDULE
+        // Mirrors NCC 2022 Glazing Calculator column order
+        // ════════════════════════════════════════════════════════════════
+        const gData = [];
+        const gMerges = [];
+        let gRow = 0;
+
+        // Helper to push a row and return its index
+        const gPush = (...cells) => { gData.push(cells); return gRow++; };
+
+        // — Title banner —
+        gPush(
+          cell('FUSENTRIC', C.brand, { bold:true, sz:14, color:C.brandTxt }, { horizontal:'left', vertical:'center' }),
+          cell('','',null), cell('','',null), cell('','',null), cell('','',null),
+          cell('','',null), cell('','',null), cell('','',null), cell('','',null),
+          cell('','',null), cell('','',null),
+          cell('Glazing Extraction Report', C.brand, { bold:true, sz:11, color:C.brandTxt }, { horizontal:'right' }),
+          cell('','',null), cell('','',null)
+        );
+        gMerges.push({ s:{r:0,c:0}, e:{r:0,c:10} });
+        gMerges.push({ s:{r:0,c:11}, e:{r:0,c:13} });
+
+        // — Project info row —
+        gPush(
+          cell('Project:', C.subhead, { bold:true, color:C.subTxt }, null),
+          cell(projAddress || '—', C.subhead, { color:C.subTxt }, null),
+          cell('','',null), cell('','',null), cell('','',null),
+          cell('Client:', C.subhead, { bold:true, color:C.subTxt }, null),
+          cell(projClient || '—', C.subhead, { color:C.subTxt }, null),
+          cell('','',null), cell('','',null),
+          cell('Date:', C.subhead, { bold:true, color:C.subTxt }, null),
+          cell(today, C.subhead, { color:C.subTxt }, null),
+          cell('Scope:', C.subhead, { bold:true, color:C.subTxt }, null),
+          cell(scopeLabel.replace('_',' ').toUpperCase(), C.subhead, { color:C.subTxt }, null),
+          cell('','',null)
+        );
+        gMerges.push({ s:{r:1,c:1}, e:{r:1,c:4} });
+        gMerges.push({ s:{r:1,c:6}, e:{r:1,c:8} });
+        gMerges.push({ s:{r:1,c:12}, e:{r:1,c:13} });
+
+        // — Pipeline confidence row —
+        const confBg = pipelineConfidence === 'high' ? C.green : pipelineConfidence === 'medium' ? C.amber : C.red;
+        const confLabel = `Pipeline Confidence: ${pipelineConfidence.toUpperCase()}${allPipelineFlags.length > 0 ? '  ⚑ ' + allPipelineFlags.length + ' flag(s)' : ''}`;
+        gPush(
+          cell(confLabel, confBg, { bold:true, color:C.subTxt }, null),
+          cell('','',null), cell('','',null), cell('','',null), cell('','',null),
+          cell('','',null), cell('','',null), cell('','',null), cell('','',null),
+          cell(scopeNote || '', confBg, { italic:true, color:C.muted }, null),
+          cell('','',null), cell('','',null), cell('','',null), cell('','',null)
+        );
+        gMerges.push({ s:{r:2,c:0}, e:{r:2,c:8} });
+        gMerges.push({ s:{r:2,c:9}, e:{r:2,c:13} });
+
+        gPush(...Array(14).fill(cell('',null,null))); // spacer
+        gMerges.push({ s:{r:3,c:0}, e:{r:3,c:13} });
+
+        // — Column headers — matching NCC calculator order —
+        const gHeaders = [
+          'ID', 'Description', 'Facing', 'Height (m)', 'Width (m)', 'Area (m²)',
+          'Room Type', 'Opening Type', 'Frame Colour',
+          'U-Value (fill in)', 'SHGC (fill in)',
+          'Confidence', 'Source Page', 'Review'
+        ];
+        gPush(...gHeaders.map(h =>
+          cell(h, C.head, { bold:true, color:C.brandTxt, sz:9 }, { horizontal:'center', vertical:'center', wrapText:true }, true)
+        ));
+
+        // — Data rows —
+        const dataStartGRow = gRow;
+        data.elements.forEach((el, idx) => {
+          const windowFlags = el.window_flags || [];
+          const reviewFlag = el.needs_review || windowFlags.length > 0 ? 'CHECK' : '';
+          const area = (el.height_m && el.width_m) ? Math.round(el.height_m * el.width_m * 100) / 100 : '';
+          const rowBg = idx % 2 === 0 ? C.white : { rgb: 'F5F9FD' };
+          const facingBg = !el.facing ? C.yellow : rowBg;
+          const reviewBg = reviewFlag === 'CHECK' ? C.orange : rowBg;
+          const confBg2 = confColour(el.confidence);
+          gPush(
+            cell(idx + 1, rowBg, { color:{ rgb:'595959' } }, { horizontal:'center' }, true),
+            cell(el.window_id || el.description || '', rowBg, null, null, true),
+            cell(el.facing || '', facingBg, { bold: !el.facing }, { horizontal:'center' }, true),
+            cell(el.height_m || '', rowBg, null, { horizontal:'center' }, true),
+            cell(el.width_m || '', rowBg, null, { horizontal:'center' }, true),
+            cell(area, rowBg, { color:{ rgb:'595959' }, italic:true }, { horizontal:'center' }, true),
+            cell(el.room_type || '', rowBg, null, null, true),
+            cell(el.opening_type || '', rowBg, null, null, true),
+            cell(el.frame_colour || '', rowBg, null, null, true),
+            cell('', C.yellow, null, { horizontal:'center' }, true),
+            cell('', C.yellow, null, { horizontal:'center' }, true),
+            cell(el.confidence || '', confBg2, { sz:9 }, { horizontal:'center' }, true),
+            cell(el.source_page || '', rowBg, { sz:9, color:{ rgb:'595959' } }, { horizontal:'center' }, true),
+            cell(reviewFlag, reviewBg, { bold:!!reviewFlag, color:{ rgb: reviewFlag ? 'C00000' : '595959' } }, { horizontal:'center' }, true)
+          );
+        });
+
+        // — Notes section —
+        gPush(...Array(14).fill(cell('',null,null)));
+        gPush(
+          cell('EXTRACTION NOTES', C.head, { bold:true, color:C.brandTxt }, null),
+          ...Array(13).fill(cell('',C.head,null))
+        );
+        gMerges.push({ s:{r:gRow-1,c:0}, e:{r:gRow-1,c:13} });
+
+        data.elements.forEach((el, idx) => {
+          if (el.notes || (el.window_flags && el.window_flags.length > 0)) {
+            const flagNote = (el.window_flags||[]).length > 0 ? `[${el.window_flags.join(', ')}] ` : '';
+            gPush(
+              cell(el.window_id || (idx+1), C.label, { bold:true, sz:9 }, null, true),
+              cell(flagNote + (el.notes || ''), C.white, { sz:9, color:{ rgb:'595959' } }, { wrapText:true }, true),
+              ...Array(12).fill(cell('',C.white,null))
+            );
+            gMerges.push({ s:{r:gRow-1,c:1}, e:{r:gRow-1,c:13} });
+          }
+        });
+
+        // — Flags section —
+        if (allPipelineFlags.length > 0) {
+          gPush(...Array(14).fill(cell('',null,null)));
+          gPush(
+            cell('PIPELINE FLAGS', C.flag, { bold:true, color:{ rgb:'C00000' } }, null),
+            cell(allPipelineFlags.join(' | '), C.flag, { sz:9, color:{ rgb:'595959' } }, { wrapText:true }, null),
+            ...Array(12).fill(cell('',C.flag,null))
+          );
+          gMerges.push({ s:{r:gRow-1,c:1}, e:{r:gRow-1,c:13} });
+        }
+
+        // Build worksheet from array of arrays
+        const glazingAOA = gData.map(row => row.map(c => (c && c.v !== undefined) ? c.v : (c || '')));
+        const glazingWS = XLSX.utils.aoa_to_sheet(glazingAOA);
+
+        // Apply cell styles
+        gData.forEach((row, ri) => {
+          row.forEach((c, ci) => {
+            if (c && c.s && Object.keys(c.s).length > 0) {
+              const ref = XLSX.utils.encode_cell({ r: ri, c: ci });
+              if (!glazingWS[ref]) glazingWS[ref] = { v: c.v || '', t: 's' };
+              glazingWS[ref].s = c.s;
+            }
+          });
+        });
+
+        glazingWS['!merges'] = gMerges;
+        glazingWS['!cols'] = [
+          { wch: 4 },  // ID
+          { wch: 18 }, // Description
+          { wch: 8 },  // Facing
+          { wch: 9 },  // H
+          { wch: 9 },  // W
+          { wch: 8 },  // Area
+          { wch: 12 }, // Room Type
+          { wch: 14 }, // Opening Type
+          { wch: 13 }, // Frame Colour
+          { wch: 10 }, // U-Value
+          { wch: 10 }, // SHGC
+          { wch: 11 }, // Confidence
+          { wch: 10 }, // Source Page
+          { wch: 8 },  // Review
+        ];
+        glazingWS['!rows'] = [{ hpt: 28 }, { hpt: 20 }, { hpt: 20 }, { hpt: 8 }, { hpt: 32 }];
+
+        XLSX.utils.book_append_sheet(wb, glazingWS, 'Glazing Schedule');
+
+        // ════════════════════════════════════════════════════════════════
+        // SHEET 2 — BUILDING FABRIC & METADATA
+        // ════════════════════════════════════════════════════════════════
+        const fabricRows = [];
+        const fabricHeaders = ['Section', 'Field', 'Value', 'Confidence', 'Notes / Flags'];
+
+        const addRow = (section, field, value, confidence, notes) => {
+          if (value !== null && value !== undefined && value !== '') {
+            fabricRows.push([section, field, String(value), confidence || '', notes || '']);
+          }
+        };
+        const addMissing = (field, note) => fabricRows.push(['⚑ MISSING / UNCLEAR', field, '', 'flag', note || '']);
+
+        if (fabricData && !fabricData._error) {
+          const pm = fabricData.project_metadata || {};
+          if (pm.project_address)        addRow('Project Metadata', 'Address',                pm.project_address,       'high', '');
+          if (pm.client_name)            addRow('Project Metadata', 'Client Name',             pm.client_name,           'high', '');
+          if (pm.block)                  addRow('Project Metadata', 'Block',                   pm.block,                 'high', '');
+          if (pm.section)                addRow('Project Metadata', 'Section',                 pm.section,               'high', '');
+          if (pm.proposed_gfa_class1)    addRow('Project Metadata', 'Proposed GFA – Class 1',  pm.proposed_gfa_class1,   'high', '');
+          if (pm.proposed_gfa_class10)   addRow('Project Metadata', 'Proposed GFA – Class 10', pm.proposed_gfa_class10,  'high', '');
+          if (pm.proposed_roof_area_class1)  addRow('Project Metadata', 'Proposed Roof Area – Class 1',  pm.proposed_roof_area_class1,  'high', '');
+          if (pm.proposed_roof_area_class10) addRow('Project Metadata', 'Proposed Roof Area – Class 10', pm.proposed_roof_area_class10, 'high', '');
+          if (pm.block_area)             addRow('Project Metadata', 'Block Area',              pm.block_area,            'high', '');
+          if (pm.storeys)                addRow('Project Metadata', 'Storeys',                 pm.storeys,               'high', '');
+          if (pm.ffl_levels && pm.ffl_levels.length > 0) addRow('Project Metadata', 'FFL Levels', pm.ffl_levels.join(' | '), 'high', '');
+
+          const r = fabricData.roof || {};
+          if (r.roof_covering)           addRow('Roof', 'Covering',              r.roof_covering,          'high', '');
+          if (r.roof_colour)             addRow('Roof', 'Colour',                r.roof_colour,            'high', '');
+          if (r.roof_pitch)              addRow('Roof', 'Pitch',                 r.roof_pitch,             'high', '');
+          if (r.roof_construction_type)  addRow('Roof', 'Construction Type',     r.roof_construction_type, 'high', '');
+          if (r.roof_ventilation)        addRow('Roof', 'Ventilation',           r.roof_ventilation,       'high', '');
+          if (r.roof_solar_absorptance)  addRow('Roof', 'Solar Absorptance',     r.roof_solar_absorptance, 'high', '');
+          if (r.sarking)                 addRow('Roof', 'Sarking / Anticon',     r.sarking,                'high', '');
+          if (r.roof_framing)            addRow('Roof', 'Framing',               r.roof_framing,           'high', '');
+          if (r.roof_lights)             addRow('Roof', 'Roof Lights',           r.roof_lights,            'high', '');
+          if (r.roof_penetrations)       addRow('Roof', 'Penetrations',          r.roof_penetrations,      'high', '');
+
+          const insulation = fabricData.insulation || [];
+          insulation.forEach((ins, i) => {
+            const flags = (ins.flags || []).join(', ');
+            const rVal = ins.r_value !== null && ins.r_value !== undefined ? String(ins.r_value) : 'NOT STATED';
+            addRow('Insulation', (ins.location || 'Unknown') + ' (item ' + (i+1) + ')', ins.description || '', ins.confidence || 'medium', 'R-value: ' + rVal + (flags ? ' | ' + flags : ''));
+          });
+
+          const w = fabricData.walls || {};
+          if (w.external_cladding)       addRow('Walls', 'External Cladding',     w.external_cladding,       'high', '');
+          if (w.external_colour)         addRow('Walls', 'External Colour',       w.external_colour,         'high', '');
+          if (w.wall_solar_absorptance)  addRow('Walls', 'Solar Absorptance',     w.wall_solar_absorptance,  'high', '');
+          if (w.wall_construction)       addRow('Walls', 'Construction Type',     w.wall_construction,       'high', '');
+          if (w.wall_height)             addRow('Walls', 'Wall Height',           w.wall_height,             'high', '');
+          if (w.internal_lining)         addRow('Walls', 'Internal Lining',       w.internal_lining,         'high', '');
+
+          const fl = fabricData.floor || {};
+          if (fl.floor_type)                  addRow('Floor', 'Floor Type',              fl.floor_type,                  'high', '');
+          if (fl.floor_construction_category) addRow('Floor', 'Construction Category',   fl.floor_construction_category, 'high', 'direct_contact = slab on ground | suspended = bearer/joist');
+          if (fl.slab_details)                addRow('Floor', 'Slab Details',            fl.slab_details,                'high', '');
+          if (fl.subfloor_type)               addRow('Floor', 'Subfloor Type',           fl.subfloor_type,               'high', '');
+          if (fl.subfloor_height)             addRow('Floor', 'Subfloor Height',         fl.subfloor_height,             'high', '');
+          if (fl.subfloor_enclosed)           addRow('Floor', 'Subfloor Enclosed',       fl.subfloor_enclosed,           'high', '');
+          if (fl.in_slab_heating)             addRow('Floor', 'In-Slab Heating',         fl.in_slab_heating,             'high', '');
+
+          // Floor coverings — per room, important for NCC calculator
+          const fc = fabricData.floor_coverings || [];
+          if (fc.length > 0) {
+            fc.forEach(item => {
+              if (item.room && item.covering) {
+                addRow('Floor Coverings', item.room, item.covering, 'high', 'Required for NCC glazing calculator');
+              }
+            });
+          }
+
+          const sh = fabricData.shading || {};
+          if (sh.eave_projection)        addRow('Shading', 'Eave Projection',   sh.eave_projection,  'high', '');
+          if (sh.pergolas_awnings)       addRow('Shading', 'Pergolas / Awnings', sh.pergolas_awnings, 'high', '');
+
+          const ls = fabricData.lighting_services || {};
+          if (ls.ic_rated_downlights)    addRow('Lighting & Services', 'IC-Rated Downlights', ls.ic_rated_downlights, 'high', '');
+          if (ls.exhaust_fans)           addRow('Lighting & Services', 'Exhaust Fans',         ls.exhaust_fans,        'high', '');
+          if (ls.hvac_system)            addRow('Lighting & Services', 'HVAC System',           ls.hvac_system,         'high', '');
+          if (ls.hot_water_system)       addRow('Lighting & Services', 'Hot Water System',      ls.hot_water_system,    'high', '');
+          if (ls.pool_spa)               addRow('Lighting & Services', 'Pool / Spa',            ls.pool_spa,            'high', '');
+
+          const missing = fabricData.missing || {};
+          ([...new Set(missing.missing_flags || [])]).forEach(flag => addMissing(flag, ''));
+          if (missing.missing_notes)     addMissing('Notes', missing.missing_notes);
+        } else {
+          fabricRows.push(['ERROR', 'Agent 5 failed', fabricData._error || 'Unknown error', '', '']);
+        }
+
+        if (fabricRows.length > 0) {
+          // ── Professional Fabric sheet ──────────────────────────────
+          const fAOA = [];
+          const fMerges = [];
+          const fStyles = {};
+          let fRow = 0;
+          const fCell = (r, c, style) => {
+            fStyles[XLSX.utils.encode_cell({ r, c })] = style;
+          };
+
+          // Title banner
+          fAOA.push(['FUSENTRIC', '', '', 'Building Fabric & Metadata Report', '']);
+          fMerges.push({ s:{r:0,c:0}, e:{r:0,c:2} });
+          fMerges.push({ s:{r:0,c:3}, e:{r:0,c:4} });
+          fRow++;
+
+          // Project info
+          fAOA.push(['Project:', projAddress || '—', '', 'Client:', projClient || '—']);
+          fRow++;
+          fAOA.push(['Date:', today, '', 'Scope:', scopeLabel.replace('_',' ').toUpperCase()]);
+          fRow++;
+          fAOA.push(['', '', '', '', '']); fRow++;
+
+          // Section order for display
+          const sections = [
+            { key: 'Project Metadata',    icon: '📋', colour: '1B2A4A' },
+            { key: 'Roof',                icon: '🏠', colour: '2E4A7A' },
+            { key: 'Insulation',          icon: '🧱', colour: '2E4A7A' },
+            { key: 'Walls',               icon: '🏗️',  colour: '2E6B8A' },
+            { key: 'Floor',               icon: '📐', colour: '2E6B8A' },
+            { key: 'Floor Coverings',     icon: '🪵', colour: '3D7A5C' },
+            { key: 'Shading',             icon: '☀️',  colour: '1F7A5C' },
+            { key: 'Lighting & Services', icon: '💡', colour: '1F7A5C' },
+            { key: '⚑ MISSING / UNCLEAR', icon: '⚑',  colour: 'C00000' },
+          ];
+
+          sections.forEach(sec => {
+            const rows = fabricRows.filter(r => r[0] === sec.key);
+            if (rows.length === 0) return;
+
+            // Section header
+            fAOA.push([sec.key.toUpperCase(), '', '', '', '']);
+            fMerges.push({ s:{r:fRow,c:0}, e:{r:fRow,c:4} });
+            fRow++;
+
+            // Column sub-headers for first section only OR insulation/missing
+            if (fRow === 6 || sec.key === 'Insulation' || sec.key === '⚑ MISSING / UNCLEAR') {
+              fAOA.push(['', 'Field', 'Value', 'Confidence', 'Notes / Flags']);
+              fRow++;
+            }
+
+            rows.forEach((r, i) => {
+              const isMissing = sec.key === '⚑ MISSING / UNCLEAR';
+              fAOA.push(['', r[1], r[2], r[3], r[4] || '']);
+              fRow++;
+            });
+
+            fAOA.push(['', '', '', '', '']); fRow++;
+          });
+
+          const fabricWS = XLSX.utils.aoa_to_sheet(fAOA);
+          fabricWS['!merges'] = fMerges;
+          fabricWS['!cols'] = [
+            { wch: 2 },   // indent
+            { wch: 30 },  // field
+            { wch: 50 },  // value
+            { wch: 12 },  // confidence
+            { wch: 55 },  // notes
+          ];
+
+          // Apply styles row by row
+          let styleRow = 0;
+          // Banner row
+          ['A1','B1','C1','D1','E1'].forEach(ref => {
+            if (!fabricWS[ref]) fabricWS[ref] = { v:'', t:'s' };
+            fabricWS[ref].s = { fill:{ fgColor:{ rgb:'1B2A4A' } }, font:{ bold:true, color:{ rgb:'FFFFFF' }, sz: ref==='A1'?14:11 }, alignment:{ vertical:'center', horizontal: ref==='A1'?'left':'right' } };
+          });
+          // Style all section headers and data rows
+          fAOA.forEach((row, ri) => {
+            const val = row[0];
+            const sectionMatch = sections.find(s => s.key.toUpperCase() === val);
+            if (sectionMatch) {
+              // Section header row
+              for (let ci = 0; ci < 5; ci++) {
+                const ref = XLSX.utils.encode_cell({ r: ri, c: ci });
+                if (!fabricWS[ref]) fabricWS[ref] = { v: '', t: 's' };
+                fabricWS[ref].s = {
+                  fill: { fgColor: { rgb: sectionMatch.colour } },
+                  font: { bold: true, color: { rgb: 'FFFFFF' }, sz: 10 },
+                  alignment: { vertical: 'center' }
+                };
+              }
+            } else if (row[1] && row[1] !== 'Field' && row[0] === '') {
+              // Data row
+              const isMissing = fabricRows.find(fr => fr[1] === row[1] && fr[0] === '⚑ MISSING / UNCLEAR');
+              const conf = row[3];
+              const rowBg = isMissing ? 'FCE4D6' : (ri % 2 === 0 ? 'F5F9FD' : 'FFFFFF');
+              for (let ci = 0; ci < 5; ci++) {
+                const ref = XLSX.utils.encode_cell({ r: ri, c: ci });
+                if (!fabricWS[ref]) fabricWS[ref] = { v: '', t: 's' };
+                const isValueCell = ci === 2;
+                const isConfCell = ci === 3;
+                const confBg3 = conf === 'high' ? 'E2EFDA' : conf === 'medium' ? 'FFF2CC' : conf === 'flag' ? 'FCE4D6' : 'FCE4D6';
+                fabricWS[ref].s = {
+                  fill: { fgColor: { rgb: isConfCell ? confBg3 : (ci === 1 ? 'EBF2FA' : rowBg) } },
+                  font: { bold: ci === 1, sz: 9, color: { rgb: ci === 1 ? '1B2A4A' : '333333' } },
+                  alignment: { wrapText: true, vertical: 'top', horizontal: isConfCell ? 'center' : 'left' },
+                  border: { bottom: { style: 'thin', color: { rgb: 'BDD7EE' } } }
+                };
+              }
+            } else if (row[1] === 'Field') {
+              // Column sub-header
+              for (let ci = 1; ci < 5; ci++) {
+                const ref = XLSX.utils.encode_cell({ r: ri, c: ci });
+                if (!fabricWS[ref]) fabricWS[ref] = { v: '', t: 's' };
+                fabricWS[ref].s = { fill: { fgColor: { rgb: 'D6E4F0' } }, font: { bold: true, sz: 9, color: { rgb: '1B2A4A' } }, alignment: { horizontal: 'center' } };
+              }
+            }
+          });
+
+          XLSX.utils.book_append_sheet(wb, fabricWS, 'Fabric & Metadata');
+        }
+
+        // Write and download
+        const xlsxOut = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([xlsxOut], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = URL.createObjectURL(blob);
+        const outFilename = `Fusentric_${data.filename}_extraction.xlsx`;
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = outFilename;
+        a.click();
+        URL.revokeObjectURL(url);
+
+        // ── Usage tracking — Airtable ────────────────────────────────
+        try {
+          const trackRes = await fetch('/.netlify/functions/track-usage', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              project_address: projAddress || data.filename,
+              client_name:     projClient || '',
+              filename:        selectedFile.name,
+              page_count:      data.page_count,
+              window_count:    data.element_count,
+              scope:           scopeLabel,
+              confidence:      pipelineConfidence,
+              flags:           allPipelineFlags.length,
+              timestamp:       new Date().toISOString(),
+            })
+          });
+          if (trackRes.ok) console.log('Usage tracked');
+          else console.warn('Usage tracking failed:', trackRes.status);
+        } catch (e) {
+          console.warn('Usage tracking error (non-fatal):', e.message);
+        }
+
+        // ── Build assessor-friendly completion message ───────────────
+        // Determine review items to surface clearly
+        const checkWindows = data.elements.filter(e => e.needs_review || (e.window_flags && e.window_flags.length > 0)).length;
+        const hasCompassWarning = window._compassWarning && window._compassWarning.confidence !== 'high';
+        const scopeIsDefaulted = allPipelineFlags.some(f => f.includes('gfa_not_found') || f.includes('defaulting_to_whole'));
+        const missingElevations = allPipelineFlags.some(f => f.includes('no_elevation_drawings_found') || f.includes('no_elevation_pages'));
+
+        // Scope label for display
+        const scopeDisplay = scopeLabel === 'new_works_only' ? 'New Works Only' : 'Whole Dwelling';
+
+        // Build action items — things the assessor actually needs to do
+        const actionItems = [];
+        if (hasCompassWarning) {
+          const cw = window._compassWarning;
+          actionItems.push(`<li><strong>Verify window orientations</strong> — block bearing was estimated from north arrow (page ${cw.page}). Check the Facing column against the drawings before entering into the calculator.</li>`);
+        }
+        if (checkWindows > 0) {
+          actionItems.push(`<li><strong>${checkWindows} window${checkWindows > 1 ? 's' : ''} flagged for review</strong> — see orange CHECK flags in the Review column. Notes column explains each flag.</li>`);
+        }
+        if (scopeIsDefaulted) {
+          actionItems.push(`<li><strong>Confirm assessment scope</strong> — existing GFA wasn't found in the title block so scope has defaulted to Whole Dwelling. Verify against the drawings.</li>`);
+        }
+        if (missingElevations) {
+          actionItems.push(`<li><strong>Check window count</strong> — some pages in this drawing set didn't contain elevation drawings with HxW annotations. Verify the schedule covers all openings.</li>`);
+        }
+        actionItems.push(`<li><strong>Add U-Values and SHGC</strong> — enter glazing performance values from product specs or WERS into the highlighted columns.</li>`);
+        actionItems.push(`<li><strong>Add solar absorptance</strong> — roof and wall values from Dulux/Colorbond datasheets (not stated on drawings).</li>`);
+
+        const actionHTML = actionItems.length > 0
+          ? `<div style="margin:12px 0;padding:12px 14px;background:#f0f7ff;border:1px solid #BDD7EE;border-radius:6px;font-size:12px;line-height:1.8;">
+              <strong style="font-size:13px;color:#1B2A4A;">Next steps for your assessment:</strong>
+              <ul style="margin:6px 0 0 0;padding-left:18px;color:#333;">${actionItems.join('')}</ul>
+             </div>`
+          : '';
+
+        showStatus('success', `
+          <div style="font-size:14px;font-weight:600;color:#1B2A4A;margin-bottom:6px;">
+            ✅ Extraction complete
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0;">
+            <div style="background:#e8f4e8;border-radius:6px;padding:8px 12px;text-align:center;">
+              <div style="font-size:22px;font-weight:700;color:#1B2A4A;">${data.element_count}</div>
+              <div style="font-size:11px;color:#555;">Windows extracted</div>
+            </div>
+            <div style="background:#e8f0fa;border-radius:6px;padding:8px 12px;text-align:center;">
+              <div style="font-size:22px;font-weight:700;color:#1B2A4A;">${data.page_count}</div>
+              <div style="font-size:11px;color:#555;">Pages processed</div>
+            </div>
+            <div style="background:#e8f0fa;border-radius:6px;padding:8px 12px;text-align:center;">
+              <div style="font-size:14px;font-weight:700;color:#1B2A4A;">${scopeDisplay}</div>
+              <div style="font-size:11px;color:#555;">Assessment scope</div>
+            </div>
+          </div>
+          ${actionHTML}
+          <div style="font-size:12px;color:#555;margin-top:8px;">
+            Your spreadsheet has downloaded automatically — two sheets: <strong>Glazing Schedule</strong> and <strong>Fabric &amp; Metadata</strong>.<br>
+            <span style="color:#888;">Yellow cells = facing to verify &nbsp;|&nbsp; Orange cells = review flagged</span>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:12px;align-items:center;">
+            <a class="download-btn" href="${url}" download="${outFilename}">⬇ Download Again</a>
+            <button onclick="clearFile()" style="padding:9px 18px;background:#1B2A4A;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;letter-spacing:0.3px;">
+              ＋ New Plans
+            </button>
+          </div>
+        `);
+
+        extractBtn.disabled = false;
+
+      } catch (err) {
+        showStatus('error', `❌ Error: ${err.message}`);
+        extractBtn.disabled = false;
+      }
+    });
+
+    function readAsBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function base64ToBlob(base64, mimeType) {
+      const bytes = atob(base64);
+      const arr = new Uint8Array(bytes.length);
+      for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+      return new Blob([arr], { type: mimeType });
+    }
+  </script>
+</body>
+</html>
