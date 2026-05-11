@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fusentric â€” Energy Assessor Extractor</title>
+  <title>Fusentric — Energy Assessor Extractor</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
@@ -39,7 +39,7 @@
       padding: 0 0 80px;
     }
 
-    /* â”€â”€ Top nav bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* ── Top nav bar ────────────────────────────────────────────── */
     .topbar {
       width: 100%;
       background: var(--navy);
@@ -57,7 +57,7 @@
       gap: 10px;
     }
 
-    /* SVG icon mark â€” cyan top / navy bottom */
+    /* SVG icon mark — cyan top / navy bottom */
     .logo-mark {
       width: 28px;
       height: 28px;
@@ -93,14 +93,14 @@
       text-transform: uppercase;
     }
 
-    /* â”€â”€ Page layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* ── Page layout ────────────────────────────────────────────── */
     .page-inner {
       width: 100%;
       max-width: 600px;
       padding: 0 20px;
     }
 
-    /* â”€â”€ Page heading â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* ── Page heading ───────────────────────────────────────────── */
     .page-heading {
       text-align: center;
       margin-bottom: 36px;
@@ -140,7 +140,7 @@
       margin: 0 auto;
     }
 
-    /* â”€â”€ Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* ── Card ───────────────────────────────────────────────────── */
     .card {
       width: 100%;
       background: var(--surface-white);
@@ -150,7 +150,7 @@
       box-shadow: 0 2px 16px rgba(13,27,75,0.06), 0 1px 3px rgba(13,27,75,0.04);
     }
 
-    /* â”€â”€ Drop zone â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* ── Drop zone ──────────────────────────────────────────────── */
     .drop-zone {
       border: 1.5px dashed var(--border-mid);
       border-radius: 12px;
@@ -195,7 +195,7 @@
       color: var(--ink-light);
     }
 
-    /* â”€â”€ File selected pill â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* ── File selected pill ─────────────────────────────────────── */
     .file-selected {
       display: none;
       align-items: center;
@@ -234,7 +234,7 @@
     }
     .clear-btn:hover { color: var(--error); }
 
-    /* â”€â”€ Primary button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* ── Primary button ─────────────────────────────────────────── */
     .btn {
       display: flex;
       align-items: center;
@@ -273,7 +273,7 @@
     }
     .btn:not(:disabled) ~ .btn-accent-line { width: 80px; }
 
-    /* â”€â”€ Status panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* ── Status panel ───────────────────────────────────────────── */
     .status {
       display: none;
       margin-top: 20px;
@@ -304,7 +304,7 @@
       color: var(--error);
     }
 
-    /* â”€â”€ Spinner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* ── Spinner ────────────────────────────────────────────────── */
     .spinner {
       display: inline-block;
       width: 13px; height: 13px;
@@ -318,7 +318,7 @@
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* â”€â”€ Download button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* ── Download button ────────────────────────────────────────── */
     .download-btn {
       display: inline-flex;
       align-items: center;
@@ -350,14 +350,14 @@
       margin-top: 8px;
     }
 
-    /* â”€â”€ Divider â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* ── Divider ────────────────────────────────────────────────── */
     .divider {
       border: none;
       border-top: 1px solid var(--border);
       margin: 28px 0;
     }
 
-    /* â”€â”€ How it works steps â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* ── How it works steps ─────────────────────────────────────── */
     .steps-label {
       font-family: 'Syne', sans-serif;
       font-size: 10px;
@@ -405,7 +405,7 @@
       font-weight: 500;
     }
 
-    /* â”€â”€ Footer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* ── Footer ─────────────────────────────────────────────────── */
     .footer {
       margin-top: 40px;
       text-align: center;
@@ -423,7 +423,7 @@
 </head>
 <body>
 
-  <!-- â”€â”€ Top navigation bar â”€â”€ -->
+  <!-- ── Top navigation bar ── -->
   <nav class="topbar">
     <div class="topbar-logo">
       <!-- Fusentric icon mark: cyan top / navy bottom -->
@@ -442,31 +442,31 @@
 
   <div class="page-inner">
 
-    <!-- â”€â”€ Page heading â”€â”€ -->
+    <!-- ── Page heading ── -->
     <div class="page-heading">
       <div class="eyebrow">Energy Assessor Tools</div>
       <h1>Glazing <em>Extractor</em></h1>
       <p class="subtitle">Upload architectural PDF plans to automatically extract glazing &amp; building fabric data for NCC 2022 energy rating assessment.</p>
     </div>
 
-    <!-- â”€â”€ Main card â”€â”€ -->
+    <!-- ── Main card ── -->
     <div class="card">
 
       <div class="drop-zone" id="dropZone">
         <input type="file" id="fileInput" accept=".pdf" />
-        <div class="drop-icon">ðŸ“„</div>
+        <div class="drop-icon">📄</div>
         <div class="drop-label">Drop PDF plans here</div>
-        <div class="drop-hint">or click to browse Â· PDF only</div>
+        <div class="drop-hint">or click to browse · PDF only</div>
       </div>
 
       <div class="file-selected" id="fileSelected">
-        <span class="file-icon">ðŸ“‹</span>
+        <span class="file-icon">📋</span>
         <span class="file-name" id="fileName"></span>
-        <button class="clear-btn" id="clearBtn" title="Remove file">âœ•</button>
+        <button class="clear-btn" id="clearBtn" title="Remove file">✕</button>
       </div>
 
       <button class="btn" id="extractBtn" disabled>
-        âš¡&nbsp; Extract Glazing Data
+        ⚡&nbsp; Extract Glazing Data
       </button>
       <div class="btn-accent-line"></div>
 
@@ -486,14 +486,14 @@
         </div>
         <div class="step">
           <div class="step-num">3</div>
-          <div class="step-text"><strong>Download</strong> the pre-filled glazing calculator spreadsheet â€” then add U-values, SHGC and openability from product specs</div>
+          <div class="step-text"><strong>Download</strong> the pre-filled glazing calculator spreadsheet — then add U-values, SHGC and openability from product specs</div>
         </div>
       </div>
 
     </div><!-- /card -->
 
     <div class="footer">
-      Powered by <span>Fusentric</span> Â· Built for Australian energy assessors
+      Powered by <span>Fusentric</span> · Built for Australian energy assessors
     </div>
 
   </div><!-- /page-inner -->
@@ -561,15 +561,15 @@
       extractBtn.disabled = true;
 
       try {
-        // â”€â”€ STEP 1: Get keys â”€â”€
-        showStatus('loading', '<span class="spinner"></span> Initialisingâ€¦ (1/4)');
+        // ── STEP 1: Get keys ──
+        showStatus('loading', '<span class="spinner"></span> Initialising… (1/4)');
         const keyResponse = await fetch('/.netlify/functions/get-upload-key');
-        if (!keyResponse.ok) { showStatus('error', `âŒ Could not get upload key (${keyResponse.status})`); extractBtn.disabled = false; return; }
+        if (!keyResponse.ok) { showStatus('error', `❌ Could not get upload key (${keyResponse.status})`); extractBtn.disabled = false; return; }
         const keyData = await keyResponse.json();
-        if (!keyData.key) { showStatus('error', 'âŒ PDF.co API key not configured'); extractBtn.disabled = false; return; }
+        if (!keyData.key) { showStatus('error', '❌ PDF.co API key not configured'); extractBtn.disabled = false; return; }
 
-        // â”€â”€ STEP 2: Upload PDF to PDF.co â”€â”€
-        showStatus('loading', '<span class="spinner"></span> Uploading plansâ€¦ (2/4)');
+        // ── STEP 2: Upload PDF to PDF.co ──
+        showStatus('loading', '<span class="spinner"></span> Uploading plans… (2/4)');
         const base64 = await readAsBase64(selectedFile);
         const uploadRes = await fetch('https://api.pdf.co/v1/file/upload/base64', {
           method: 'POST',
@@ -577,10 +577,10 @@
           body: JSON.stringify({ file: base64, name: selectedFile.name }),
         });
         const uploadData = await uploadRes.json();
-        if (uploadData.error || !uploadData.url) { showStatus('error', `âŒ Upload failed: ${uploadData.message}`); extractBtn.disabled = false; return; }
+        if (uploadData.error || !uploadData.url) { showStatus('error', `❌ Upload failed: ${uploadData.message}`); extractBtn.disabled = false; return; }
 
-        // â”€â”€ STEP 3: Convert PDF to images via PDF.co â”€â”€
-        showStatus('loading', '<span class="spinner"></span> Converting pages to imagesâ€¦ (3/4)');
+        // ── STEP 3: Convert PDF to images via PDF.co ──
+        showStatus('loading', '<span class="spinner"></span> Converting pages to images… (3/4)');
         const convertRes = await fetch('https://api.pdf.co/v1/pdf/convert/to/png', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-api-key': keyData.key },
@@ -602,21 +602,21 @@
             break;
           }
         }
-        if (pageUrls.length === 0) { showStatus('error', 'âŒ PDF conversion failed or timed out'); extractBtn.disabled = false; return; }
+        if (pageUrls.length === 0) { showStatus('error', '❌ PDF conversion failed or timed out'); extractBtn.disabled = false; return; }
 
-        // â”€â”€ STEP 4: 3-CALL PIPELINE â”€â”€
-        // Agent 1 (site analyst) â†’ Agent 2 (extractor, receives A1 outputs) â†’ Agent 3 (scope, receives A1+A2 outputs) â†’ Agent 4 JS compiler
+        // ── STEP 4: 3-CALL PIPELINE ──
+        // Agent 1 (site analyst) → Agent 2 (extractor, receives A1 outputs) → Agent 3 (scope, receives A1+A2 outputs) → Agent 4 JS compiler
         //
-        // BASELINE LOCKED â€” 14 Mar 2026
-        // Validated on: Saville Close (3 windows, new_works_only, rotated block ~23Â°)
+        // BASELINE LOCKED — 14 Mar 2026
+        // Validated on: Saville Close (3 windows, new_works_only, rotated block ~23°)
         // Result: 3/3 correct (ASD 21-24 SE, ASW 6-20 SW, HIGHLIGHT AAW 4-14 NW)
-        // Compass: bearing_data method (113Â°30') â†’ SW/SE/NW âœ…
-        // Scope: 32.84 Ã· 135.52 = 24.2% â†’ new_works_only âœ…
+        // Compass: bearing_data method (113°30') → SW/SE/NW ✅
+        // Scope: 32.84 ÷ 135.52 = 24.2% → new_works_only ✅
         // Known working job type: single-storey extension, rotated block, Alspec tags, new_works_only
 
-        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ─────────────────────────────────────────────────────────────────
         // SHARED HELPER: call Claude proxy with retry on 429
-        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ─────────────────────────────────────────────────────────────────
         async function callClaude(messages, system, retries = 5) {
           const body = { messages };
           if (system) body.system = system;
@@ -628,7 +628,7 @@
             });
             if (res.status === 429) {
               const wait = Math.pow(2, attempt) * 2000;
-              console.warn(`429 rate limit â€” waiting ${wait/1000}s before retry ${attempt+1}/${retries}`);
+              console.warn(`429 rate limit — waiting ${wait/1000}s before retry ${attempt+1}/${retries}`);
               await new Promise(r => setTimeout(r, wait));
               continue;
             }
@@ -662,7 +662,7 @@
               }
             }
           }
-          // Safe failure â€” job continues with flags rather than crashing
+          // Safe failure — job continues with flags rather than crashing
           console.error(`${agentName} JSON parse failed. Raw:`, raw.substring(0, 300));
           return {
             error: true,
@@ -672,16 +672,16 @@
             pipeline_confidence: 'failed',
             compass_map: {}, project_type: 'extension',
             windows: [], gfa_notes: '',
-            scope: 'whole_dwelling', scope_note: 'Parse failed â€” defaulting to whole_dwelling'
+            scope: 'whole_dwelling', scope_note: 'Parse failed — defaulting to whole_dwelling'
           };
         }
 
-        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        // AGENT 1 â€” SITE ANALYST (pages 1-5)
-        // One job: north arrow â†’ true compass map for each elevation title
+        // ─────────────────────────────────────────────────────────────────
+        // AGENT 1 — SITE ANALYST (pages 1-5)
+        // One job: north arrow → true compass map for each elevation title
         // Kept separate so compass reasoning has full focus on site plan
-        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        showStatus('loading', '<span class="spinner"></span> Agent 1 â€” Reading site planâ€¦');
+        // ─────────────────────────────────────────────────────────────────
+        showStatus('loading', '<span class="spinner"></span> Agent 1 — Reading site plan…');
 
         let a1Result = {};
         let compassMap = {};
@@ -691,7 +691,7 @@
 
         try {
           const a1Content = [];
-          // Agent 1 only needs site plan + floor plan + drawing index â€” first 12 pages is sufficient
+          // Agent 1 only needs site plan + floor plan + drawing index — first 12 pages is sufficient
           // Sending all pages causes edge function timeouts on large PDFs (38+ pages)
           const A1_MAX_PAGES = 12;
           const a1Pages = pageUrls.slice(0, Math.min(A1_MAX_PAGES, pageUrls.length));
@@ -700,41 +700,41 @@
             a1Content.push({ type: 'image', source: { type: 'url', url: a1Pages[i] } });
           }
           a1Content.push({ type: 'text', text: `You are a site plan analyst for Australian residential projects.
-You must RETURN VALID JSON ONLY â€” no commentary, no markdown, no explanation outside the JSON structure.
+You must RETURN VALID JSON ONLY — no commentary, no markdown, no explanation outside the JSON structure.
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-STEP 1 â€” READ SURVEY BEARING DATA (PRIMARY METHOD)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════════
+STEP 1 — READ SURVEY BEARING DATA (PRIMARY METHOD)
+═══════════════════════════════════════════
 
 On the site plan, boundary lines are sometimes annotated with survey bearings in degrees
-(e.g. "206Â°15'", "296Â°", "023Â°30'"). These give the most accurate block orientation.
+(e.g. "206°15'", "296°", "023°30'"). These give the most accurate block orientation.
 
 HOW TO USE BEARINGS:
-1. Find the STREET FRONTAGE boundary â€” this is the boundary line adjacent to the street.
+1. Find the STREET FRONTAGE boundary — this is the boundary line adjacent to the street.
    Look for a street name label (e.g. "SAVILLE CLOSE", "FERNIE PLACE") on or near the boundary.
    The street frontage is the boundary closest to that street label.
 2. Read the bearing annotated on that specific boundary line.
-3. A bearing of 0Â° = true North. 90Â° = East. 113Â° â‰ˆ SE. 180Â° = South. 206Â° â‰ˆ SSW. 270Â° = West.
+3. A bearing of 0° = true North. 90° = East. 113° ≈ SE. 180° = South. 206° ≈ SSW. 270° = West.
 4. The street frontage bearing tells you which compass direction that boundary FACES OUTWARD.
 5. From this, determine which compass direction each elevation wall faces.
 
-CRITICAL â€” USE THE STREET FRONTAGE BEARING ONLY:
+CRITICAL — USE THE STREET FRONTAGE BEARING ONLY:
 A site plan has multiple boundary lines, each with different bearings.
-You must use the bearing on the boundary that faces the STREET â€” not the rear, not the sides.
-The rear boundary bearing will produce the OPPOSITE rotation â€” using it will flip east and west.
+You must use the bearing on the boundary that faces the STREET — not the rear, not the sides.
+The rear boundary bearing will produce the OPPOSITE rotation — using it will flip east and west.
 If you are unsure which boundary is the street frontage, look for the street name annotation.
 
 CRITICAL BEARING SELECTION RULE:
 On a typical suburban ACT/NSW block, there are 4 boundary lines with 4 different bearings.
-The street frontage bearing and the rear boundary bearing differ by approximately 180Â°.
-Example: street frontage = 113Â°, rear boundary = 293Â° (or 206Â° for an irregular block).
-If you find bearings of approximately 113Â° AND 206Â° on the same plan:
-- 113Â° is the street frontage (facing SE) â€” USE THIS ONE
-- 206Â° is a side or rear boundary â€” DO NOT USE THIS
+The street frontage bearing and the rear boundary bearing differ by approximately 180°.
+Example: street frontage = 113°, rear boundary = 293° (or 206° for an irregular block).
+If you find bearings of approximately 113° AND 206° on the same plan:
+- 113° is the street frontage (facing SE) — USE THIS ONE
+- 206° is a side or rear boundary — DO NOT USE THIS
 Before finalising: confirm your chosen bearing matches the boundary adjacent to the street label.
-State your reasoning: "I chose [XÂ°] because it is annotated on the boundary line adjacent to [STREET NAME]."
+State your reasoning: "I chose [X°] because it is annotated on the boundary line adjacent to [STREET NAME]."
 
-CRITICAL â€” ONLY REPORT WHAT YOU CAN SEE ON THESE PAGES:
+CRITICAL — ONLY REPORT WHAT YOU CAN SEE ON THESE PAGES:
 Only set bearing_data_found: true if you can read an actual degrees annotation on the
 current pages in front of you right now.
 Do NOT recall, estimate, or carry over a bearing from memory or a previous job.
@@ -746,63 +746,63 @@ bearing_source_page (page number where you found it).
 
 IF NO BEARING DATA FOUND: proceed to Step 2 (north arrow method).
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-STEP 2 â€” NORTH ARROW (FALLBACK METHOD)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════════
+STEP 2 — NORTH ARROW (FALLBACK METHOD)
+═══════════════════════════════════════════
 
 Only use this if no survey bearing data was found in Step 1.
 
 Think of the north arrow as a clock hand:
-- 12 o'clock = 0Â° = no correction needed (axis-aligned)
-- 10-11 o'clock = approx 300-330Â° anticlockwise = ~30-60Â° rotation
+- 12 o'clock = 0° = no correction needed (axis-aligned)
+- 10-11 o'clock = approx 300-330° anticlockwise = ~30-60° rotation
 
-MANDATORY â€” YOU MUST EXPLICITLY STATE:
+MANDATORY — YOU MUST EXPLICITLY STATE:
 1. What clock position does the north arrow point to?
 2. Is the block rotated or axis-aligned?
 
-IMPORTANT: Many Canberra suburban blocks are rotated 20-45Â°. Do NOT default to
+IMPORTANT: Many Canberra suburban blocks are rotated 20-45°. Do NOT default to
 axis-aligned without confirming the north arrow points to exactly 12 o'clock.
 
 Note: A decorative north arrow on a site plan may be a schematic indicator only.
 If both bearing data AND a north arrow are present, trust the bearing data.
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-STEP 3 â€” BUILD THE COMPASS MAP
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════════
+STEP 3 — BUILD THE COMPASS MAP
+═══════════════════════════════════════════
 
 Using the orientation determined in Step 1 or Step 2:
 Map each elevation title in the drawing set to its true compass direction.
 Compass values must be exactly one of: N, NE, E, SE, S, SW, W, NW
-Never return SSW, NNE or other intermediate directions â€” round to nearest of the 8.
+Never return SSW, NNE or other intermediate directions — round to nearest of the 8.
 
-IMPORTANT â€” ONLY MAP ACTUAL ELEVATION PAGES:
+IMPORTANT — ONLY MAP ACTUAL ELEVATION PAGES:
 Some drawing sets begin with a drawing index or schedule listing all drawings
 (e.g. "SP-1 Site Plan", "DEMOLITION Floor Plan", "ELEVATIONS 1", "SECTION B").
 Do NOT use the drawing index as your compass map source.
 Only map elevation titles that appear as actual headings on the elevation drawing pages.
-An elevation page shows building walls with windows drawn on them â€” not a list of drawings.
+An elevation page shows building walls with windows drawn on them — not a list of drawings.
 
 COMPASS MAP KEYS MUST BE ELEVATION TITLES ONLY:
 Valid key examples: "SOUTH ELEVATION", "NORTH ELEV.", "EAST ELEVATION", "FRONT ELEVATION"
-Invalid keys â€” never use these: floor plan titles, section titles, site plan titles,
+Invalid keys — never use these: floor plan titles, section titles, site plan titles,
 demolition titles, or any title that does not contain "ELEVATION" or "ELEV."
-If a title does not contain "ELEVATION" or "ELEV.", it is not an elevation â€” do not add it.
+If a title does not contain "ELEVATION" or "ELEV.", it is not an elevation — do not add it.
 
 Elevation titles to look for on actual pages (examples):
 "SOUTH ELEVATION", "NORTH ELEVATION", "EAST ELEVATION", "WEST ELEVATION"
 "FRONT ELEVATION", "REAR ELEVATION", "LEFT ELEVATION", "RIGHT ELEVATION"
-"ELEVATIONS 1-4 â€” EXTENSION", "SOUTH ELEV.", "EAST ELEV."
+"ELEVATIONS 1-4 — EXTENSION", "SOUTH ELEV.", "EAST ELEV."
 
 If you cannot find the actual elevation pages within the pages provided, set
 compass_map to {} and add "compass_map_incomplete" to flags[].
 
-WORKED EXAMPLE â€” ~23Â° clockwise rotation (bearing-derived):
-Street frontage bearing 113Â° â†’ block rotated ~23Â° clockwise
-â†’ SOUTH ELEV = SW | EAST ELEV = SE | WEST ELEV = NW | NORTH ELEV = NE
+WORKED EXAMPLE — ~23° clockwise rotation (bearing-derived):
+Street frontage bearing 113° → block rotated ~23° clockwise
+→ SOUTH ELEV = SW | EAST ELEV = SE | WEST ELEV = NW | NORTH ELEV = NE
 
-WORKED EXAMPLE â€” axis-aligned block:
+WORKED EXAMPLE — axis-aligned block:
 North arrow at 12 o'clock, no bearing rotation detected
-â†’ SOUTH ELEV = S | EAST ELEV = E | WEST ELEV = W | NORTH ELEV = N
+→ SOUTH ELEV = S | EAST ELEV = E | WEST ELEV = W | NORTH ELEV = N
 
 Record orientation_method: "bearing_data" | "north_arrow" | "default_assumed"
 
@@ -810,20 +810,20 @@ POSITIONAL ELEVATION TITLES (FRONT/REAR/LEFT/RIGHT):
 Some drawing sets use positional titles instead of compass titles.
 You MUST resolve these before building the compass map.
 
-METHOD â€” resolving FRONT direction:
+METHOD — resolving FRONT direction:
 1. Find the site plan. Look for the street name or "ROAD" / "STREET" / "AVENUE" label.
-2. The FRONT of the house is the faÃ§ade facing the street.
+2. The FRONT of the house is the façade facing the street.
 3. Look at the north arrow. Which compass direction does the street frontage face?
 4. FRONT ELEVATION = that compass direction.
 5. REAR = opposite. LEFT and RIGHT depend on standing inside looking out to the street.
 
-EXAMPLE â€” axis-aligned block, street to the north:
-North arrow up, street label at top of site plan â†’ FRONT faces N
-â†’ FRONT ELEV = N | REAR ELEV = S | LEFT ELEV = W | RIGHT ELEV = E
+EXAMPLE — axis-aligned block, street to the north:
+North arrow up, street label at top of site plan → FRONT faces N
+→ FRONT ELEV = N | REAR ELEV = S | LEFT ELEV = W | RIGHT ELEV = E
 
-EXAMPLE â€” rotated block, street to the SE:
-Block rotated, street label at lower-right â†’ FRONT faces SE
-â†’ FRONT ELEV = SE | REAR ELEV = NW | LEFT ELEV = NE | RIGHT ELEV = SW
+EXAMPLE — rotated block, street to the SE:
+Block rotated, street label at lower-right → FRONT faces SE
+→ FRONT ELEV = SE | REAR ELEV = NW | LEFT ELEV = NE | RIGHT ELEV = SW
 
 If you can resolve FRONT from the site plan:
 - Set front_facing to the resolved compass direction
@@ -833,11 +833,11 @@ If you can resolve FRONT from the site plan:
 Only add "positional_elevation_unresolved" to flags[] if the site plan gives
 no indication of which direction FRONT faces after careful inspection.
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-STEP 4 â€” LOCATE ELEVATION PAGE NUMBERS
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════════
+STEP 4 — LOCATE ELEVATION PAGE NUMBERS
+═══════════════════════════════════════════
 
-Many drawing sets include a drawing index on one of the first pages â€” a table listing
+Many drawing sets include a drawing index on one of the first pages — a table listing
 all sheets with their sheet numbers and titles (e.g. "1234-5 Elevations 1", "SP-2 Site Plan").
 
 If you find a drawing index:
@@ -854,15 +854,15 @@ If no drawing index is found:
 Record: elevation_page_numbers (array of page numbers containing elevation drawings),
 floor_plan_page_numbers (array of page numbers containing proposed floor plans with room labels)
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-STEP 5 â€” PROJECT TYPE
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════════
+STEP 5 — PROJECT TYPE
+═══════════════════════════════════════════
 
 project_type values: "new_dwelling" | "extension" | "renovation" | "extension_and_renovation" | "unknown"
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════════
 OUTPUT FORMAT
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════════
 
 {
   "bearing_data_found": false,
@@ -874,8 +874,8 @@ OUTPUT FORMAT
   "north_arrow_page": 2,
   "north_arrow_description": "arrow pointing to 12 o'clock, upper-right of site plan",
   "north_arrow_confidence": "high",
-  "north_arrow": "12 o'clock â€” upward",
-  "block_rotation": "0Â° â€” axis aligned",
+  "north_arrow": "12 o'clock — upward",
+  "block_rotation": "0° — axis aligned",
   "compass_map": {
     "SOUTH ELEVATION": "S",
     "NORTH ELEVATION": "N",
@@ -888,7 +888,7 @@ OUTPUT FORMAT
   "elevation_page_numbers": [8, 9],
   "floor_plan_page_numbers": [5, 6, 7],
   "project_type": "extension",
-  "drawing_set_title": "Jones Residence â€” Rear Extension",
+  "drawing_set_title": "Jones Residence — Rear Extension",
   "project_address": "use actual address from title block",
   "flags": [],
   "requires_human_review": false,
@@ -896,11 +896,11 @@ OUTPUT FORMAT
 }
 
 north_arrow_confidence rules:
-"high"   â€” north arrow clearly visible, unambiguous clock position, rotation confidently determined
-"medium" â€” north arrow found but partially obscured, small, or on a busy page; clock position is estimated
-"low"    â€” north arrow not found, or found but genuinely ambiguous (multiple arrows, conflicting indicators)
+"high"   — north arrow clearly visible, unambiguous clock position, rotation confidently determined
+"medium" — north arrow found but partially obscured, small, or on a busy page; clock position is estimated
+"low"    — north arrow not found, or found but genuinely ambiguous (multiple arrows, conflicting indicators)
 
-FLAGS â€” use these exact strings:
+FLAGS — use these exact strings:
 "no_north_arrow" | "north_arrow_ambiguous" | "north_arrow_multiple_found"
 "positional_elevation_unresolved" | "abstract_elevation_titles_used"
 "compass_map_incomplete" | "project_type_unknown"
@@ -917,24 +917,24 @@ Set requires_human_review: true if north_arrow_confidence is "medium" or "low", 
           const orientationMethod = a1Result.orientation_method || 'default_assumed';
           const bearingFound = a1Result.bearing_data_found || false;
           const streetBearing = a1Result.street_frontage_bearing || 'not found';
-          // â”€â”€ Bearing vs north-arrow cross-check â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+          // ── Bearing vs north-arrow cross-check ───────────────────────────
           // If Agent 1 used bearing_data, verify it's plausible against the
           // north arrow description. A near-vertical north arrow (12 o'clock)
-          // implies ~0Â° block rotation. A 206Â° bearing implies ~26Â° anti-clockwise
-          // rotation â€” inconsistent. When they conflict, trust the north arrow
-          // and rebuild the compass map with the correct ~23Â° CW rotation.
+          // implies ~0° block rotation. A 206° bearing implies ~26° anti-clockwise
+          // rotation — inconsistent. When they conflict, trust the north arrow
+          // and rebuild the compass map with the correct ~23° CW rotation.
           if (orientationMethod === 'bearing_data' && bearingFound) {
             const bearingNum = parseFloat(streetBearing);
             if (!isNaN(bearingNum)) {
               const nearVertical = /12.{0,6}o.?clock|straight up|pointing up(?:ward)?|vertical|due north|true north/i.test(northArrowDescription) ||
                                    /11.{0,6}o.?clock/i.test(northArrowDescription);
-              // 206Â° bearing â†’ block faces SSW â†’ north arrow should be ~11 o'clock
+              // 206° bearing → block faces SSW → north arrow should be ~11 o'clock
               // If north arrow is described as vertical/12 o'clock, the bearing is wrong
               if (nearVertical && bearingNum > 150 && bearingNum < 260) {
-                console.warn('âš ï¸ Bearing ' + bearingNum + 'Â° conflicts with near-vertical north arrow â€” likely wrong boundary. Rebuilding compass map.');
+                console.warn('⚠️ Bearing ' + bearingNum + '° conflicts with near-vertical north arrow — likely wrong boundary. Rebuilding compass map.');
                 agent1Flags.push('bearing_overridden_by_north_arrow');
-                // Rebuild: literal cardinal directions first, then apply 23Â° CW rotation
-                // (which is what a correct 113Â° street frontage bearing implies)
+                // Rebuild: literal cardinal directions first, then apply 23° CW rotation
+                // (which is what a correct 113° street frontage bearing implies)
                 const rotation23cw = { 'N':'NE', 'NE':'E', 'E':'SE', 'SE':'S', 'S':'SW', 'SW':'W', 'W':'NW', 'NW':'N' };
                 const rebuildMap = {};
                 for (const [k, v] of Object.entries(compassMap)) {
@@ -951,10 +951,10 @@ Set requires_human_review: true if north_arrow_confidence is "medium" or "low", 
               }
             }
           }
-          // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+          // ─────────────────────────────────────────────────────────────────
           // Extract elevation page numbers from Agent 1 for targeted Agent 2A/3A calls
           elevationPageNums = new Set((a1Result.elevation_page_numbers || []).map(n => Number(n)));
-          console.log('Agent 1 elevation pages:', elevationPageNums.size > 0 ? [...elevationPageNums].join(',') : 'not provided â€” will use all pages');
+          console.log('Agent 1 elevation pages:', elevationPageNums.size > 0 ? [...elevationPageNums].join(',') : 'not provided — will use all pages');
           if (northArrowConfidence !== 'high' && orientationMethod !== 'bearing_data') {
             agent1Flags.push('north_arrow_confidence_' + northArrowConfidence);
           }
@@ -965,7 +965,7 @@ Set requires_human_review: true if north_arrow_confidence is "medium" or "low", 
           console.log('Agent 1 flags:', JSON.stringify(agent1Flags));
           const needsCompassReview = orientationMethod === 'default_assumed' || (northArrowConfidence !== 'high' && !bearingFound);
           if (a1Result.requires_human_review || needsCompassReview) {
-            console.warn('Agent 1 requires human review â€” orientation method:', orientationMethod);
+            console.warn('Agent 1 requires human review — orientation method:', orientationMethod);
             window._compassWarning = { confidence: northArrowConfidence, description: northArrowDescription, page: northArrowPage, compassMap, orientationMethod, bearing: streetBearing };
           }
         } catch (e) {
@@ -973,7 +973,7 @@ Set requires_human_review: true if north_arrow_confidence is "medium" or "low", 
           agent1Flags = ['agent1_error'];
         }
 
-        // Sanitise compass map â€” only allow 8 valid cardinal/intercardinal directions
+        // Sanitise compass map — only allow 8 valid cardinal/intercardinal directions
         const VALID_COMPASS = new Set(['N','NE','E','SE','S','SW','W','NW']);
         const sanitiseCompass = v => {
           if (!v) return null;
@@ -989,15 +989,15 @@ Set requires_human_review: true if north_arrow_confidence is "medium" or "low", 
         }
 
         const compassContext = Object.keys(cleanCompassMap).length > 0
-          ? `COMPASS MAP FROM AGENT 1 (apply exactly â€” do not override):\n` +
-            Object.entries(cleanCompassMap).map(([k, v]) => `  "${k}" â†’ ${v}`).join('\n')
+          ? `COMPASS MAP FROM AGENT 1 (apply exactly — do not override):\n` +
+            Object.entries(cleanCompassMap).map(([k, v]) => `  "${k}" → ${v}`).join('\n')
           : `COMPASS: No rotation map available. Read facing from elevation titles literally.`;
 
-        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        // AGENT 2A â€” ELEVATION PASS (all pages, elevation drawings only)
+        // ─────────────────────────────────────────────────────────────────
+        // AGENT 2A — ELEVATION PASS (all pages, elevation drawings only)
         // Extracts windows confirmed on elevation drawings with HxW annotations.
-        // No page cap â€” all pages sent for maximum coverage.
-        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // No page cap — all pages sent for maximum coverage.
+        // ─────────────────────────────────────────────────────────────────
         // Use Agent 1's elevation_page_numbers for targeted extraction if available,
         // otherwise fall back to first 16 pages (safe cap for rate limits).
         // MINIMUM COVERAGE CHECK: if Agent 1 found very few elevation pages relative
@@ -1007,7 +1007,7 @@ Set requires_human_review: true if north_arrow_confidence is "medium" or "low", 
         const floorPlanPageNums = new Set((a1Result.floor_plan_page_numbers || []).map(Number));
 
         if (elevationPageNums.size > 0 && elevationPageNums.size < 4 && totalPages > 20) {
-          console.warn('Only ' + elevationPageNums.size + ' elevation pages found in ' + totalPages + '-page PDF â€” widening search');
+          console.warn('Only ' + elevationPageNums.size + ' elevation pages found in ' + totalPages + '-page PDF — widening search');
           for (const p of floorPlanPageNums) elevationPageNums.add(p);
           // Add all pages from last known elevation page onwards
           // (midpoint heuristic skipped pages 11-20 on Snowy Place)
@@ -1023,18 +1023,18 @@ Set requires_human_review: true if north_arrow_confidence is "medium" or "low", 
           : pageUrls.slice(0, Math.min(MAX_FALLBACK_PAGES, pageUrls.length))
               .map((url, i) => ({ url, pageNum: i + 1 }));
         const method = elevationPageNums.size > 0
-          ? 'TARGETED â€” elevation pages [' + [...elevationPageNums].sort((a,b)=>a-b).join(',') + ']'
-          : 'FALLBACK â€” first ' + glazingPages.length + ' of ' + pageUrls.length + ' pages';
+          ? 'TARGETED — elevation pages [' + [...elevationPageNums].sort((a,b)=>a-b).join(',') + ']'
+          : 'FALLBACK — first ' + glazingPages.length + ' of ' + pageUrls.length + ' pages';
         console.log(`Agent 2A page selection: ${method}`);
 
-        showStatus('loading', `<span class="spinner"></span> Agent 2A â€” Elevation pass (${glazingPages.length} pages)â€¦`);
+        showStatus('loading', `<span class="spinner"></span> Agent 2A — Elevation pass (${glazingPages.length} pages)…`);
 
         let allWindows = [];
         let gfaNotes = '';
         let agent2Flags = [];
         let pageInventory = [];
 
-        // â”€â”€ AGENT 2A â€” ELEVATION PASS (batched if >12 pages) â”€â”€
+        // ── AGENT 2A — ELEVATION PASS (batched if >12 pages) ──
         const A2A_BATCH_SIZE = 12;
         const a2aBatches = [];
         for (let i = 0; i < glazingPages.length; i += A2A_BATCH_SIZE) {
@@ -1046,10 +1046,10 @@ Set requires_human_review: true if north_arrow_confidence is "medium" or "low", 
           for (let batchIdx = 0; batchIdx < a2aBatches.length; batchIdx++) {
             const batch = a2aBatches[batchIdx];
             if (batchIdx > 0) {
-              console.log(`Agent 2A batch ${batchIdx+1}/${a2aBatches.length} â€” waiting 8s...`);
+              console.log(`Agent 2A batch ${batchIdx+1}/${a2aBatches.length} — waiting 8s...`);
               await new Promise(r => setTimeout(r, 8000));
             }
-            showStatus('loading', `<span class="spinner"></span> Agent 2A â€” Elevation pass (batch ${batchIdx+1}/${a2aBatches.length}, pages ${batch[0].pageNum}â€“${batch[batch.length-1].pageNum})â€¦`);
+            showStatus('loading', `<span class="spinner"></span> Agent 2A — Elevation pass (batch ${batchIdx+1}/${a2aBatches.length}, pages ${batch[0].pageNum}–${batch[batch.length-1].pageNum})…`);
             const a2Content = [];
             for (let i = 0; i < batch.length; i++) {
               const { url, pageNum } = batch[i];
@@ -1057,7 +1057,7 @@ Set requires_human_review: true if north_arrow_confidence is "medium" or "low", 
               a2Content.push({ type: 'image', source: { type: 'url', url } });
             }
           a2Content.push({ type: 'text', text: `You are extracting glazing data from ELEVATION DRAWINGS ONLY for Australian residential projects.
-You must RETURN VALID JSON ONLY â€” no commentary, no markdown, no explanation outside the JSON structure.
+You must RETURN VALID JSON ONLY — no commentary, no markdown, no explanation outside the JSON structure.
 
 INPUTS FROM AGENT 1:
 project_type: "${projectType}"
@@ -1066,72 +1066,72 @@ ${compassContext}
 
 YOUR ONLY JOB: Find windows on elevation drawings that have HxW dimension annotations.
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════════
 WHAT TO EXTRACT FROM
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════════
 
 EXTRACT FROM: elevation drawing pages only.
 An elevation drawing shows the external wall of the building with windows drawn on it.
 Elevation pages have titles like: "SOUTH ELEVATION", "NORTH ELEV.", "WEST ELEV. - EXT", "ELEVATIONS 1-4"
 
 SKIP entirely: floor plan pages, site plan pages, section pages, detail pages, legend pages, cover pages.
-Floor plan pages show room layouts from above â€” do not extract from these.
+Floor plan pages show room layouts from above — do not extract from these.
 
-IMPORTANT â€” each window appears on ONE primary elevation only:
+IMPORTANT — each window appears on ONE primary elevation only:
 If the same tag appears visible on multiple elevation drawings, extract it only from the elevation
 where the HxW callout is directly labelled on that wall surface.
 Do NOT extract a window from an elevation where it appears as a background element or is visible
-through another opening â€” only extract where the tag and HxW annotation are directly on that wall.
+through another opening — only extract where the tag and HxW annotation are directly on that wall.
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-DIMENSION RULE â€” NO FALLBACK
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════════
+DIMENSION RULE — NO FALLBACK
+═══════════════════════════════════════════
 
 ONLY populate height_m and width_m if you can read an HxW annotation directly on the elevation.
-HxW annotations look like: "ASW HxW:6Ã—20", "ASD HxW:21-24", "HIGHLIGHT AFW HxW:6Ã—35"
-These appear as: "HxW:6Ã—35" or "HxW:6-20" or "HxW:6 x 20" â€” all equivalent.
+HxW annotations look like: "ASW HxW:6×20", "ASD HxW:21-24", "HIGHLIGHT AFW HxW:6×35"
+These appear as: "HxW:6×35" or "HxW:6-20" or "HxW:6 x 20" — all equivalent.
 
 DO NOT calculate dimensions from the tag number code.
-Tag codes like "7-35" or "4-14" are nominal product identifiers â€” NOT reliable dimensions.
+Tag codes like "7-35" or "4-14" are nominal product identifiers — NOT reliable dimensions.
 If the HxW annotation is not clearly readable: set height_m: null, width_m: null,
 add "hxw_not_confirmed" to that window's flags[]. The assessor will fill these in manually.
 A blank dimension is better than a wrong dimension.
 
 EXAMPLE of correct behaviour:
-Tag: "HIGHLIGHT AFW 4-14" â€” tag decode would give H:0.4 W:1.4
-HxW annotation on elevation: "HxW:6Ã—35" â†’ use H:0.6m W:3.5m
+Tag: "HIGHLIGHT AFW 4-14" — tag decode would give H:0.4 W:1.4
+HxW annotation on elevation: "HxW:6×35" → use H:0.6m W:3.5m
 If no HxW annotation visible: set height_m: null, width_m: null, flag "hxw_not_confirmed"
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════════
 TAG FORMAT
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════════
 
-Valid tag prefixes (only these â€” others are misreads):
+Valid tag prefixes (only these — others are misreads):
 ASW = Sliding Window | ASD = Sliding Door | AAW = Awning Window
 AFW = Fixed Window | ACW = Casement Window
 HIGHLIGHT AAW = Clerestory Awning | HIGHLIGHT AFW = Clerestory Fixed
 
-uPVC TAG SYSTEM â€” some drafting firms use uPVC-prefixed tags instead of Alspec:
+uPVC TAG SYSTEM — some drafting firms use uPVC-prefixed tags instead of Alspec:
 uPSW = uPVC Sliding Window | uPSD = uPVC Sliding Door | uPAW = uPVC Awning Window
 uPFW = uPVC Fixed Window | uPCW = uPVC Casement Window
-These decode identically: uPSW HxW:18Ã—20 = H:1.8m W:2.0m
-Treat uPVC tags exactly like Alspec tags â€” extract them the same way.
+These decode identically: uPSW HxW:18×20 = H:1.8m W:2.0m
+Treat uPVC tags exactly like Alspec tags — extract them the same way.
 The HxW callout on the elevation is still your only authoritative source for dimensions.
 
-HIGHLIGHT windows sit above the main window line â€” they may appear near the ceiling/roofline
+HIGHLIGHT windows sit above the main window line — they may appear near the ceiling/roofline
 of the elevation drawing, not at the typical window height zone. Look for small horizontal
-openings near the top of the wall. These often have small HxW callouts (e.g. HxW:4Ã—14 = H:0.4m W:1.4m).
+openings near the top of the wall. These often have small HxW callouts (e.g. HxW:4×14 = H:0.4m W:1.4m).
 
 Sliding doors (ASD / uPSD) span full height floor-to-ceiling on the elevation drawing.
-Do NOT record a full-height floor-to-ceiling opening as ASW/uPSW â€” it is ASD/uPSD.
+Do NOT record a full-height floor-to-ceiling opening as ASW/uPSW — it is ASD/uPSD.
 
-An elevation drawing often contains MULTIPLE windows â€” scan the ENTIRE wall surface top to bottom,
+An elevation drawing often contains MULTIPLE windows — scan the ENTIRE wall surface top to bottom,
 left to right. Do not stop after finding the first window. A single elevation page may show
 3, 4, or 5 separate openings at different heights and positions on the wall.
-Casement windows (ACW/uPCW) may be narrow (as small as 0.6mâ€“0.9m wide) â€” do not overlook them.
-Sliding windows (ASW/uPSW) may appear at any height â€” they are not always at eye level.
+Casement windows (ACW/uPCW) may be narrow (as small as 0.6m–0.9m wide) — do not overlook them.
+Sliding windows (ASW/uPSW) may appear at any height — they are not always at eye level.
 
-FACING â€” ALWAYS FROM ELEVATION TITLE TEXT:
+FACING — ALWAYS FROM ELEVATION TITLE TEXT:
 Assign facing ONLY from the elevation title text printed on the drawing (e.g. "NORTH ELEV.", "SOUTH ELEV.").
 Do NOT assign facing based on the visual position of a window within the page layout.
 When two elevations appear on the same page (e.g. NORTH ELEV. top half, SOUTH ELEV. bottom half),
@@ -1139,53 +1139,53 @@ a window drawn near the edge of one elevation may visually sit close to the othe
 Always read the title text above or below the elevation drawing to confirm which elevation owns each window.
 If a window's elevation title is ambiguous, set facing: "UNKNOWN" and flag "orientation_unresolved".
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════════
 COMPASS ORIENTATION
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════════
 
 Use the compass map from Agent 1 to assign facing.
-The compass map was derived from the site plan by Agent 1 â€” apply it exactly as given.
-Do NOT attempt to independently verify the north arrow or override the provided compass values â€” trust it unconditionally.
+The compass map was derived from the site plan by Agent 1 — apply it exactly as given.
+Do NOT attempt to independently verify the north arrow or override the provided compass values — trust it unconditionally.
 Match the elevation drawing title to a key in the compass map.
 If the elevation title is not in the compass map, set facing: "UNKNOWN" and flag "orientation_unresolved".
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════════
 GFA FIGURES
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════════
 
 Look for a project data box (often in the title block, bottom corner of pages).
-Record exact label and value for each figure â€” do not combine or sum:
-- "Existing Structure GFA - Class 1: XmÂ²" 
-- "Proposed Structure GFA - Single Storey - Class 1: XmÂ²"
-- Renovation or Class 10 figures â€” label each separately
+Record exact label and value for each figure — do not combine or sum:
+- "Existing Structure GFA - Class 1: Xm²" 
+- "Proposed Structure GFA - Single Storey - Class 1: Xm²"
+- Renovation or Class 10 figures — label each separately
 
-CRITICAL â€” "Proposed Roof Area" is NOT GFA and must be excluded:
+CRITICAL — "Proposed Roof Area" is NOT GFA and must be excluded:
 "Proposed Roof Area" or "Proposed Roof Area - Class 1" is roof coverage area, NOT floor area.
 Do NOT include this figure in gfa_notes under any circumstances.
 Only record figures explicitly labelled as "GFA", "Gross Floor Area", or "Floor Area".
 
 The ONLY valid label for existing dwelling floor area is:
 "Existing Structure GFA - Class 1" or "Existing Dwelling GFA" or "Existing Building Area - Class 1"
-Any other label that mentions the existing dwelling should be verified carefully â€” if it says
+Any other label that mentions the existing dwelling should be verified carefully — if it says
 "Roof Area", "Site Coverage", "Plot Ratio", or "Setback", exclude it entirely.
 
-CRITICAL â€” "Renovation Inside Existing Residence" or "Proposed Renovation" is NOT existing GFA:
+CRITICAL — "Renovation Inside Existing Residence" or "Proposed Renovation" is NOT existing GFA:
 This figure describes internal alteration works and must NOT be recorded as existing_gfa.
 If you see both "Existing Structure GFA" and "Renovation Inside Existing Residence" in the title block,
 record ONLY the "Existing Structure GFA" value as existing GFA. Ignore the renovation figure entirely.
 
-EXAMPLE of a correct title block â€” only record the two GFA lines:
-  Proposed Structure GFA - Single Storey - Class 1: 32.84mÂ²  â† RECORD THIS
-  Proposed Roof Area - Class 1: 41.67mÂ²                      â† IGNORE (roof area, not GFA)
-  Existing Structure GFA - Class 1: 135.52mÂ²                 â† RECORD THIS
-  Proposed Renovation - Inside Existing Residence: 39.82mÂ²   â† IGNORE (renovation, not GFA)
+EXAMPLE of a correct title block — only record the two GFA lines:
+  Proposed Structure GFA - Single Storey - Class 1: 32.84m²  ← RECORD THIS
+  Proposed Roof Area - Class 1: 41.67m²                      ← IGNORE (roof area, not GFA)
+  Existing Structure GFA - Class 1: 135.52m²                 ← RECORD THIS
+  Proposed Renovation - Inside Existing Residence: 39.82m²   ← IGNORE (renovation, not GFA)
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════════
 OUTPUT FORMAT
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════════
 
 {
-  "gfa_notes": "Existing Structure GFA - Class 1: [value]mÂ², Proposed Structure GFA - Single Storey - Class 1: [value]mÂ²",
+  "gfa_notes": "Existing Structure GFA - Class 1: [value]m², Proposed Structure GFA - Single Storey - Class 1: [value]m²",
   "windows": [
     {
       "tag_id": "ASD 21-24",
@@ -1207,7 +1207,7 @@ OUTPUT FORMAT
   "requires_human_review": false
 }
 
-Leave room_name as "NOT IDENTIFIED" â€” Agent 2B will fill room names from floor plans.` });
+Leave room_name as "NOT IDENTIFIED" — Agent 2B will fill room names from floor plans.` });
 
           const a2Result = await callClaude([{ role: 'user', content: a2Content }]);
             const batchWindows = a2Result.windows || [];
@@ -1227,18 +1227,18 @@ Leave room_name as "NOT IDENTIFIED" â€” Agent 2B will fill room names from 
           });
         } catch (e) {
           console.warn('Agent 2A failed:', e);
-          showStatus('error', 'âŒ Elevation extraction failed: ' + e.message);
+          showStatus('error', '❌ Elevation extraction failed: ' + e.message);
           extractBtn.disabled = false;
           return;
         }
 
-        // â”€â”€ AGENT 2B â€” FLOOR PLAN CROSS-REFERENCE PASS â”€â”€
+        // ── AGENT 2B — FLOOR PLAN CROSS-REFERENCE PASS ──
         if (allWindows.length > 0) {
           await new Promise(r => setTimeout(r, 8000)); // rate limit recovery between agents
-          showStatus('loading', `<span class="spinner"></span> Agent 2B â€” Floor plan cross-reference (${allWindows.length} windows)â€¦`);
+          showStatus('loading', `<span class="spinner"></span> Agent 2B — Floor plan cross-reference (${allWindows.length} windows)…`);
           try {
             const a2bContent = [];
-            // Agent 2B needs floor plan pages â€” use full pageUrls, not the elevation-filtered glazingPages
+            // Agent 2B needs floor plan pages — use full pageUrls, not the elevation-filtered glazingPages
             const floorPlanPages = pageUrls.slice(0, Math.min(8, pageUrls.length))
               .map((url, i) => ({ url, pageNum: i + 1 }));
             for (let i = 0; i < floorPlanPages.length; i++) {
@@ -1254,17 +1254,17 @@ ${JSON.stringify(allWindows, null, 2)}
 
 YOUR JOB has TWO parts:
 
-PART 1 â€” Augment the existing window list:
+PART 1 — Augment the existing window list:
 For each window in the list above, find it on the proposed floor plan and determine:
-1. room_name â€” which room's wall does the opening penetrate? Use the room label from the floor plan.
-2. is_new_works â€” is this opening in the new extension/proposed works, or existing dwelling?
-DO NOT change tag_id, facing, height_m, width_m, or other fields â€” only fill room_name and is_new_works.
+1. room_name — which room's wall does the opening penetrate? Use the room label from the floor plan.
+2. is_new_works — is this opening in the new extension/proposed works, or existing dwelling?
+DO NOT change tag_id, facing, height_m, width_m, or other fields — only fill room_name and is_new_works.
 
-PART 2 â€” Find replacement windows on floor plans:
+PART 2 — Find replacement windows on floor plans:
 Scan the floor plan pages for windows with notes like:
 "REPLACE WITH NEW", "REPLACE WITH NEW SAME SIZE", "REPLACE WITH NEW DOUBLE GLAZING",
 "NEW WINDOW SAME OPENING", or similar replacement instructions.
-These are existing windows being replaced â€” they will not appear on extension elevation drawings,
+These are existing windows being replaced — they will not appear on extension elevation drawings,
 but are relevant to the energy rating assessment.
 For each replacement window found:
 - Extract the tag (e.g. "ASW 21-15"), room name, and any dimensions visible on the floor plan
@@ -1272,16 +1272,16 @@ For each replacement window found:
 - Set facing from the wall direction (use the compass map if provided)
 - Set flags: ["replacement_window", "hxw_from_floor_plan"]
 - Add to the windows array as a new entry
-Only include windows with a clear replacement instruction â€” do not guess.
+Only include windows with a clear replacement instruction — do not guess.
 
 ROOM NAME METHOD:
 Find the window tag on the floor plan. The tag sits on the wall of a room.
 The room whose boundary wall contains the opening owns the window.
-Do not use the nearest room label â€” use the room whose wall the opening is cut through.
+Do not use the nearest room label — use the room whose wall the opening is cut through.
 
 NEW WORKS vs EXISTING:
-- is_new_works: true â€” opening is on a wall of the new extension/addition
-- is_new_works: false â€” opening is on a wall of the original existing dwelling
+- is_new_works: true — opening is on a wall of the new extension/addition
+- is_new_works: false — opening is on a wall of the original existing dwelling
 
 Return the same window list with room_name and is_new_works filled in where you can confirm them.
 If you cannot find a window on the floor plan, leave room_name as "NOT IDENTIFIED".
@@ -1295,26 +1295,26 @@ Return: { "windows": [...same array with room_name and is_new_works updated...] 
               allWindows = updatedWindows;
               console.log('Agent 2B: room names updated' + (updatedWindows.length > allWindows.length ? ', replacement windows added' : ''));
               allWindows.forEach((w, i) => {
-                console.log(`  [${i}] ${w.tag_id||'?'} â†’ room:"${w.room_name||'?'}" is_new_works:${w.is_new_works}`);
+                console.log(`  [${i}] ${w.tag_id||'?'} → room:"${w.room_name||'?'}" is_new_works:${w.is_new_works}`);
               });
             } else {
-              console.warn(`Agent 2B returned ${updatedWindows.length} windows, expected ${allWindows.length} â€” using 2A results`);
+              console.warn(`Agent 2B returned ${updatedWindows.length} windows, expected ${allWindows.length} — using 2A results`);
             }
           } catch (e) {
             console.warn('Agent 2B cross-reference failed (non-fatal, using 2A results):', e);
           }
         }
-        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        // AGENT 3A â€” VERIFICATION PASS
+        // ─────────────────────────────────────────────────────────────────
+        // AGENT 3A — VERIFICATION PASS
         // Checks each extracted window against elevation drawings.
         // Confirms tag, facing, and dimensions before scope calculation.
-        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ─────────────────────────────────────────────────────────────────
         if (allWindows.length > 0) {
           await new Promise(r => setTimeout(r, 8000)); // rate limit recovery between agents
-          showStatus('loading', `<span class="spinner"></span> Agent 3A â€” Verifying ${allWindows.length} windows against drawingsâ€¦`);
+          showStatus('loading', `<span class="spinner"></span> Agent 3A — Verifying ${allWindows.length} windows against drawings…`);
           try {
             const a3aContent = [];
-            // Agent 3A only needs elevation pages â€” same targeted set as Agent 2A
+            // Agent 3A only needs elevation pages — same targeted set as Agent 2A
             const a3aPages = glazingPages; // already filtered to elevation pages
             for (let i = 0; i < a3aPages.length; i++) {
               const { url, pageNum } = a3aPages[i];
@@ -1330,36 +1330,36 @@ WINDOWS TO VERIFY:
 ${JSON.stringify(allWindows, null, 2)}
 
 For each window in the list, look at the elevation drawings and verify:
-1. TAG â€” does this exact tag appear on an elevation drawing? (yes/no)
-2. FACING â€” which elevation drawing title does it appear on? Apply compass map to get facing.
-3. DIMENSIONS â€” what does the HxW annotation say on that elevation?
+1. TAG — does this exact tag appear on an elevation drawing? (yes/no)
+2. FACING — which elevation drawing title does it appear on? Apply compass map to get facing.
+3. DIMENSIONS — what does the HxW annotation say on that elevation?
 
-TAG FORMAT â€” both Alspec and uPVC tags are valid:
+TAG FORMAT — both Alspec and uPVC tags are valid:
 Alspec: ASW, ASD, AAW, AFW, ACW, HIGHLIGHT AAW, HIGHLIGHT AFW
 uPVC: uPSW, uPSD, uPAW, uPFW, uPCW
 Both decode identically from HxW callouts.
 
-BREACHES ELEVATIONS â€” DO NOT CREATE DUPLICATE FLAGS:
+BREACHES ELEVATIONS — DO NOT CREATE DUPLICATE FLAGS:
 Many drawing sets include a "BREACHES" version of each elevation (e.g. "ELEVATIONS 1 - BREACHES",
-"ELEVATIONS 2 - BREACHES"). These are the SAME physical walls shown twice â€” once as a standard
+"ELEVATIONS 2 - BREACHES"). These are the SAME physical walls shown twice — once as a standard
 elevation and once with setback encroachment overlays added.
 A window tag that appears on both "NORTH ELEV." and "NORTH ELEV. - BREACHES" is ONE physical
 window, not two. Do NOT flag it as a possible_duplicate.
 Only flag as possible_duplicate if the same tag appears on two genuinely different elevation faces
-(e.g. both NORTH ELEV. and EAST ELEV.) â€” which would indicate a genuine extraction error.
+(e.g. both NORTH ELEV. and EAST ELEV.) — which would indicate a genuine extraction error.
 
-FACING CONFIRMATION â€” FROM TITLE TEXT ONLY:
+FACING CONFIRMATION — FROM TITLE TEXT ONLY:
 When verifying facing, confirm by reading the elevation title text, not by visual position.
 A window drawn near the edge of one elevation page may visually appear to belong to the adjacent
-elevation â€” always read the title text above or below the drawing.
+elevation — always read the title text above or below the drawing.
 
-DIMENSION CORRECTIONS â€” allowed:
+DIMENSION CORRECTIONS — allowed:
 If the HxW annotation gives different dimensions than what was extracted, update height_m and width_m
 and add "dimensions_corrected" to flags.
 
-FACING CORRECTIONS â€” restricted:
+FACING CORRECTIONS — restricted:
 Do NOT correct facing if the window already has a valid compass direction (N/NE/E/SE/S/SW/W/NW).
-Agent 1 derived the compass map from the site plan â€” trust it unconditionally.
+Agent 1 derived the compass map from the site plan — trust it unconditionally.
 Only update facing if the current value is "UNKNOWN" or "UNVERIFIED".
 If you believe the facing looks wrong, add "facing_check_recommended" to flags[] but do NOT change it.
 
@@ -1375,21 +1375,21 @@ Return the same window list with verified field and any corrections applied.
               const corrected = allWindows.filter(w => (w.flags||[]).some(f => f.includes('corrected')));
               const notFound = allWindows.filter(w => (w.flags||[]).includes('not_found_on_elevation'));
               console.log(`Agent 3A: ${allWindows.length} verified, ${corrected.length} corrected, ${notFound.length} not found on elevation`);
-              corrected.forEach(w => console.log(`  CORRECTED: ${w.tag_id} â€” ${JSON.stringify(w.flags)}`));
+              corrected.forEach(w => console.log(`  CORRECTED: ${w.tag_id} — ${JSON.stringify(w.flags)}`));
               notFound.forEach(w => console.log(`  NOT FOUND: ${w.tag_id}`));
             } else {
-              console.warn(`Agent 3A returned ${verifiedWindows.length} windows, expected ${allWindows.length} â€” using unverified`);
+              console.warn(`Agent 3A returned ${verifiedWindows.length} windows, expected ${allWindows.length} — using unverified`);
             }
           } catch (e) {
             console.warn('Agent 3A verification failed (non-fatal):', e);
           }
         }
 
-        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        // AGENT 3 â€” SCOPE DETERMINER (text only, receives A1 + A2 outputs)
-        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ─────────────────────────────────────────────────────────────────
+        // AGENT 3 — SCOPE DETERMINER (text only, receives A1 + A2 outputs)
+        // ─────────────────────────────────────────────────────────────────
         await new Promise(r => setTimeout(r, 8000)); // rate limit recovery
-        showStatus('loading', '<span class="spinner"></span> Agent 3 â€” Determining scopeâ€¦');
+        showStatus('loading', '<span class="spinner"></span> Agent 3 — Determining scope…');
 
         let scopeLabel = 'whole_dwelling';
         let scopeNote = gfaNotes;
@@ -1402,7 +1402,7 @@ Return the same window list with verified field and any corrections applied.
         console.log(`Agent 3: ${agent3NeedsPDF ? 'sending PDF (GFA not found by Agent 2)' : 'text only (GFA found)'}`);
 
         const a3PromptText = `You are an NCC 2022 scope calculator for Australian residential projects.
-You must RETURN VALID JSON ONLY â€” no commentary, no markdown, no explanation outside the JSON structure.
+You must RETURN VALID JSON ONLY — no commentary, no markdown, no explanation outside the JSON structure.
 
 INPUTS FROM UPSTREAM AGENTS:
 project_type: "${projectType}"
@@ -1410,27 +1410,27 @@ agent1_flags: ${JSON.stringify(agent1Flags)}
 agent2_flags: ${JSON.stringify(agent2Flags)}
 gfa_notes from Agent 2: "${gfaNotes}"
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-STEP 1 â€” LOCATE GFA FIGURES
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════════
+STEP 1 — LOCATE GFA FIGURES
+═══════════════════════════════════════════
 
 Use the gfa_notes above. Identify exactly two figures for the calculation:
 
-EXISTING GFA â€” use the figure labelled EXACTLY:
+EXISTING GFA — use the figure labelled EXACTLY:
 "Existing Structure GFA" or "Existing Structure GFA - Class 1" or "Existing Dwelling GFA"
 This is a SINGLE figure from the title block. Do NOT add or combine multiple figures.
 Do NOT include renovation area, internal works, Class 10, or any other area.
 The existing GFA is the habitable Class 1 floor area of the house BEFORE any works.
 
-NEW WORKS GFA â€” use the figure labelled EXACTLY:
+NEW WORKS GFA — use the figure labelled EXACTLY:
 "Proposed Structure GFA" or "Proposed Structure GFA - Single Storey - Class 1" or "New Extension GFA"
 This is the new physical structure being added only. Exclude Class 10. Exclude renovation.
 
 FIGURES TO EXPLICITLY IGNORE (do not add to either side):
-- "Proposed Roof Area" â€” this is roof area, not GFA
-- "Internal Renovation" / "Renovation Area" / "Reno GFA" â€” not new extension GFA
-- "Class 10" / "Garage" / "Carport" / "Shed" / "Deck" â€” Class 10, excluded
-- "Total GFA" / "Combined GFA" â€” never use totals, always use individual labelled figures
+- "Proposed Roof Area" — this is roof area, not GFA
+- "Internal Renovation" / "Renovation Area" / "Reno GFA" — not new extension GFA
+- "Class 10" / "Garage" / "Carport" / "Shed" / "Deck" — Class 10, excluded
+- "Total GFA" / "Combined GFA" — never use totals, always use individual labelled figures
 - Any figure you cannot match to an exact label above
 
 CRITICAL: existing_gfa and new_works_gfa must each come from ONE labelled figure.
@@ -1438,36 +1438,36 @@ Never derive existing_gfa by subtraction if the labelled figure is available.
 Never sum multiple figures to get either value.
 ${agent3NeedsPDF ? 'Also scan the PDF pages provided to locate the title block GFA schedule.' : ''}
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-STEP 2 â€” NCC 2022 SCOPE CALCULATION
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════════
+STEP 2 — NCC 2022 SCOPE CALCULATION
+═══════════════════════════════════════════
 
-FORMULA: scope_ratio = new_works_gfa Ã· existing_gfa
-scope_ratio â‰¥ 0.50 â†’ scope: "whole_dwelling"
-scope_ratio < 0.50 â†’ scope: "new_works_only"
-project_type "new_dwelling" â†’ scope: "whole_dwelling" always
-Borderline (0.45â€“0.55): apply calculation + add "borderline_scope_ratio" to flags[] + requires_human_review: true
-GFA not found â†’ scope: "whole_dwelling" + add "gfa_not_found_defaulting_to_whole_dwelling" to flags[] + requires_human_review: true
+FORMULA: scope_ratio = new_works_gfa ÷ existing_gfa
+scope_ratio ≥ 0.50 → scope: "whole_dwelling"
+scope_ratio < 0.50 → scope: "new_works_only"
+project_type "new_dwelling" → scope: "whole_dwelling" always
+Borderline (0.45–0.55): apply calculation + add "borderline_scope_ratio" to flags[] + requires_human_review: true
+GFA not found → scope: "whole_dwelling" + add "gfa_not_found_defaulting_to_whole_dwelling" to flags[] + requires_human_review: true
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-STEP 3 â€” PIPELINE FLAGS SUMMARY
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════════
+STEP 3 — PIPELINE FLAGS SUMMARY
+═══════════════════════════════════════════
 
 Collect all flags from all agents into pipeline_flags_summary.
 pipeline_confidence: "high" (no flags) | "medium" (minor flags) | "low" (significant flags) | "failed" (critical missing data)
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════════
 OUTPUT FORMAT
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════════
 
 {
-  "scope": "[whole_dwelling OR new_works_only â€” calculated from ratio, NOT copied from this example]",
+  "scope": "[whole_dwelling OR new_works_only — calculated from ratio, NOT copied from this example]",
   "scope_ratio": "[ratio as decimal]",
   "scope_ratio_percentage": "[ratio as percentage]",
   "existing_gfa": "[value from drawings]",
   "new_works_gfa": "[value from drawings]",
   "total_gfa": "[sum]",
-  "scope_note": "[X] Ã· [Y] = [Z]% â€” [above/below] 50% threshold â†’ [whole_dwelling/new_works_only]",
+  "scope_note": "[X] ÷ [Y] = [Z]% — [above/below] 50% threshold → [whole_dwelling/new_works_only]",
   "pipeline_flags_summary": {
     "agent1_flags": [],
     "agent2_flags": [],
@@ -1501,7 +1501,7 @@ Set requires_human_review: true if ANY flag is present.`;
           const a3Result = await callClaude(a3Messages, 'You are an NCC 2022 scope calculator. Respond with valid JSON only.');
 
           scopeLabel = a3Result.scope || 'whole_dwelling';
-          // JS override: recompute scope from numbers â€” prevents Agent 3 returning wrong scope string
+          // JS override: recompute scope from numbers — prevents Agent 3 returning wrong scope string
           const a3Existing = parseFloat(a3Result.existing_gfa);
           const a3Proposed = parseFloat(a3Result.new_works_gfa);
           if (!isNaN(a3Existing) && !isNaN(a3Proposed) && a3Existing > 0) {
@@ -1527,18 +1527,18 @@ Set requires_human_review: true if ANY flag is present.`;
           pipelineConfidence = 'low';
         }
 
-        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        // AGENT 4 â€” COMPILER (pure JavaScript, no Claude call)
-        // Scope filter â†’ deduplicate â†’ validate â†’ sort â†’ final schedule
-        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        showStatus('loading', '<span class="spinner"></span> Agent 4 â€” Compiling scheduleâ€¦');
+        // ─────────────────────────────────────────────────────────────────
+        // AGENT 4 — COMPILER (pure JavaScript, no Claude call)
+        // Scope filter → deduplicate → validate → sort → final schedule
+        // ─────────────────────────────────────────────────────────────────
+        showStatus('loading', '<span class="spinner"></span> Agent 4 — Compiling schedule…');
 
-        // Scope filter â€” only runs for new_works_only
-        // Trust Agent 2's is_new_works flag â€” room-name matching is too aggressive
+        // Scope filter — only runs for new_works_only
+        // Trust Agent 2's is_new_works flag — room-name matching is too aggressive
         // (extension rooms like Bedroom 4, Lounge can have same names as existing rooms)
         if (scopeLabel === 'new_works_only') {
           allWindows = allWindows.filter(w => {
-            // is_new_works === false is explicit Agent 2 signal â€” exclude
+            // is_new_works === false is explicit Agent 2 signal — exclude
             if (w.is_new_works === false) { console.log(`  SCOPE DROP (is_new_works:false): ${w.tag_id||w.tag}`); return false; }
             // Check notes for explicit existing dwelling markers
             const notes = (w.notes || '').toLowerCase();
@@ -1551,7 +1551,7 @@ Set requires_human_review: true if ANY flag is present.`;
           });
           console.log(`Scope filter (new_works_only): ${allWindows.length} windows remain`);
 
-          // Flag ambiguous room names for review â€” Entrance/Hall/Laundry appear in both
+          // Flag ambiguous room names for review — Entrance/Hall/Laundry appear in both
           // existing and new works; assessor must verify before entering into NCC calculator
           const ambiguousRooms = ['entrance','hall','hallway','laundry','wc','powder room','toilet'];
           allWindows.forEach(w => {
@@ -1560,23 +1560,23 @@ Set requires_human_review: true if ANY flag is present.`;
               w.needs_review = true;
               w.flags = [...(w.flags || []), 'room_name_check_existing_vs_new'];
               if (!w.notes) w.notes = '';
-              w.notes = (`[CHECK] Room "${w.room_name||w.room}" â€” verify this is in new works not existing dwelling. ` + w.notes).trim();
-              console.log(`  REVIEW FLAG (room): ${w.tag_id||w.tag} â€” "${w.room_name||w.room}"`);
+              w.notes = (`[CHECK] Room "${w.room_name||w.room}" — verify this is in new works not existing dwelling. ` + w.notes).trim();
+              console.log(`  REVIEW FLAG (room): ${w.tag_id||w.tag} — "${w.room_name||w.room}"`);
             }
           });
         }
 
         // Strip elevation format artifacts from tag names before deduplication
-        // Handles: "HxW:" prefix, "21 x 24" â†’ "21-24", "6x20" â†’ "6-20"
+        // Handles: "HxW:" prefix, "21 x 24" → "21-24", "6x20" → "6-20"
         const stripHxW = str => {
           if (!str) return '';
           return str
             .replace(/HxW:/gi, '')           // remove "HxW:" label
-            .replace(/(\d+)\s*[x\u00d7]\s*(\d+)/gi, '$1-$2')  // "21 x 24", "6x20", "6Ã—20" â†’ "21-24"
+            .replace(/(\d+)\s*[x\u00d7]\s*(\d+)/gi, '$1-$2')  // "21 x 24", "6x20", "6×20" → "21-24"
             .replace(/\s+/g, ' ')
             .trim();
         };
-        // â”€â”€ FRAME COLOUR NORMALISATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── FRAME COLOUR NORMALISATION ──────────────────────────────────────
         // Opus reads actual colour names from drawings (Monument, Pearl White, Jasper etc.)
         // Map known Colorbond/uPVC colour names to Dark/Medium/Light categories
         // for the NCC calculator. Unknown colours preserved as-is for assessor review.
@@ -1618,13 +1618,13 @@ Set requires_human_review: true if ANY flag is present.`;
         const normaliseColour = (raw) => {
           if (!raw) return '';
           const lower = raw.toLowerCase().trim();
-          // Already a category â€” pass through
+          // Already a category — pass through
           if (lower === 'dark' || lower === 'medium' || lower === 'light') return raw;
           // Check colour map
           for (const [key, cat] of Object.entries(COLOUR_MAP)) {
             if (lower.includes(key)) return cat;
           }
-          // Unknown â€” return as-is, assessor will see it
+          // Unknown — return as-is, assessor will see it
           return raw;
         };
         // Clean up room names that are actually elevation titles (Agent 2 bug)
@@ -1645,12 +1645,12 @@ Set requires_human_review: true if ANY flag is present.`;
           return confScore(a.confidence) - confScore(b.confidence);
         });
 
-        // Deduplicate by tag â€” same tag code = same physical window
+        // Deduplicate by tag — same tag code = same physical window
         // Key strategy: prefer full tag (prefix + size), fall back to type+room+facing+dims
         const deduped = new Map();
         let droppedNoTag = 0, droppedDupe = 0;
 
-        // Detect bare size-code tags (e.g. "HxW:6-20", "6-20", "620") â€” no type prefix
+        // Detect bare size-code tags (e.g. "HxW:6-20", "6-20", "620") — no type prefix
         const isBareSize = str => /^(HxW:)?[\d\s\-x]+$/i.test(str.trim());
 
         const makeKey = (w) => {
@@ -1658,11 +1658,11 @@ Set requires_human_review: true if ANY flag is present.`;
           const cleaned = stripHxW(rawId).trim();
           const facing = (w.facing || '').toUpperCase();
           if (cleaned && !isBareSize(cleaned)) {
-            // Full tag available â€” key on tag + facing
+            // Full tag available — key on tag + facing
             // Two windows with same tag code but different facing = different physical openings
             return norm(cleaned) + '|' + facing;
           }
-          // Bare size code â€” key on type+room+facing+dims
+          // Bare size code — key on type+room+facing+dims
           const type = (w.opening_type || w.type || '').toLowerCase().replace(/\s+/g,'');
           const room = (w.room_name || w.room || '').toLowerCase().replace(/\s+/g,'');
           const h = String(w.height_m || '');
@@ -1712,8 +1712,8 @@ Set requires_human_review: true if ANY flag is present.`;
           }
         }
 
-        // â”€â”€ DIMENSION VALIDATION â€” plausibility only, no vocabulary filter â”€â”€
-        // Dimensions are never cleared â€” only flagged. Blank = assessor fills in manually.
+        // ── DIMENSION VALIDATION — plausibility only, no vocabulary filter ──
+        // Dimensions are never cleared — only flagged. Blank = assessor fills in manually.
         const isValidDim = (val, type) => {
           if (val === null || val === undefined || val === '') return true;
           const num = parseFloat(val);
@@ -1740,7 +1740,7 @@ Set requires_human_review: true if ANY flag is present.`;
               ...w,
               needs_review: flagged,
               notes: (!hOk || !wOk)
-                ? `[CHECK] ${!hOk ? 'H:'+w.height_m+' ' : ''}${!wOk ? 'W:'+w.width_m : ''} implausible â€” verify on plans`.trim()
+                ? `[CHECK] ${!hOk ? 'H:'+w.height_m+' ' : ''}${!wOk ? 'W:'+w.width_m : ''} implausible — verify on plans`.trim()
                 : (w.notes || ''),
             };
           })
@@ -1748,12 +1748,12 @@ Set requires_human_review: true if ANY flag is present.`;
 
         console.log('Agent 4 final schedule:', schedule.length, 'windows');
 
-        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        // AGENT 5 â€” FABRIC & METADATA EXTRACTOR (batched, all pages)
-        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ─────────────────────────────────────────────────────────────────
+        // AGENT 5 — FABRIC & METADATA EXTRACTOR (batched, all pages)
+        // ─────────────────────────────────────────────────────────────────
         let fabricData = {};
         try {
-          showStatus('loading', '<span class="spinner"></span> Agent 5 â€” Extracting building fabric & metadataâ€¦');
+          showStatus('loading', '<span class="spinner"></span> Agent 5 — Extracting building fabric & metadata…');
           await new Promise(r => setTimeout(r, 5000)); // rate limit gap after Agent 3
 
           const A5_BATCH_SIZE = 12;
@@ -1763,7 +1763,7 @@ Set requires_human_review: true if ANY flag is present.`;
           }
           console.log('Agent 5: ' + pageUrls.length + ' pages in ' + a5Batches.length + ' batch(es)');
 
-          // Merge results across batches â€” later batches override nulls from earlier
+          // Merge results across batches — later batches override nulls from earlier
           const mergeDeep = (base, incoming) => {
             for (const key of Object.keys(incoming || {})) {
               if (incoming[key] !== null && incoming[key] !== undefined && incoming[key] !== '') {
@@ -1785,7 +1785,7 @@ Set requires_human_review: true if ANY flag is present.`;
 
           for (let bIdx = 0; bIdx < a5Batches.length; bIdx++) {
             if (bIdx > 0) {
-              console.log('Agent 5 batch ' + (bIdx+1) + '/' + a5Batches.length + ' â€” waiting 8s...');
+              console.log('Agent 5 batch ' + (bIdx+1) + '/' + a5Batches.length + ' — waiting 8s...');
               await new Promise(r => setTimeout(r, 8000));
             }
             const batch = a5Batches[bIdx];
@@ -1795,114 +1795,114 @@ Set requires_human_review: true if ANY flag is present.`;
               a5Content.push({ type: 'image', source: { type: 'url', url } });
             }
             a5Content.push({ type: 'text', text: `You are extracting building fabric and project metadata from Australian residential architectural drawings.
-You must RETURN VALID JSON ONLY â€” no commentary, no markdown, no explanation outside the JSON structure.
+You must RETURN VALID JSON ONLY — no commentary, no markdown, no explanation outside the JSON structure.
 
 CRITICAL RULE: Extract ONLY what is explicitly written on the drawings.
 Do NOT calculate, estimate, or infer any value.
-If a value is not shown on these pages, set it to null â€” do not guess.
-"EER requirements" or "to comply" without a stated R-value â†’ extract the note text, set r_value: null.
+If a value is not shown on these pages, set it to null — do not guess.
+"EER requirements" or "to comply" without a stated R-value → extract the note text, set r_value: null.
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-SECTION 1 â€” PROJECT METADATA
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════
+SECTION 1 — PROJECT METADATA
+═══════════════════════════════════════
 Extract only if explicitly shown in title block or cover sheet:
 project_address, client_name, block, section
-proposed_gfa_class1 â€” label "Proposed Structure GFA - Class 1" (mÂ² value only)
-proposed_gfa_class10 â€” label "Proposed Structure GFA - Class 10"
-proposed_roof_area_class1 â€” label "Proposed Roof Area - Class 1"
-proposed_roof_area_class10 â€” label "Proposed Roof Area - Class 10"
-block_area â€” site/block area if stated
-storeys â€” only if explicitly stated (e.g. "Single Storey", "Two Storey")
-ffl_levels â€” finished floor levels exactly as written (array of strings)
+proposed_gfa_class1 — label "Proposed Structure GFA - Class 1" (m² value only)
+proposed_gfa_class10 — label "Proposed Structure GFA - Class 10"
+proposed_roof_area_class1 — label "Proposed Roof Area - Class 1"
+proposed_roof_area_class10 — label "Proposed Roof Area - Class 10"
+block_area — site/block area if stated
+storeys — only if explicitly stated (e.g. "Single Storey", "Two Storey")
+ffl_levels — finished floor levels exactly as written (array of strings)
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-SECTION 2 â€” ROOF
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-roof_covering â€” material as written (e.g. "Colorbond Cliplock")
-roof_colour â€” colour as written
-roof_pitch â€” pitch as written (e.g. "5.00Â°")
-roof_construction_type â€” e.g. "Pitched with horizontal ceiling" | "Cathedral/Skillion" | "Flat" â€” only if explicitly stated
-roof_ventilation â€” "Vented" or "Standard" â€” only if explicitly labelled
-roof_solar_absorptance â€” only if a numeric value is explicitly stated
-sarking â€” description as written, or null
-roof_framing â€” as written, or null
-roof_lights â€” description if shown
-roof_penetrations â€” if labelled
+═══════════════════════════════════════
+SECTION 2 — ROOF
+═══════════════════════════════════════
+roof_covering — material as written (e.g. "Colorbond Cliplock")
+roof_colour — colour as written
+roof_pitch — pitch as written (e.g. "5.00°")
+roof_construction_type — e.g. "Pitched with horizontal ceiling" | "Cathedral/Skillion" | "Flat" — only if explicitly stated
+roof_ventilation — "Vented" or "Standard" — only if explicitly labelled
+roof_solar_absorptance — only if a numeric value is explicitly stated
+sarking — description as written, or null
+roof_framing — as written, or null
+roof_lights — description if shown
+roof_penetrations — if labelled
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-SECTION 3 â€” INSULATION
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-insulation â€” array of objects, one per distinct insulation note found:
+═══════════════════════════════════════
+SECTION 3 — INSULATION
+═══════════════════════════════════════
+insulation — array of objects, one per distinct insulation note found:
   { location, description, r_value, confidence, flags[] }
 location values: "ceiling" | "wall" | "floor" | "anticon" | "other"
 r_value: numeric only if explicitly written (e.g. 3.5 for R3.5), else null
 flags: include "r_value_missing" if note references EER/compliance without giving R-value
 IMPORTANT: Extract subfloor/floor insulation R-value if explicitly stated (e.g. "R3.0 floor batts")
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-SECTION 4 â€” WALLS
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-external_cladding â€” material as written
-external_colour â€” colour as written
-wall_solar_absorptance â€” only if numeric value explicitly stated
-wall_construction â€” construction type if labelled (e.g. "timber stud frame", "brick veneer")
-wall_height â€” wall height if dimensioned in section drawings (e.g. "2400mm" or "2.40m")
-internal_lining â€” if written
+═══════════════════════════════════════
+SECTION 4 — WALLS
+═══════════════════════════════════════
+external_cladding — material as written
+external_colour — colour as written
+wall_solar_absorptance — only if numeric value explicitly stated
+wall_construction — construction type if labelled (e.g. "timber stud frame", "brick veneer")
+wall_height — wall height if dimensioned in section drawings (e.g. "2400mm" or "2.40m")
+internal_lining — if written
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-SECTION 5 â€” FLOOR
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-floor_type â€” as written (e.g. "concrete slab on ground", "suspended timber")
-floor_construction_category â€” derive ONLY from explicit labels: "direct_contact" (slab on ground) | "suspended" (bearer/joist, timber floor) | null
-slab_details â€” if dimensioned
-subfloor_type â€” if shown
-subfloor_height â€” subfloor/void height if dimensioned (e.g. "â‰¤1800mm", "1695mm")
-subfloor_enclosed â€” "enclosed" | "open" | null â€” only if explicitly described
-in_slab_heating â€” only if explicitly shown
+═══════════════════════════════════════
+SECTION 5 — FLOOR
+═══════════════════════════════════════
+floor_type — as written (e.g. "concrete slab on ground", "suspended timber")
+floor_construction_category — derive ONLY from explicit labels: "direct_contact" (slab on ground) | "suspended" (bearer/joist, timber floor) | null
+slab_details — if dimensioned
+subfloor_type — if shown
+subfloor_height — subfloor/void height if dimensioned (e.g. "≤1800mm", "1695mm")
+subfloor_enclosed — "enclosed" | "open" | null — only if explicitly described
+in_slab_heating — only if explicitly shown
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-SECTION 6 â€” FLOOR COVERINGS
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════
+SECTION 6 — FLOOR COVERINGS
+═══════════════════════════════════════
 Scan inclusions plan, floor plan, and spec notes for room-by-room floor covering information.
-floor_coverings â€” array of objects: { room, covering }
+floor_coverings — array of objects: { room, covering }
 covering values as written (e.g. "Carpet", "Floating Timber", "Ceramic Tile", "Concrete")
 Common room names: Bedroom, Living, Kitchen, Bathroom, Ensuite, Laundry, Entry, Hall, Study
 If a single covering applies to all rooms (e.g. "Timber flooring throughout"), record as { room: "All", covering: "..." }
 If inclusions plan is not present, set floor_coverings: []
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-SECTION 7 â€” SHADING
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-eave_projection â€” dimension as written (e.g. "450mm", "900mm eave")
-pergolas_awnings â€” description if shown
+═══════════════════════════════════════
+SECTION 7 — SHADING
+═══════════════════════════════════════
+eave_projection — dimension as written (e.g. "450mm", "900mm eave")
+pergolas_awnings — description if shown
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-SECTION 8 â€” LIGHTING & SERVICES
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════
+SECTION 8 — LIGHTING & SERVICES
+═══════════════════════════════════════
 Extract ONLY if explicitly shown on drawings:
-ic_rated_downlights â€” true/false/description (check spec notes for "IC rated" requirement)
-exhaust_fans â€” description including location and cutout size if stated (e.g. "1x Ensuite 250x250mm")
-hvac_system â€” description if shown (e.g. "6.4kW Reverse Cycle Split System")
-hot_water_system â€” type if shown (e.g. "Heat Pump Hot Water Service", "Solar HWS", "Gas HWS")
-pool_spa â€” description if shown
+ic_rated_downlights — true/false/description (check spec notes for "IC rated" requirement)
+exhaust_fans — description including location and cutout size if stated (e.g. "1x Ensuite 250x250mm")
+hvac_system — description if shown (e.g. "6.4kW Reverse Cycle Split System")
+hot_water_system — type if shown (e.g. "Heat Pump Hot Water Service", "Solar HWS", "Gas HWS")
+pool_spa — description if shown
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-SECTION 9 â€” MISSING OR UNCLEAR
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-missing_flags â€” array of applicable strings:
-"glazing_performance_missing" â€” U-values / SHGC not stated anywhere
-"insulation_r_values_missing" â€” insulation noted but no R-values given
-"solar_absorptance_not_stated" â€” no solar absorptance values found
-"no_window_schedule" â€” no schedule mapping tags to rooms
-"floor_coverings_not_found" â€” no inclusions plan or floor covering information found
-"conflicting_values" â€” describe in missing_notes
-"unspecified_performance_values" â€” performance referenced but not given
+═══════════════════════════════════════
+SECTION 9 — MISSING OR UNCLEAR
+═══════════════════════════════════════
+missing_flags — array of applicable strings:
+"glazing_performance_missing" — U-values / SHGC not stated anywhere
+"insulation_r_values_missing" — insulation noted but no R-values given
+"solar_absorptance_not_stated" — no solar absorptance values found
+"no_window_schedule" — no schedule mapping tags to rooms
+"floor_coverings_not_found" — no inclusions plan or floor covering information found
+"conflicting_values" — describe in missing_notes
+"unspecified_performance_values" — performance referenced but not given
 
-missing_notes â€” free text for any conflicts or ambiguities
+missing_notes — free text for any conflicts or ambiguities
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════
 OUTPUT FORMAT
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════
 {
   "project_metadata": {
     "project_address": null,
@@ -1971,7 +1971,7 @@ OUTPUT FORMAT
           }
           // Deduplicate insulation items across batches
           // Strip parenthetical content first, then match on first 3 words of description
-          // e.g. "Thermal insulation (shown in...)" and "Thermal Insulation" both â†’ "thermal insulation"
+          // e.g. "Thermal insulation (shown in...)" and "Thermal Insulation" both → "thermal insulation"
           if (fabricData.insulation && fabricData.insulation.length > 0) {
             const seen = new Set();
             fabricData.insulation = fabricData.insulation.filter(item => {
@@ -2003,15 +2003,15 @@ OUTPUT FORMAT
           filename: selectedFile.name.replace(/\.pdf$/i, '').replace(/[^a-z0-9_-]/gi, '_')
         };
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        // BUILD XLSX â€” Professional Fusentric output
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ═══════════════════════════════════════════════════════════════
+        // BUILD XLSX — Professional Fusentric output
+        // ═══════════════════════════════════════════════════════════════
         const wb = XLSX.utils.book_new();
         const today = new Date().toLocaleDateString('en-AU', { day:'2-digit', month:'2-digit', year:'numeric' });
         const projAddress = (fabricData && fabricData.project_metadata && fabricData.project_metadata.project_address) || '';
         const projClient  = (fabricData && fabricData.project_metadata && fabricData.project_metadata.client_name) || '';
 
-        // â”€â”€ Colour palette â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Colour palette ───────────────────────────────────────────
         const C = {
           brand:    { rgb: '1B2A4A' }, // Fusentric navy
           brandTxt: { rgb: 'FFFFFF' },
@@ -2050,10 +2050,10 @@ OUTPUT FORMAT
           return C.red;
         };
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        // SHEET 1 â€” GLAZING SCHEDULE
+        // ════════════════════════════════════════════════════════════════
+        // SHEET 1 — GLAZING SCHEDULE
         // Mirrors NCC 2022 Glazing Calculator column order
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ════════════════════════════════════════════════════════════════
         const gData = [];
         const gMerges = [];
         let gRow = 0;
@@ -2061,7 +2061,7 @@ OUTPUT FORMAT
         // Helper to push a row and return its index
         const gPush = (...cells) => { gData.push(cells); return gRow++; };
 
-        // â€” Title banner â€”
+        // — Title banner —
         gPush(
           cell('FUSENTRIC', C.brand, { bold:true, sz:14, color:C.brandTxt }, { horizontal:'left', vertical:'center' }),
           cell('','',null), cell('','',null), cell('','',null), cell('','',null),
@@ -2073,13 +2073,13 @@ OUTPUT FORMAT
         gMerges.push({ s:{r:0,c:0}, e:{r:0,c:10} });
         gMerges.push({ s:{r:0,c:11}, e:{r:0,c:13} });
 
-        // â€” Project info row â€”
+        // — Project info row —
         gPush(
           cell('Project:', C.subhead, { bold:true, color:C.subTxt }, null),
-          cell(projAddress || 'â€”', C.subhead, { color:C.subTxt }, null),
+          cell(projAddress || '—', C.subhead, { color:C.subTxt }, null),
           cell('','',null), cell('','',null), cell('','',null),
           cell('Client:', C.subhead, { bold:true, color:C.subTxt }, null),
-          cell(projClient || 'â€”', C.subhead, { color:C.subTxt }, null),
+          cell(projClient || '—', C.subhead, { color:C.subTxt }, null),
           cell('','',null), cell('','',null),
           cell('Date:', C.subhead, { bold:true, color:C.subTxt }, null),
           cell(today, C.subhead, { color:C.subTxt }, null),
@@ -2091,9 +2091,9 @@ OUTPUT FORMAT
         gMerges.push({ s:{r:1,c:6}, e:{r:1,c:8} });
         gMerges.push({ s:{r:1,c:12}, e:{r:1,c:13} });
 
-        // â€” Pipeline confidence row â€”
+        // — Pipeline confidence row —
         const confBg = pipelineConfidence === 'high' ? C.green : pipelineConfidence === 'medium' ? C.amber : C.red;
-        const confLabel = `Pipeline Confidence: ${pipelineConfidence.toUpperCase()}${allPipelineFlags.length > 0 ? '  âš‘ ' + allPipelineFlags.length + ' flag(s)' : ''}`;
+        const confLabel = `Pipeline Confidence: ${pipelineConfidence.toUpperCase()}${allPipelineFlags.length > 0 ? '  ⚑ ' + allPipelineFlags.length + ' flag(s)' : ''}`;
         gPush(
           cell(confLabel, confBg, { bold:true, color:C.subTxt }, null),
           cell('','',null), cell('','',null), cell('','',null), cell('','',null),
@@ -2107,9 +2107,9 @@ OUTPUT FORMAT
         gPush(...Array(14).fill(cell('',null,null))); // spacer
         gMerges.push({ s:{r:3,c:0}, e:{r:3,c:13} });
 
-        // â€” Column headers â€” matching NCC calculator order â€”
+        // — Column headers — matching NCC calculator order —
         const gHeaders = [
-          'ID', 'Description', 'Facing', 'Height (m)', 'Width (m)', 'Area (mÂ²)',
+          'ID', 'Description', 'Facing', 'Height (m)', 'Width (m)', 'Area (m²)',
           'Room Type', 'Opening Type', 'Frame Colour',
           'U-Value (fill in)', 'SHGC (fill in)',
           'Confidence', 'Source Page', 'Review'
@@ -2118,7 +2118,7 @@ OUTPUT FORMAT
           cell(h, C.head, { bold:true, color:C.brandTxt, sz:9 }, { horizontal:'center', vertical:'center', wrapText:true }, true)
         ));
 
-        // â€” Data rows â€”
+        // — Data rows —
         const dataStartGRow = gRow;
         data.elements.forEach((el, idx) => {
           const windowFlags = el.window_flags || [];
@@ -2146,7 +2146,7 @@ OUTPUT FORMAT
           );
         });
 
-        // â€” Notes section â€”
+        // — Notes section —
         gPush(...Array(14).fill(cell('',null,null)));
         gPush(
           cell('EXTRACTION NOTES', C.head, { bold:true, color:C.brandTxt }, null),
@@ -2166,7 +2166,7 @@ OUTPUT FORMAT
           }
         });
 
-        // â€” Flags section â€”
+        // — Flags section —
         if (allPipelineFlags.length > 0) {
           gPush(...Array(14).fill(cell('',null,null)));
           gPush(
@@ -2213,9 +2213,9 @@ OUTPUT FORMAT
 
         XLSX.utils.book_append_sheet(wb, glazingWS, 'Glazing Schedule');
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        // SHEET 2 â€” BUILDING FABRIC & METADATA
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ════════════════════════════════════════════════════════════════
+        // SHEET 2 — BUILDING FABRIC & METADATA
+        // ════════════════════════════════════════════════════════════════
         const fabricRows = [];
         const fabricHeaders = ['Section', 'Field', 'Value', 'Confidence', 'Notes / Flags'];
 
@@ -2224,7 +2224,7 @@ OUTPUT FORMAT
             fabricRows.push([section, field, String(value), confidence || '', notes || '']);
           }
         };
-        const addMissing = (field, note) => fabricRows.push(['âš‘ MISSING / UNCLEAR', field, '', 'flag', note || '']);
+        const addMissing = (field, note) => fabricRows.push(['⚑ MISSING / UNCLEAR', field, '', 'flag', note || '']);
 
         if (fabricData && !fabricData._error) {
           const pm = fabricData.project_metadata || {};
@@ -2232,10 +2232,10 @@ OUTPUT FORMAT
           if (pm.client_name)            addRow('Project Metadata', 'Client Name',             pm.client_name,           'high', '');
           if (pm.block)                  addRow('Project Metadata', 'Block',                   pm.block,                 'high', '');
           if (pm.section)                addRow('Project Metadata', 'Section',                 pm.section,               'high', '');
-          if (pm.proposed_gfa_class1)    addRow('Project Metadata', 'Proposed GFA â€“ Class 1',  pm.proposed_gfa_class1,   'high', '');
-          if (pm.proposed_gfa_class10)   addRow('Project Metadata', 'Proposed GFA â€“ Class 10', pm.proposed_gfa_class10,  'high', '');
-          if (pm.proposed_roof_area_class1)  addRow('Project Metadata', 'Proposed Roof Area â€“ Class 1',  pm.proposed_roof_area_class1,  'high', '');
-          if (pm.proposed_roof_area_class10) addRow('Project Metadata', 'Proposed Roof Area â€“ Class 10', pm.proposed_roof_area_class10, 'high', '');
+          if (pm.proposed_gfa_class1)    addRow('Project Metadata', 'Proposed GFA – Class 1',  pm.proposed_gfa_class1,   'high', '');
+          if (pm.proposed_gfa_class10)   addRow('Project Metadata', 'Proposed GFA – Class 10', pm.proposed_gfa_class10,  'high', '');
+          if (pm.proposed_roof_area_class1)  addRow('Project Metadata', 'Proposed Roof Area – Class 1',  pm.proposed_roof_area_class1,  'high', '');
+          if (pm.proposed_roof_area_class10) addRow('Project Metadata', 'Proposed Roof Area – Class 10', pm.proposed_roof_area_class10, 'high', '');
           if (pm.block_area)             addRow('Project Metadata', 'Block Area',              pm.block_area,            'high', '');
           if (pm.storeys)                addRow('Project Metadata', 'Storeys',                 pm.storeys,               'high', '');
           if (pm.ffl_levels && pm.ffl_levels.length > 0) addRow('Project Metadata', 'FFL Levels', pm.ffl_levels.join(' | '), 'high', '');
@@ -2276,7 +2276,7 @@ OUTPUT FORMAT
           if (fl.subfloor_enclosed)           addRow('Floor', 'Subfloor Enclosed',       fl.subfloor_enclosed,           'high', '');
           if (fl.in_slab_heating)             addRow('Floor', 'In-Slab Heating',         fl.in_slab_heating,             'high', '');
 
-          // Floor coverings â€” per room, important for NCC calculator
+          // Floor coverings — per room, important for NCC calculator
           const fc = fabricData.floor_coverings || [];
           if (fc.length > 0) {
             fc.forEach(item => {
@@ -2305,7 +2305,7 @@ OUTPUT FORMAT
         }
 
         if (fabricRows.length > 0) {
-          // â”€â”€ Professional Fabric sheet â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+          // ── Professional Fabric sheet ──────────────────────────────
           const fAOA = [];
           const fMerges = [];
           const fStyles = {};
@@ -2321,7 +2321,7 @@ OUTPUT FORMAT
           fRow++;
 
           // Project info
-          fAOA.push(['Project:', projAddress || 'â€”', '', 'Client:', projClient || 'â€”']);
+          fAOA.push(['Project:', projAddress || '—', '', 'Client:', projClient || '—']);
           fRow++;
           fAOA.push(['Date:', today, '', 'Scope:', scopeLabel.replace('_',' ').toUpperCase()]);
           fRow++;
@@ -2329,15 +2329,15 @@ OUTPUT FORMAT
 
           // Section order for display
           const sections = [
-            { key: 'Project Metadata',    icon: 'ðŸ“‹', colour: '1B2A4A' },
-            { key: 'Roof',                icon: 'ðŸ ', colour: '2E4A7A' },
-            { key: 'Insulation',          icon: 'ðŸ§±', colour: '2E4A7A' },
-            { key: 'Walls',               icon: 'ðŸ—ï¸',  colour: '2E6B8A' },
-            { key: 'Floor',               icon: 'ðŸ“', colour: '2E6B8A' },
-            { key: 'Floor Coverings',     icon: 'ðŸªµ', colour: '3D7A5C' },
-            { key: 'Shading',             icon: 'â˜€ï¸',  colour: '1F7A5C' },
-            { key: 'Lighting & Services', icon: 'ðŸ’¡', colour: '1F7A5C' },
-            { key: 'âš‘ MISSING / UNCLEAR', icon: 'âš‘',  colour: 'C00000' },
+            { key: 'Project Metadata',    icon: '📋', colour: '1B2A4A' },
+            { key: 'Roof',                icon: '🏠', colour: '2E4A7A' },
+            { key: 'Insulation',          icon: '🧱', colour: '2E4A7A' },
+            { key: 'Walls',               icon: '🏗️',  colour: '2E6B8A' },
+            { key: 'Floor',               icon: '📐', colour: '2E6B8A' },
+            { key: 'Floor Coverings',     icon: '🪵', colour: '3D7A5C' },
+            { key: 'Shading',             icon: '☀️',  colour: '1F7A5C' },
+            { key: 'Lighting & Services', icon: '💡', colour: '1F7A5C' },
+            { key: '⚑ MISSING / UNCLEAR', icon: '⚑',  colour: 'C00000' },
           ];
 
           sections.forEach(sec => {
@@ -2350,13 +2350,13 @@ OUTPUT FORMAT
             fRow++;
 
             // Column sub-headers for first section only OR insulation/missing
-            if (fRow === 6 || sec.key === 'Insulation' || sec.key === 'âš‘ MISSING / UNCLEAR') {
+            if (fRow === 6 || sec.key === 'Insulation' || sec.key === '⚑ MISSING / UNCLEAR') {
               fAOA.push(['', 'Field', 'Value', 'Confidence', 'Notes / Flags']);
               fRow++;
             }
 
             rows.forEach((r, i) => {
-              const isMissing = sec.key === 'âš‘ MISSING / UNCLEAR';
+              const isMissing = sec.key === '⚑ MISSING / UNCLEAR';
               fAOA.push(['', r[1], r[2], r[3], r[4] || '']);
               fRow++;
             });
@@ -2398,7 +2398,7 @@ OUTPUT FORMAT
               }
             } else if (row[1] && row[1] !== 'Field' && row[0] === '') {
               // Data row
-              const isMissing = fabricRows.find(fr => fr[1] === row[1] && fr[0] === 'âš‘ MISSING / UNCLEAR');
+              const isMissing = fabricRows.find(fr => fr[1] === row[1] && fr[0] === '⚑ MISSING / UNCLEAR');
               const conf = row[3];
               const rowBg = isMissing ? 'FCE4D6' : (ri % 2 === 0 ? 'F5F9FD' : 'FFFFFF');
               for (let ci = 0; ci < 5; ci++) {
@@ -2438,7 +2438,7 @@ OUTPUT FORMAT
         a.click();
         URL.revokeObjectURL(url);
 
-        // â”€â”€ Usage tracking â€” Airtable â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Usage tracking — Airtable ────────────────────────────────
         try {
           const trackRes = await fetch('/.netlify/functions/track-usage', {
             method: 'POST',
@@ -2461,7 +2461,7 @@ OUTPUT FORMAT
           console.warn('Usage tracking error (non-fatal):', e.message);
         }
 
-        // â”€â”€ Build assessor-friendly completion message â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Build assessor-friendly completion message ───────────────
         // Determine review items to surface clearly
         const checkWindows = data.elements.filter(e => e.needs_review || (e.window_flags && e.window_flags.length > 0)).length;
         const hasCompassWarning = window._compassWarning && window._compassWarning.confidence !== 'high';
@@ -2471,23 +2471,23 @@ OUTPUT FORMAT
         // Scope label for display
         const scopeDisplay = scopeLabel === 'new_works_only' ? 'New Works Only' : 'Whole Dwelling';
 
-        // Build action items â€” things the assessor actually needs to do
+        // Build action items — things the assessor actually needs to do
         const actionItems = [];
         if (hasCompassWarning) {
           const cw = window._compassWarning;
-          actionItems.push(`<li><strong>Verify window orientations</strong> â€” block bearing was estimated from north arrow (page ${cw.page}). Check the Facing column against the drawings before entering into the calculator.</li>`);
+          actionItems.push(`<li><strong>Verify window orientations</strong> — block bearing was estimated from north arrow (page ${cw.page}). Check the Facing column against the drawings before entering into the calculator.</li>`);
         }
         if (checkWindows > 0) {
-          actionItems.push(`<li><strong>${checkWindows} window${checkWindows > 1 ? 's' : ''} flagged for review</strong> â€” see orange CHECK flags in the Review column. Notes column explains each flag.</li>`);
+          actionItems.push(`<li><strong>${checkWindows} window${checkWindows > 1 ? 's' : ''} flagged for review</strong> — see orange CHECK flags in the Review column. Notes column explains each flag.</li>`);
         }
         if (scopeIsDefaulted) {
-          actionItems.push(`<li><strong>Confirm assessment scope</strong> â€” existing GFA wasn't found in the title block so scope has defaulted to Whole Dwelling. Verify against the drawings.</li>`);
+          actionItems.push(`<li><strong>Confirm assessment scope</strong> — existing GFA wasn't found in the title block so scope has defaulted to Whole Dwelling. Verify against the drawings.</li>`);
         }
         if (missingElevations) {
-          actionItems.push(`<li><strong>Check window count</strong> â€” some pages in this drawing set didn't contain elevation drawings with HxW annotations. Verify the schedule covers all openings.</li>`);
+          actionItems.push(`<li><strong>Check window count</strong> — some pages in this drawing set didn't contain elevation drawings with HxW annotations. Verify the schedule covers all openings.</li>`);
         }
-        actionItems.push(`<li><strong>Add U-Values and SHGC</strong> â€” enter glazing performance values from product specs or WERS into the highlighted columns.</li>`);
-        actionItems.push(`<li><strong>Add solar absorptance</strong> â€” roof and wall values from Dulux/Colorbond datasheets (not stated on drawings).</li>`);
+        actionItems.push(`<li><strong>Add U-Values and SHGC</strong> — enter glazing performance values from product specs or WERS into the highlighted columns.</li>`);
+        actionItems.push(`<li><strong>Add solar absorptance</strong> — roof and wall values from Dulux/Colorbond datasheets (not stated on drawings).</li>`);
 
         const actionHTML = actionItems.length > 0
           ? `<div style="margin:12px 0;padding:12px 14px;background:#f0f7ff;border:1px solid #BDD7EE;border-radius:6px;font-size:12px;line-height:1.8;">
@@ -2498,7 +2498,7 @@ OUTPUT FORMAT
 
         showStatus('success', `
           <div style="font-size:14px;font-weight:600;color:#1B2A4A;margin-bottom:6px;">
-            âœ… Extraction complete
+            ✅ Extraction complete
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0;">
             <div style="background:#e8f4e8;border-radius:6px;padding:8px 12px;text-align:center;">
@@ -2516,13 +2516,13 @@ OUTPUT FORMAT
           </div>
           ${actionHTML}
           <div style="font-size:12px;color:#555;margin-top:8px;">
-            Your spreadsheet has downloaded automatically â€” two sheets: <strong>Glazing Schedule</strong> and <strong>Fabric &amp; Metadata</strong>.<br>
+            Your spreadsheet has downloaded automatically — two sheets: <strong>Glazing Schedule</strong> and <strong>Fabric &amp; Metadata</strong>.<br>
             <span style="color:#888;">Yellow cells = facing to verify &nbsp;|&nbsp; Orange cells = review flagged</span>
           </div>
           <div style="display:flex;gap:10px;margin-top:12px;align-items:center;">
-            <a class="download-btn" href="${url}" download="${outFilename}">â¬‡ Download Again</a>
+            <a class="download-btn" href="${url}" download="${outFilename}">⬇ Download Again</a>
             <button onclick="clearFile()" style="padding:9px 18px;background:#1B2A4A;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;letter-spacing:0.3px;">
-              ï¼‹ New Plans
+              ＋ New Plans
             </button>
           </div>
         `);
@@ -2530,7 +2530,7 @@ OUTPUT FORMAT
         extractBtn.disabled = false;
 
       } catch (err) {
-        showStatus('error', `âŒ Error: ${err.message}`);
+        showStatus('error', `❌ Error: ${err.message}`);
         extractBtn.disabled = false;
       }
     });
@@ -2571,12 +2571,12 @@ OUTPUT FORMAT
           return confScore(a.confidence) - confScore(b.confidence);
         });
 
-        // Deduplicate by tag â€” same tag code = same physical window
+        // Deduplicate by tag — same tag code = same physical window
         // Key strategy: prefer full tag (prefix + size), fall back to type+room+facing+dims
         const deduped = new Map();
         let droppedNoTag = 0, droppedDupe = 0;
 
-        // Detect bare size-code tags (e.g. "HxW:6-20", "6-20", "620") â€” no type prefix
+        // Detect bare size-code tags (e.g. "HxW:6-20", "6-20", "620") — no type prefix
         const isBareSize = str => /^(HxW:)?[\d\s\-x]+$/i.test(str.trim());
 
         const makeKey = (w) => {
@@ -2584,11 +2584,11 @@ OUTPUT FORMAT
           const cleaned = stripHxW(rawId).trim();
           const facing = (w.facing || '').toUpperCase();
           if (cleaned && !isBareSize(cleaned)) {
-            // Full tag available â€” key on tag + facing
+            // Full tag available — key on tag + facing
             // Two windows with same tag code but different facing = different physical openings
             return norm(cleaned) + '|' + facing;
           }
-          // Bare size code â€” key on type+room+facing+dims
+          // Bare size code — key on type+room+facing+dims
           const type = (w.opening_type || w.type || '').toLowerCase().replace(/\s+/g,'');
           const room = (w.room_name || w.room || '').toLowerCase().replace(/\s+/g,'');
           const h = String(w.height_m || '');
@@ -2637,8 +2637,8 @@ OUTPUT FORMAT
           }
         }
 
-        // â”€â”€ DIMENSION VALIDATION â€” plausibility only, no vocabulary filter â”€â”€
-        // Dimensions are never cleared â€” only flagged. Blank = assessor fills in manually.
+        // ── DIMENSION VALIDATION — plausibility only, no vocabulary filter ──
+        // Dimensions are never cleared — only flagged. Blank = assessor fills in manually.
         const isValidDim = (val, type) => {
           if (val === null || val === undefined || val === '') return true;
           const num = parseFloat(val);
@@ -2665,7 +2665,7 @@ OUTPUT FORMAT
               ...w,
               needs_review: flagged,
               notes: (!hOk || !wOk)
-                ? `[CHECK] ${!hOk ? 'H:'+w.height_m+' ' : ''}${!wOk ? 'W:'+w.width_m : ''} implausible â€” verify on plans`.trim()
+                ? `[CHECK] ${!hOk ? 'H:'+w.height_m+' ' : ''}${!wOk ? 'W:'+w.width_m : ''} implausible — verify on plans`.trim()
                 : (w.notes || ''),
             };
           })
@@ -2673,12 +2673,12 @@ OUTPUT FORMAT
 
         console.log('Agent 4 final schedule:', schedule.length, 'windows');
 
-        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        // AGENT 5 â€” FABRIC & METADATA EXTRACTOR (batched, all pages)
-        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ─────────────────────────────────────────────────────────────────
+        // AGENT 5 — FABRIC & METADATA EXTRACTOR (batched, all pages)
+        // ─────────────────────────────────────────────────────────────────
         let fabricData = {};
         try {
-          showStatus('loading', '<span class="spinner"></span> Agent 5 â€” Extracting building fabric & metadataâ€¦');
+          showStatus('loading', '<span class="spinner"></span> Agent 5 — Extracting building fabric & metadata…');
           await new Promise(r => setTimeout(r, 5000)); // rate limit gap after Agent 3
 
           const A5_BATCH_SIZE = 12;
@@ -2688,7 +2688,7 @@ OUTPUT FORMAT
           }
           console.log('Agent 5: ' + pageUrls.length + ' pages in ' + a5Batches.length + ' batch(es)');
 
-          // Merge results across batches â€” later batches override nulls from earlier
+          // Merge results across batches — later batches override nulls from earlier
           const mergeDeep = (base, incoming) => {
             for (const key of Object.keys(incoming || {})) {
               if (incoming[key] !== null && incoming[key] !== undefined && incoming[key] !== '') {
@@ -2710,7 +2710,7 @@ OUTPUT FORMAT
 
           for (let bIdx = 0; bIdx < a5Batches.length; bIdx++) {
             if (bIdx > 0) {
-              console.log('Agent 5 batch ' + (bIdx+1) + '/' + a5Batches.length + ' â€” waiting 8s...');
+              console.log('Agent 5 batch ' + (bIdx+1) + '/' + a5Batches.length + ' — waiting 8s...');
               await new Promise(r => setTimeout(r, 8000));
             }
             const batch = a5Batches[bIdx];
@@ -2720,114 +2720,114 @@ OUTPUT FORMAT
               a5Content.push({ type: 'image', source: { type: 'url', url } });
             }
             a5Content.push({ type: 'text', text: `You are extracting building fabric and project metadata from Australian residential architectural drawings.
-You must RETURN VALID JSON ONLY â€” no commentary, no markdown, no explanation outside the JSON structure.
+You must RETURN VALID JSON ONLY — no commentary, no markdown, no explanation outside the JSON structure.
 
 CRITICAL RULE: Extract ONLY what is explicitly written on the drawings.
 Do NOT calculate, estimate, or infer any value.
-If a value is not shown on these pages, set it to null â€” do not guess.
-"EER requirements" or "to comply" without a stated R-value â†’ extract the note text, set r_value: null.
+If a value is not shown on these pages, set it to null — do not guess.
+"EER requirements" or "to comply" without a stated R-value → extract the note text, set r_value: null.
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-SECTION 1 â€” PROJECT METADATA
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════
+SECTION 1 — PROJECT METADATA
+═══════════════════════════════════════
 Extract only if explicitly shown in title block or cover sheet:
 project_address, client_name, block, section
-proposed_gfa_class1 â€” label "Proposed Structure GFA - Class 1" (mÂ² value only)
-proposed_gfa_class10 â€” label "Proposed Structure GFA - Class 10"
-proposed_roof_area_class1 â€” label "Proposed Roof Area - Class 1"
-proposed_roof_area_class10 â€” label "Proposed Roof Area - Class 10"
-block_area â€” site/block area if stated
-storeys â€” only if explicitly stated (e.g. "Single Storey", "Two Storey")
-ffl_levels â€” finished floor levels exactly as written (array of strings)
+proposed_gfa_class1 — label "Proposed Structure GFA - Class 1" (m² value only)
+proposed_gfa_class10 — label "Proposed Structure GFA - Class 10"
+proposed_roof_area_class1 — label "Proposed Roof Area - Class 1"
+proposed_roof_area_class10 — label "Proposed Roof Area - Class 10"
+block_area — site/block area if stated
+storeys — only if explicitly stated (e.g. "Single Storey", "Two Storey")
+ffl_levels — finished floor levels exactly as written (array of strings)
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-SECTION 2 â€” ROOF
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-roof_covering â€” material as written (e.g. "Colorbond Cliplock")
-roof_colour â€” colour as written
-roof_pitch â€” pitch as written (e.g. "5.00Â°")
-roof_construction_type â€” e.g. "Pitched with horizontal ceiling" | "Cathedral/Skillion" | "Flat" â€” only if explicitly stated
-roof_ventilation â€” "Vented" or "Standard" â€” only if explicitly labelled
-roof_solar_absorptance â€” only if a numeric value is explicitly stated
-sarking â€” description as written, or null
-roof_framing â€” as written, or null
-roof_lights â€” description if shown
-roof_penetrations â€” if labelled
+═══════════════════════════════════════
+SECTION 2 — ROOF
+═══════════════════════════════════════
+roof_covering — material as written (e.g. "Colorbond Cliplock")
+roof_colour — colour as written
+roof_pitch — pitch as written (e.g. "5.00°")
+roof_construction_type — e.g. "Pitched with horizontal ceiling" | "Cathedral/Skillion" | "Flat" — only if explicitly stated
+roof_ventilation — "Vented" or "Standard" — only if explicitly labelled
+roof_solar_absorptance — only if a numeric value is explicitly stated
+sarking — description as written, or null
+roof_framing — as written, or null
+roof_lights — description if shown
+roof_penetrations — if labelled
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-SECTION 3 â€” INSULATION
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-insulation â€” array of objects, one per distinct insulation note found:
+═══════════════════════════════════════
+SECTION 3 — INSULATION
+═══════════════════════════════════════
+insulation — array of objects, one per distinct insulation note found:
   { location, description, r_value, confidence, flags[] }
 location values: "ceiling" | "wall" | "floor" | "anticon" | "other"
 r_value: numeric only if explicitly written (e.g. 3.5 for R3.5), else null
 flags: include "r_value_missing" if note references EER/compliance without giving R-value
 IMPORTANT: Extract subfloor/floor insulation R-value if explicitly stated (e.g. "R3.0 floor batts")
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-SECTION 4 â€” WALLS
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-external_cladding â€” material as written
-external_colour â€” colour as written
-wall_solar_absorptance â€” only if numeric value explicitly stated
-wall_construction â€” construction type if labelled (e.g. "timber stud frame", "brick veneer")
-wall_height â€” wall height if dimensioned in section drawings (e.g. "2400mm" or "2.40m")
-internal_lining â€” if written
+═══════════════════════════════════════
+SECTION 4 — WALLS
+═══════════════════════════════════════
+external_cladding — material as written
+external_colour — colour as written
+wall_solar_absorptance — only if numeric value explicitly stated
+wall_construction — construction type if labelled (e.g. "timber stud frame", "brick veneer")
+wall_height — wall height if dimensioned in section drawings (e.g. "2400mm" or "2.40m")
+internal_lining — if written
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-SECTION 5 â€” FLOOR
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-floor_type â€” as written (e.g. "concrete slab on ground", "suspended timber")
-floor_construction_category â€” derive ONLY from explicit labels: "direct_contact" (slab on ground) | "suspended" (bearer/joist, timber floor) | null
-slab_details â€” if dimensioned
-subfloor_type â€” if shown
-subfloor_height â€” subfloor/void height if dimensioned (e.g. "â‰¤1800mm", "1695mm")
-subfloor_enclosed â€” "enclosed" | "open" | null â€” only if explicitly described
-in_slab_heating â€” only if explicitly shown
+═══════════════════════════════════════
+SECTION 5 — FLOOR
+═══════════════════════════════════════
+floor_type — as written (e.g. "concrete slab on ground", "suspended timber")
+floor_construction_category — derive ONLY from explicit labels: "direct_contact" (slab on ground) | "suspended" (bearer/joist, timber floor) | null
+slab_details — if dimensioned
+subfloor_type — if shown
+subfloor_height — subfloor/void height if dimensioned (e.g. "≤1800mm", "1695mm")
+subfloor_enclosed — "enclosed" | "open" | null — only if explicitly described
+in_slab_heating — only if explicitly shown
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-SECTION 6 â€” FLOOR COVERINGS
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════
+SECTION 6 — FLOOR COVERINGS
+═══════════════════════════════════════
 Scan inclusions plan, floor plan, and spec notes for room-by-room floor covering information.
-floor_coverings â€” array of objects: { room, covering }
+floor_coverings — array of objects: { room, covering }
 covering values as written (e.g. "Carpet", "Floating Timber", "Ceramic Tile", "Concrete")
 Common room names: Bedroom, Living, Kitchen, Bathroom, Ensuite, Laundry, Entry, Hall, Study
 If a single covering applies to all rooms (e.g. "Timber flooring throughout"), record as { room: "All", covering: "..." }
 If inclusions plan is not present, set floor_coverings: []
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-SECTION 7 â€” SHADING
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-eave_projection â€” dimension as written (e.g. "450mm", "900mm eave")
-pergolas_awnings â€” description if shown
+═══════════════════════════════════════
+SECTION 7 — SHADING
+═══════════════════════════════════════
+eave_projection — dimension as written (e.g. "450mm", "900mm eave")
+pergolas_awnings — description if shown
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-SECTION 8 â€” LIGHTING & SERVICES
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════
+SECTION 8 — LIGHTING & SERVICES
+═══════════════════════════════════════
 Extract ONLY if explicitly shown on drawings:
-ic_rated_downlights â€” true/false/description (check spec notes for "IC rated" requirement)
-exhaust_fans â€” description including location and cutout size if stated (e.g. "1x Ensuite 250x250mm")
-hvac_system â€” description if shown (e.g. "6.4kW Reverse Cycle Split System")
-hot_water_system â€” type if shown (e.g. "Heat Pump Hot Water Service", "Solar HWS", "Gas HWS")
-pool_spa â€” description if shown
+ic_rated_downlights — true/false/description (check spec notes for "IC rated" requirement)
+exhaust_fans — description including location and cutout size if stated (e.g. "1x Ensuite 250x250mm")
+hvac_system — description if shown (e.g. "6.4kW Reverse Cycle Split System")
+hot_water_system — type if shown (e.g. "Heat Pump Hot Water Service", "Solar HWS", "Gas HWS")
+pool_spa — description if shown
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-SECTION 9 â€” MISSING OR UNCLEAR
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-missing_flags â€” array of applicable strings:
-"glazing_performance_missing" â€” U-values / SHGC not stated anywhere
-"insulation_r_values_missing" â€” insulation noted but no R-values given
-"solar_absorptance_not_stated" â€” no solar absorptance values found
-"no_window_schedule" â€” no schedule mapping tags to rooms
-"floor_coverings_not_found" â€” no inclusions plan or floor covering information found
-"conflicting_values" â€” describe in missing_notes
-"unspecified_performance_values" â€” performance referenced but not given
+═══════════════════════════════════════
+SECTION 9 — MISSING OR UNCLEAR
+═══════════════════════════════════════
+missing_flags — array of applicable strings:
+"glazing_performance_missing" — U-values / SHGC not stated anywhere
+"insulation_r_values_missing" — insulation noted but no R-values given
+"solar_absorptance_not_stated" — no solar absorptance values found
+"no_window_schedule" — no schedule mapping tags to rooms
+"floor_coverings_not_found" — no inclusions plan or floor covering information found
+"conflicting_values" — describe in missing_notes
+"unspecified_performance_values" — performance referenced but not given
 
-missing_notes â€” free text for any conflicts or ambiguities
+missing_notes — free text for any conflicts or ambiguities
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════
 OUTPUT FORMAT
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+═══════════════════════════════════════
 {
   "project_metadata": {
     "project_address": null,
@@ -2896,7 +2896,7 @@ OUTPUT FORMAT
           }
           // Deduplicate insulation items across batches
           // Strip parenthetical content first, then match on first 3 words of description
-          // e.g. "Thermal insulation (shown in...)" and "Thermal Insulation" both â†’ "thermal insulation"
+          // e.g. "Thermal insulation (shown in...)" and "Thermal Insulation" both → "thermal insulation"
           if (fabricData.insulation && fabricData.insulation.length > 0) {
             const seen = new Set();
             fabricData.insulation = fabricData.insulation.filter(item => {
@@ -2928,15 +2928,15 @@ OUTPUT FORMAT
           filename: selectedFile.name.replace(/\.pdf$/i, '').replace(/[^a-z0-9_-]/gi, '_')
         };
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        // BUILD XLSX â€” Professional Fusentric output
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ═══════════════════════════════════════════════════════════════
+        // BUILD XLSX — Professional Fusentric output
+        // ═══════════════════════════════════════════════════════════════
         const wb = XLSX.utils.book_new();
         const today = new Date().toLocaleDateString('en-AU', { day:'2-digit', month:'2-digit', year:'numeric' });
         const projAddress = (fabricData && fabricData.project_metadata && fabricData.project_metadata.project_address) || '';
         const projClient  = (fabricData && fabricData.project_metadata && fabricData.project_metadata.client_name) || '';
 
-        // â”€â”€ Colour palette â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Colour palette ───────────────────────────────────────────
         const C = {
           brand:    { rgb: '1B2A4A' }, // Fusentric navy
           brandTxt: { rgb: 'FFFFFF' },
@@ -2975,10 +2975,10 @@ OUTPUT FORMAT
           return C.red;
         };
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        // SHEET 1 â€” GLAZING SCHEDULE
+        // ════════════════════════════════════════════════════════════════
+        // SHEET 1 — GLAZING SCHEDULE
         // Mirrors NCC 2022 Glazing Calculator column order
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ════════════════════════════════════════════════════════════════
         const gData = [];
         const gMerges = [];
         let gRow = 0;
@@ -2986,7 +2986,7 @@ OUTPUT FORMAT
         // Helper to push a row and return its index
         const gPush = (...cells) => { gData.push(cells); return gRow++; };
 
-        // â€” Title banner â€”
+        // — Title banner —
         gPush(
           cell('FUSENTRIC', C.brand, { bold:true, sz:14, color:C.brandTxt }, { horizontal:'left', vertical:'center' }),
           cell('','',null), cell('','',null), cell('','',null), cell('','',null),
@@ -2998,13 +2998,13 @@ OUTPUT FORMAT
         gMerges.push({ s:{r:0,c:0}, e:{r:0,c:10} });
         gMerges.push({ s:{r:0,c:11}, e:{r:0,c:13} });
 
-        // â€” Project info row â€”
+        // — Project info row —
         gPush(
           cell('Project:', C.subhead, { bold:true, color:C.subTxt }, null),
-          cell(projAddress || 'â€”', C.subhead, { color:C.subTxt }, null),
+          cell(projAddress || '—', C.subhead, { color:C.subTxt }, null),
           cell('','',null), cell('','',null), cell('','',null),
           cell('Client:', C.subhead, { bold:true, color:C.subTxt }, null),
-          cell(projClient || 'â€”', C.subhead, { color:C.subTxt }, null),
+          cell(projClient || '—', C.subhead, { color:C.subTxt }, null),
           cell('','',null), cell('','',null),
           cell('Date:', C.subhead, { bold:true, color:C.subTxt }, null),
           cell(today, C.subhead, { color:C.subTxt }, null),
@@ -3016,9 +3016,9 @@ OUTPUT FORMAT
         gMerges.push({ s:{r:1,c:6}, e:{r:1,c:8} });
         gMerges.push({ s:{r:1,c:12}, e:{r:1,c:13} });
 
-        // â€” Pipeline confidence row â€”
+        // — Pipeline confidence row —
         const confBg = pipelineConfidence === 'high' ? C.green : pipelineConfidence === 'medium' ? C.amber : C.red;
-        const confLabel = `Pipeline Confidence: ${pipelineConfidence.toUpperCase()}${allPipelineFlags.length > 0 ? '  âš‘ ' + allPipelineFlags.length + ' flag(s)' : ''}`;
+        const confLabel = `Pipeline Confidence: ${pipelineConfidence.toUpperCase()}${allPipelineFlags.length > 0 ? '  ⚑ ' + allPipelineFlags.length + ' flag(s)' : ''}`;
         gPush(
           cell(confLabel, confBg, { bold:true, color:C.subTxt }, null),
           cell('','',null), cell('','',null), cell('','',null), cell('','',null),
@@ -3032,9 +3032,9 @@ OUTPUT FORMAT
         gPush(...Array(14).fill(cell('',null,null))); // spacer
         gMerges.push({ s:{r:3,c:0}, e:{r:3,c:13} });
 
-        // â€” Column headers â€” matching NCC calculator order â€”
+        // — Column headers — matching NCC calculator order —
         const gHeaders = [
-          'ID', 'Description', 'Facing', 'Height (m)', 'Width (m)', 'Area (mÂ²)',
+          'ID', 'Description', 'Facing', 'Height (m)', 'Width (m)', 'Area (m²)',
           'Room Type', 'Opening Type', 'Frame Colour',
           'U-Value (fill in)', 'SHGC (fill in)',
           'Confidence', 'Source Page', 'Review'
@@ -3043,7 +3043,7 @@ OUTPUT FORMAT
           cell(h, C.head, { bold:true, color:C.brandTxt, sz:9 }, { horizontal:'center', vertical:'center', wrapText:true }, true)
         ));
 
-        // â€” Data rows â€”
+        // — Data rows —
         const dataStartGRow = gRow;
         data.elements.forEach((el, idx) => {
           const windowFlags = el.window_flags || [];
@@ -3071,7 +3071,7 @@ OUTPUT FORMAT
           );
         });
 
-        // â€” Notes section â€”
+        // — Notes section —
         gPush(...Array(14).fill(cell('',null,null)));
         gPush(
           cell('EXTRACTION NOTES', C.head, { bold:true, color:C.brandTxt }, null),
@@ -3091,7 +3091,7 @@ OUTPUT FORMAT
           }
         });
 
-        // â€” Flags section â€”
+        // — Flags section —
         if (allPipelineFlags.length > 0) {
           gPush(...Array(14).fill(cell('',null,null)));
           gPush(
@@ -3138,9 +3138,9 @@ OUTPUT FORMAT
 
         XLSX.utils.book_append_sheet(wb, glazingWS, 'Glazing Schedule');
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        // SHEET 2 â€” BUILDING FABRIC & METADATA
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ════════════════════════════════════════════════════════════════
+        // SHEET 2 — BUILDING FABRIC & METADATA
+        // ════════════════════════════════════════════════════════════════
         const fabricRows = [];
         const fabricHeaders = ['Section', 'Field', 'Value', 'Confidence', 'Notes / Flags'];
 
@@ -3149,7 +3149,7 @@ OUTPUT FORMAT
             fabricRows.push([section, field, String(value), confidence || '', notes || '']);
           }
         };
-        const addMissing = (field, note) => fabricRows.push(['âš‘ MISSING / UNCLEAR', field, '', 'flag', note || '']);
+        const addMissing = (field, note) => fabricRows.push(['⚑ MISSING / UNCLEAR', field, '', 'flag', note || '']);
 
         if (fabricData && !fabricData._error) {
           const pm = fabricData.project_metadata || {};
@@ -3157,10 +3157,10 @@ OUTPUT FORMAT
           if (pm.client_name)            addRow('Project Metadata', 'Client Name',             pm.client_name,           'high', '');
           if (pm.block)                  addRow('Project Metadata', 'Block',                   pm.block,                 'high', '');
           if (pm.section)                addRow('Project Metadata', 'Section',                 pm.section,               'high', '');
-          if (pm.proposed_gfa_class1)    addRow('Project Metadata', 'Proposed GFA â€“ Class 1',  pm.proposed_gfa_class1,   'high', '');
-          if (pm.proposed_gfa_class10)   addRow('Project Metadata', 'Proposed GFA â€“ Class 10', pm.proposed_gfa_class10,  'high', '');
-          if (pm.proposed_roof_area_class1)  addRow('Project Metadata', 'Proposed Roof Area â€“ Class 1',  pm.proposed_roof_area_class1,  'high', '');
-          if (pm.proposed_roof_area_class10) addRow('Project Metadata', 'Proposed Roof Area â€“ Class 10', pm.proposed_roof_area_class10, 'high', '');
+          if (pm.proposed_gfa_class1)    addRow('Project Metadata', 'Proposed GFA – Class 1',  pm.proposed_gfa_class1,   'high', '');
+          if (pm.proposed_gfa_class10)   addRow('Project Metadata', 'Proposed GFA – Class 10', pm.proposed_gfa_class10,  'high', '');
+          if (pm.proposed_roof_area_class1)  addRow('Project Metadata', 'Proposed Roof Area – Class 1',  pm.proposed_roof_area_class1,  'high', '');
+          if (pm.proposed_roof_area_class10) addRow('Project Metadata', 'Proposed Roof Area – Class 10', pm.proposed_roof_area_class10, 'high', '');
           if (pm.block_area)             addRow('Project Metadata', 'Block Area',              pm.block_area,            'high', '');
           if (pm.storeys)                addRow('Project Metadata', 'Storeys',                 pm.storeys,               'high', '');
           if (pm.ffl_levels && pm.ffl_levels.length > 0) addRow('Project Metadata', 'FFL Levels', pm.ffl_levels.join(' | '), 'high', '');
@@ -3201,7 +3201,7 @@ OUTPUT FORMAT
           if (fl.subfloor_enclosed)           addRow('Floor', 'Subfloor Enclosed',       fl.subfloor_enclosed,           'high', '');
           if (fl.in_slab_heating)             addRow('Floor', 'In-Slab Heating',         fl.in_slab_heating,             'high', '');
 
-          // Floor coverings â€” per room, important for NCC calculator
+          // Floor coverings — per room, important for NCC calculator
           const fc = fabricData.floor_coverings || [];
           if (fc.length > 0) {
             fc.forEach(item => {
@@ -3230,7 +3230,7 @@ OUTPUT FORMAT
         }
 
         if (fabricRows.length > 0) {
-          // â”€â”€ Professional Fabric sheet â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+          // ── Professional Fabric sheet ──────────────────────────────
           const fAOA = [];
           const fMerges = [];
           const fStyles = {};
@@ -3246,7 +3246,7 @@ OUTPUT FORMAT
           fRow++;
 
           // Project info
-          fAOA.push(['Project:', projAddress || 'â€”', '', 'Client:', projClient || 'â€”']);
+          fAOA.push(['Project:', projAddress || '—', '', 'Client:', projClient || '—']);
           fRow++;
           fAOA.push(['Date:', today, '', 'Scope:', scopeLabel.replace('_',' ').toUpperCase()]);
           fRow++;
@@ -3254,15 +3254,15 @@ OUTPUT FORMAT
 
           // Section order for display
           const sections = [
-            { key: 'Project Metadata',    icon: 'ðŸ“‹', colour: '1B2A4A' },
-            { key: 'Roof',                icon: 'ðŸ ', colour: '2E4A7A' },
-            { key: 'Insulation',          icon: 'ðŸ§±', colour: '2E4A7A' },
-            { key: 'Walls',               icon: 'ðŸ—ï¸',  colour: '2E6B8A' },
-            { key: 'Floor',               icon: 'ðŸ“', colour: '2E6B8A' },
-            { key: 'Floor Coverings',     icon: 'ðŸªµ', colour: '3D7A5C' },
-            { key: 'Shading',             icon: 'â˜€ï¸',  colour: '1F7A5C' },
-            { key: 'Lighting & Services', icon: 'ðŸ’¡', colour: '1F7A5C' },
-            { key: 'âš‘ MISSING / UNCLEAR', icon: 'âš‘',  colour: 'C00000' },
+            { key: 'Project Metadata',    icon: '📋', colour: '1B2A4A' },
+            { key: 'Roof',                icon: '🏠', colour: '2E4A7A' },
+            { key: 'Insulation',          icon: '🧱', colour: '2E4A7A' },
+            { key: 'Walls',               icon: '🏗️',  colour: '2E6B8A' },
+            { key: 'Floor',               icon: '📐', colour: '2E6B8A' },
+            { key: 'Floor Coverings',     icon: '🪵', colour: '3D7A5C' },
+            { key: 'Shading',             icon: '☀️',  colour: '1F7A5C' },
+            { key: 'Lighting & Services', icon: '💡', colour: '1F7A5C' },
+            { key: '⚑ MISSING / UNCLEAR', icon: '⚑',  colour: 'C00000' },
           ];
 
           sections.forEach(sec => {
@@ -3275,13 +3275,13 @@ OUTPUT FORMAT
             fRow++;
 
             // Column sub-headers for first section only OR insulation/missing
-            if (fRow === 6 || sec.key === 'Insulation' || sec.key === 'âš‘ MISSING / UNCLEAR') {
+            if (fRow === 6 || sec.key === 'Insulation' || sec.key === '⚑ MISSING / UNCLEAR') {
               fAOA.push(['', 'Field', 'Value', 'Confidence', 'Notes / Flags']);
               fRow++;
             }
 
             rows.forEach((r, i) => {
-              const isMissing = sec.key === 'âš‘ MISSING / UNCLEAR';
+              const isMissing = sec.key === '⚑ MISSING / UNCLEAR';
               fAOA.push(['', r[1], r[2], r[3], r[4] || '']);
               fRow++;
             });
@@ -3323,7 +3323,7 @@ OUTPUT FORMAT
               }
             } else if (row[1] && row[1] !== 'Field' && row[0] === '') {
               // Data row
-              const isMissing = fabricRows.find(fr => fr[1] === row[1] && fr[0] === 'âš‘ MISSING / UNCLEAR');
+              const isMissing = fabricRows.find(fr => fr[1] === row[1] && fr[0] === '⚑ MISSING / UNCLEAR');
               const conf = row[3];
               const rowBg = isMissing ? 'FCE4D6' : (ri % 2 === 0 ? 'F5F9FD' : 'FFFFFF');
               for (let ci = 0; ci < 5; ci++) {
@@ -3363,7 +3363,7 @@ OUTPUT FORMAT
         a.click();
         URL.revokeObjectURL(url);
 
-        // â”€â”€ Usage tracking â€” Airtable â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Usage tracking — Airtable ────────────────────────────────
         try {
           const trackRes = await fetch('/.netlify/functions/track-usage', {
             method: 'POST',
@@ -3386,7 +3386,7 @@ OUTPUT FORMAT
           console.warn('Usage tracking error (non-fatal):', e.message);
         }
 
-        // â”€â”€ Build assessor-friendly completion message â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Build assessor-friendly completion message ───────────────
         // Determine review items to surface clearly
         const checkWindows = data.elements.filter(e => e.needs_review || (e.window_flags && e.window_flags.length > 0)).length;
         const hasCompassWarning = window._compassWarning && window._compassWarning.confidence !== 'high';
@@ -3396,23 +3396,23 @@ OUTPUT FORMAT
         // Scope label for display
         const scopeDisplay = scopeLabel === 'new_works_only' ? 'New Works Only' : 'Whole Dwelling';
 
-        // Build action items â€” things the assessor actually needs to do
+        // Build action items — things the assessor actually needs to do
         const actionItems = [];
         if (hasCompassWarning) {
           const cw = window._compassWarning;
-          actionItems.push(`<li><strong>Verify window orientations</strong> â€” block bearing was estimated from north arrow (page ${cw.page}). Check the Facing column against the drawings before entering into the calculator.</li>`);
+          actionItems.push(`<li><strong>Verify window orientations</strong> — block bearing was estimated from north arrow (page ${cw.page}). Check the Facing column against the drawings before entering into the calculator.</li>`);
         }
         if (checkWindows > 0) {
-          actionItems.push(`<li><strong>${checkWindows} window${checkWindows > 1 ? 's' : ''} flagged for review</strong> â€” see orange CHECK flags in the Review column. Notes column explains each flag.</li>`);
+          actionItems.push(`<li><strong>${checkWindows} window${checkWindows > 1 ? 's' : ''} flagged for review</strong> — see orange CHECK flags in the Review column. Notes column explains each flag.</li>`);
         }
         if (scopeIsDefaulted) {
-          actionItems.push(`<li><strong>Confirm assessment scope</strong> â€” existing GFA wasn't found in the title block so scope has defaulted to Whole Dwelling. Verify against the drawings.</li>`);
+          actionItems.push(`<li><strong>Confirm assessment scope</strong> — existing GFA wasn't found in the title block so scope has defaulted to Whole Dwelling. Verify against the drawings.</li>`);
         }
         if (missingElevations) {
-          actionItems.push(`<li><strong>Check window count</strong> â€” some pages in this drawing set didn't contain elevation drawings with HxW annotations. Verify the schedule covers all openings.</li>`);
+          actionItems.push(`<li><strong>Check window count</strong> — some pages in this drawing set didn't contain elevation drawings with HxW annotations. Verify the schedule covers all openings.</li>`);
         }
-        actionItems.push(`<li><strong>Add U-Values and SHGC</strong> â€” enter glazing performance values from product specs or WERS into the highlighted columns.</li>`);
-        actionItems.push(`<li><strong>Add solar absorptance</strong> â€” roof and wall values from Dulux/Colorbond datasheets (not stated on drawings).</li>`);
+        actionItems.push(`<li><strong>Add U-Values and SHGC</strong> — enter glazing performance values from product specs or WERS into the highlighted columns.</li>`);
+        actionItems.push(`<li><strong>Add solar absorptance</strong> — roof and wall values from Dulux/Colorbond datasheets (not stated on drawings).</li>`);
 
         const actionHTML = actionItems.length > 0
           ? `<div style="margin:12px 0;padding:12px 14px;background:#f0f7ff;border:1px solid #BDD7EE;border-radius:6px;font-size:12px;line-height:1.8;">
@@ -3423,7 +3423,7 @@ OUTPUT FORMAT
 
         showStatus('success', `
           <div style="font-size:14px;font-weight:600;color:#1B2A4A;margin-bottom:6px;">
-            âœ… Extraction complete
+            ✅ Extraction complete
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0;">
             <div style="background:#e8f4e8;border-radius:6px;padding:8px 12px;text-align:center;">
@@ -3441,13 +3441,13 @@ OUTPUT FORMAT
           </div>
           ${actionHTML}
           <div style="font-size:12px;color:#555;margin-top:8px;">
-            Your spreadsheet has downloaded automatically â€” two sheets: <strong>Glazing Schedule</strong> and <strong>Fabric &amp; Metadata</strong>.<br>
+            Your spreadsheet has downloaded automatically — two sheets: <strong>Glazing Schedule</strong> and <strong>Fabric &amp; Metadata</strong>.<br>
             <span style="color:#888;">Yellow cells = facing to verify &nbsp;|&nbsp; Orange cells = review flagged</span>
           </div>
           <div style="display:flex;gap:10px;margin-top:12px;align-items:center;">
-            <a class="download-btn" href="${url}" download="${outFilename}">â¬‡ Download Again</a>
+            <a class="download-btn" href="${url}" download="${outFilename}">⬇ Download Again</a>
             <button onclick="clearFile()" style="padding:9px 18px;background:#1B2A4A;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;letter-spacing:0.3px;">
-              ï¼‹ New Plans
+              ＋ New Plans
             </button>
           </div>
         `);
@@ -3455,7 +3455,7 @@ OUTPUT FORMAT
         extractBtn.disabled = false;
 
       } catch (err) {
-        showStatus('error', `âŒ Error: ${err.message}`);
+        showStatus('error', `❌ Error: ${err.message}`);
         extractBtn.disabled = false;
       }
     });
