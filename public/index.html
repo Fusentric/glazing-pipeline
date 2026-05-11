@@ -917,18 +917,33 @@ ASW = Sliding Window | ASD = Sliding Door | AAW = Awning Window
 AFW = Fixed Window | ACW = Casement Window
 HIGHLIGHT AAW = Clerestory Awning | HIGHLIGHT AFW = Clerestory Fixed
 
+uPVC TAG SYSTEM — some drafting firms use uPVC-prefixed tags instead of Alspec:
+uPSW = uPVC Sliding Window | uPSD = uPVC Sliding Door | uPAW = uPVC Awning Window
+uPFW = uPVC Fixed Window | uPCW = uPVC Casement Window
+These decode identically: uPSW HxW:18×20 = H:1.8m W:2.0m
+Treat uPVC tags exactly like Alspec tags — extract them the same way.
+The HxW callout on the elevation is still your only authoritative source for dimensions.
+
 HIGHLIGHT windows sit above the main window line — they may appear near the ceiling/roofline
 of the elevation drawing, not at the typical window height zone. Look for small horizontal
 openings near the top of the wall. These often have small HxW callouts (e.g. HxW:4×14 = H:0.4m W:1.4m).
 
-Sliding doors (ASD) span full height floor-to-ceiling on the elevation drawing.
-Do NOT record a full-height floor-to-ceiling opening as ASW — it is ASD.
+Sliding doors (ASD / uPSD) span full height floor-to-ceiling on the elevation drawing.
+Do NOT record a full-height floor-to-ceiling opening as ASW/uPSW — it is ASD/uPSD.
 
 An elevation drawing often contains MULTIPLE windows — scan the ENTIRE wall surface top to bottom,
 left to right. Do not stop after finding the first window. A single elevation page may show
 3, 4, or 5 separate openings at different heights and positions on the wall.
-Casement windows (ACW) may be narrow (as small as 0.6m–0.9m wide) — do not overlook them.
-Sliding windows (ASW) may appear at any height — they are not always at eye level.
+Casement windows (ACW/uPCW) may be narrow (as small as 0.6m–0.9m wide) — do not overlook them.
+Sliding windows (ASW/uPSW) may appear at any height — they are not always at eye level.
+
+FACING — ALWAYS FROM ELEVATION TITLE TEXT:
+Assign facing ONLY from the elevation title text printed on the drawing (e.g. "NORTH ELEV.", "SOUTH ELEV.").
+Do NOT assign facing based on the visual position of a window within the page layout.
+When two elevations appear on the same page (e.g. NORTH ELEV. top half, SOUTH ELEV. bottom half),
+a window drawn near the edge of one elevation may visually sit close to the other elevation.
+Always read the title text above or below the elevation drawing to confirm which elevation owns each window.
+If a window's elevation title is ambiguous, set facing: "UNKNOWN" and flag "orientation_unresolved".
 
 ═══════════════════════════════════════════
 COMPASS ORIENTATION
@@ -1124,6 +1139,25 @@ For each window in the list, look at the elevation drawings and verify:
 1. TAG — does this exact tag appear on an elevation drawing? (yes/no)
 2. FACING — which elevation drawing title does it appear on? Apply compass map to get facing.
 3. DIMENSIONS — what does the HxW annotation say on that elevation?
+
+TAG FORMAT — both Alspec and uPVC tags are valid:
+Alspec: ASW, ASD, AAW, AFW, ACW, HIGHLIGHT AAW, HIGHLIGHT AFW
+uPVC: uPSW, uPSD, uPAW, uPFW, uPCW
+Both decode identically from HxW callouts.
+
+BREACHES ELEVATIONS — DO NOT CREATE DUPLICATE FLAGS:
+Many drawing sets include a "BREACHES" version of each elevation (e.g. "ELEVATIONS 1 - BREACHES",
+"ELEVATIONS 2 - BREACHES"). These are the SAME physical walls shown twice — once as a standard
+elevation and once with setback encroachment overlays added.
+A window tag that appears on both "NORTH ELEV." and "NORTH ELEV. - BREACHES" is ONE physical
+window, not two. Do NOT flag it as a possible_duplicate.
+Only flag as possible_duplicate if the same tag appears on two genuinely different elevation faces
+(e.g. both NORTH ELEV. and EAST ELEV.) — which would indicate a genuine extraction error.
+
+FACING CONFIRMATION — FROM TITLE TEXT ONLY:
+When verifying facing, confirm by reading the elevation title text, not by visual position.
+A window drawn near the edge of one elevation page may visually appear to belong to the adjacent
+elevation — always read the title text above or below the drawing.
 
 DIMENSION CORRECTIONS — allowed:
 If the HxW annotation gives different dimensions than what was extracted, update height_m and width_m
@@ -1348,6 +1382,58 @@ Set requires_human_review: true if ANY flag is present.`;
             .replace(/\s+/g, ' ')
             .trim();
         };
+
+        // ── FRAME COLOUR NORMALISATION ──────────────────────────────────────
+        // Opus reads actual colour names from drawings (Monument, Pearl White, Jasper etc.)
+        // Map known Colorbond/uPVC colour names to Dark/Medium/Light categories
+        // for the NCC calculator. Unknown colours preserved as-is for assessor review.
+        const COLOUR_MAP = {
+          // Dark frame colours
+          'monument':        'Dark',
+          'ironstone':       'Dark',
+          'night sky':       'Dark',
+          'woodland grey':   'Dark',
+          'jasper':          'Dark',
+          'deep ocean':      'Dark',
+          'basalt':          'Dark',
+          'slate':           'Dark',
+          'shale grey':      'Dark',
+          'gully':           'Dark',
+          'terrain':         'Dark',
+          // Medium frame colours
+          'paperbark':       'Medium',
+          'dune':            'Medium',
+          'primrose':        'Medium',
+          'sandbank':        'Medium',
+          'grey ridge':      'Medium',
+          'evening haze':    'Medium',
+          'windspray':       'Medium',
+          'mangrove':        'Medium',
+          'cove':            'Medium',
+          'pale eucalypt':   'Medium',
+          // Light frame colours
+          'pearl white':     'Light',
+          'surfmist':        'Light',
+          'dover white':     'Light',
+          'classic cream':   'Light',
+          'whitehaven':      'Light',
+          'white':           'Light',
+          'off white':       'Light',
+          'alabaster':       'Light',
+          'natural':         'Light',
+        };
+        const normaliseColour = (raw) => {
+          if (!raw) return '';
+          const lower = raw.toLowerCase().trim();
+          // Already a category — pass through
+          if (lower === 'dark' || lower === 'medium' || lower === 'light') return raw;
+          // Check colour map
+          for (const [key, cat] of Object.entries(COLOUR_MAP)) {
+            if (lower.includes(key)) return cat;
+          }
+          // Unknown — return as-is, assessor will see it
+          return raw;
+        };
         // Clean up room names that are actually elevation titles (Agent 2 bug)
         const elevationTitlePattern = /^(north|south|east|west)(\s+elev|\.\s*\d*|ation)/i;
         const cleanRoom = str => {
@@ -1412,7 +1498,7 @@ Set requires_human_review: true if ANY flag is present.`;
               width_m: w.width_m || '',
               room_type: w.room_type || '',
               opening_type: w.opening_type || w.type || '',
-              frame_colour: w.frame_colour || '',
+              frame_colour: normaliseColour(w.frame_colour || ''),
               confidence: w.confidence || '',
               source_page: Array.isArray(w.source_pages) ? w.source_pages.join(',') : (w.source_page || ''),
               notes: w.notes || '',
@@ -1422,10 +1508,12 @@ Set requires_human_review: true if ANY flag is present.`;
             droppedDupe++;
             console.log(`  MERGE (dupe): ${key}`);
             const ex = deduped.get(key);
-            const fields = ['room_name','facing','height_m','width_m','room_type','opening_type','frame_colour','confidence'];
+            const fields = ['room_name','facing','height_m','width_m','room_type','opening_type','confidence'];
             for (const f of fields) {
               if (!ex[f] && w[f]) ex[f] = w[f];
             }
+            // frame_colour gets normalised on merge
+            if (!ex.frame_colour && w.frame_colour) ex.frame_colour = normaliseColour(w.frame_colour);
             if (w.notes && w.notes !== ex.notes) ex.notes = [ex.notes, w.notes].filter(Boolean).join('; ');
             if (w.flags?.length) ex.window_flags = [...new Set([...ex.window_flags, ...w.flags])];
           }
